@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
+
+    <TextView
+        android:id="@+id/tvTitleReg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Cadastrar-se"
+        android:textColor="#FFFFFF"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardRegister"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_login_card"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitleReg">
+
+        <TextView
+            android:id="@+id/btnVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Voltar"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollRegister"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@id/btnCadastrar"
+            app:layout_constraintTop_toBottomOf="@id/btnVoltar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText android:id="@+id/etRegUser" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="Usuário" android:paddingStart="15dp" android:textColor="#000000"/>
+                <EditText android:id="@+id/etRegCPF" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="CPF" android:inputType="number" android:paddingStart="15dp" android:textColor="#000000"/>
+                <EditText android:id="@+id/etRegEmail" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="E-mail" android:inputType="textEmailAddress" android:paddingStart="15dp" android:textColor="#000000"/>
+                <EditText android:id="@+id/etRegGenero" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="Gênero" android:paddingStart="15dp" android:textColor="#000000"/>
+                <EditText android:id="@+id/etRegData" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="Data de Nascimento" android:paddingStart="15dp" android:textColor="#000000"/>
+                <EditText android:id="@+id/etRegPassword" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="Senha" android:inputType="textPassword" android:paddingStart="15dp" android:textColor="#000000"/>
+                <EditText android:id="@+id/etRegConfirmPassword" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@drawable/bg_input_field" android:hint="Confirme a Senha" android:inputType="textPassword" android:paddingStart="15dp" android:textColor="#000000"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnCadastrar"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:backgroundTint="#3B82F6"
+            android:text="Cadastrar"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
