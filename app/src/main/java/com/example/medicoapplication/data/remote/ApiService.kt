@@ -194,37 +194,39 @@ interface ApiService {
     ): Response<Unit>
 
 //BLOQUEIOAGENDA
-// LISTAR BLOQUEIOS DE AGENDA
-    @GET("bloqueio-agenda")
-    suspend fun getBloqueiosAgenda(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20,
-        @Query("sort") sort: String = "dataInicio,asc"
-    ): Response<BloqueioAgendaPageResponseDto>
+// LISTAR BLOQUEIOS DE AGENDA -ok
+    @GET("/medicos/{idMedico}/bloqueio_agenda")
+        suspend fun getBloqueiosAgenda(
+        @Path("id") idMedico: Long
+    ): Response<List<BloqueioAgendaPageResponseDto>>
 
     // BUSCAR BLOQUEIO POR ID
-    @GET("bloqueio-agenda/{id}")
+    @GET("/medicos/{idMedico}/bloqueio_agenda/{idBloqueio}")
     suspend fun getBloqueioAgendaById(
-        @Path("id") id: Long
+        @Path("id") idMedico: Long,
+        @Path("idBloqueio") idBloqueio: Long
     ): Response<BloqueioAgendaResponseDto>
 
     // CRIAR BLOQUEIO
-    @POST("bloqueio-agenda")
+    @POST("/medicos/{idMedico}/bloqueio_agenda")
     suspend fun createBloqueioAgenda(
+        @Path("id") idMedico: Long,
         @Body bloqueio: BloqueioAgendaCreateRequestDto
     ): Response<BloqueioAgendaResponseDto>
 
     // ATUALIZAR BLOQUEIO
-    @PUT("bloqueio-agenda/{id}")
+    @PUT("/medicos/{idMedico}/bloqueio_agenda/{idBloqueio}")
     suspend fun updateBloqueioAgenda(
-        @Path("id") id: Long,
+        @Path("id") idMedico: Long,
+        @Path("idBloqueio") idBloqueio: Long,
         @Body bloqueio: BloqueioAgendaUpdateRequestDto
     ): Response<BloqueioAgendaResponseDto>
 
     // DELETAR BLOQUEIO
-    @DELETE("bloqueio-agenda/{id}")
+    @DELETE("/medicos/{idMedico}/bloqueio_agenda/{idBloqueio}")
     suspend fun deleteBloqueioAgenda(
-        @Path("id") id: Long
+        @Path("id") idMedico: Long,
+        @Path("idBloqueio") idBloqueio: Long
     ): Response<Unit>
 
 //CONVENIOS
