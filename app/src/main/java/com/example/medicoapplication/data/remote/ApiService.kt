@@ -1,13 +1,29 @@
 package com.example.medicoapplication.data.remote
 
+import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaPageResponseDto
+import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaResponseDto
+import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaUpdateRequestDto
+import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioPageResponseDto
+import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
+import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioUpdateRequestDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadePageResponseDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeResponseDto
+import com.example.medicoapplication.data.remote.DTO.local.LocalCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.local.LocalPageResponseDto
+import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
+import com.example.medicoapplication.data.remote.DTO.local.LocalUpdateRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.LoginResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoUpdateRequestDto
+import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadePageResponseDto
+import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
+import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeUpdateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacientePageResponseDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
@@ -63,7 +79,7 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-    //MEDICOS
+//MEDICOS
     // LISTAR MÉDICOS
     @GET("medicos")
     suspend fun getMedicos(
@@ -97,6 +113,39 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
+//MEDICO-ESPECIALIDADE
+// LISTAR RELAÇÕES MÉDICO-ESPECIALIDADE
+    @GET("medico-especialidade")
+    suspend fun getMedicoEspecialidades(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20
+    ): Response<MedicoEspecialidadePageResponseDto>
+
+    // BUSCAR RELAÇÃO POR ID
+    @GET("medico-especialidade/{id}")
+    suspend fun getMedicoEspecialidadeById(
+        @Path("id") id: Long
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // CRIAR RELAÇÃO
+    @POST("medico-especialidade")
+    suspend fun createMedicoEspecialidade(
+        @Body medicoEspecialidade: MedicoEspecialidadeCreateRequestDto
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // ATUALIZAR RELAÇÃO
+    @PUT("medico-especialidade/{id}")
+    suspend fun updateMedicoEspecialidade(
+        @Path("id") id: Long,
+        @Body medicoEspecialidade: MedicoEspecialidadeUpdateRequestDto
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // DELETAR RELAÇÃO
+    @DELETE("medico-especialidade/{id}")
+    suspend fun deleteMedicoEspecialidade(
+        @Path("id") id: Long
+    ): Response<Unit>
+
 //ESPECIALIDADES
     // LISTAR ESPECIALIDADES
     @GET("especialidades")
@@ -111,4 +160,106 @@ interface ApiService {
     suspend fun getEspecialidadeById(
         @Path("id") id: Long
     ): Response<EspecialidadeResponseDto>
+
+//LOCAL
+    // LISTAR LOCAIS
+    @GET("locais")
+    suspend fun getLocais(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20,
+        @Query("sort") sort: String = "nome,asc"
+    ): Response<LocalPageResponseDto>
+
+    // BUSCAR LOCAL POR ID
+    @GET("locais/{id}")
+    suspend fun getLocalById(
+        @Path("id") id: Long
+    ): Response<LocalResponseDto>
+
+    // CRIAR LOCAL
+    @POST("locais")
+    suspend fun createLocal(
+        @Body local: LocalCreateRequestDto
+    ): Response<LocalResponseDto>
+
+    // ATUALIZAR LOCAL
+    @PUT("locais/{id}")
+    suspend fun updateLocal(
+        @Path("id") id: Long,
+        @Body local: LocalUpdateRequestDto
+    ): Response<LocalResponseDto>
+
+    // DELETAR LOCAL
+    @DELETE("locais/{id}")
+    suspend fun deleteLocal(
+        @Path("id") id: Long
+    ): Response<Unit>
+
+//BLOQUEIOAGENDA
+// LISTAR BLOQUEIOS DE AGENDA
+@GET("bloqueio-agenda")
+suspend fun getBloqueiosAgenda(
+    @Query("page") page: Int = 0,
+    @Query("size") size: Int = 20,
+    @Query("sort") sort: String = "dataInicio,asc"
+): Response<BloqueioAgendaPageResponseDto>
+
+    // BUSCAR BLOQUEIO POR ID
+    @GET("bloqueio-agenda/{id}")
+    suspend fun getBloqueioAgendaById(
+        @Path("id") id: Long
+    ): Response<BloqueioAgendaResponseDto>
+
+    // CRIAR BLOQUEIO
+    @POST("bloqueio-agenda")
+    suspend fun createBloqueioAgenda(
+        @Body bloqueio: BloqueioAgendaCreateRequestDto
+    ): Response<BloqueioAgendaResponseDto>
+
+    // ATUALIZAR BLOQUEIO
+    @PUT("bloqueio-agenda/{id}")
+    suspend fun updateBloqueioAgenda(
+        @Path("id") id: Long,
+        @Body bloqueio: BloqueioAgendaUpdateRequestDto
+    ): Response<BloqueioAgendaResponseDto>
+
+    // DELETAR BLOQUEIO
+    @DELETE("bloqueio-agenda/{id}")
+    suspend fun deleteBloqueioAgenda(
+        @Path("id") id: Long
+    ): Response<Unit>
+
+//CONVENIOS
+// LISTAR CONVÊNIOS
+    @GET("convenios")
+    suspend fun getConvenios(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20,
+        @Query("sort") sort: String = "nome,asc"
+    ): Response<ConvenioPageResponseDto>
+
+    // BUSCAR CONVÊNIO POR ID
+    @GET("convenios/{id}")
+    suspend fun getConvenioById(
+        @Path("id") id: Long
+    ): Response<ConvenioResponseDto>
+
+    // CRIAR CONVÊNIO
+    @POST("convenios")
+    suspend fun createConvenio(
+        @Body convenio: ConvenioCreateRequestDto
+    ): Response<ConvenioResponseDto>
+
+    // ATUALIZAR CONVÊNIO
+    @PUT("convenios/{id}")
+    suspend fun updateConvenio(
+        @Path("id") id: Long,
+        @Body convenio: ConvenioUpdateRequestDto
+    ): Response<ConvenioResponseDto>
+
+    // DELETAR CONVÊNIO
+    @DELETE("convenios/{id}")
+    suspend fun deleteConvenio(
+        @Path("id") id: Long
+    ): Response<Unit>
 }
