@@ -1,5 +1,7 @@
 package com.example.medicoapplication.data.remote
 
+import com.example.medicoapplication.data.remote.DTO.agenda.AgendaRequestDTO
+import com.example.medicoapplication.data.remote.DTO.agenda.AgendaResponseDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaResponseDto
@@ -47,13 +49,13 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    //LOGIN
+    //LOGIN ok
     @POST("auth/login")
     suspend fun login(
         @Body request: LoginRequestDto
     ): Response<LoginResponseDto>
 
-    //PACIENTES
+    //PACIENTES ok
     // LISTAR PACIENTES
     @GET("pacientes")
     suspend fun getPacientes(
@@ -87,7 +89,7 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//MEDICOS
+//MEDICOS ok
     // LISTAR MÉDICOS
     @GET("medicos")
     suspend fun getMedicos(
@@ -121,40 +123,8 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//MEDICO-ESPECIALIDADE
-// LISTAR RELAÇÕES MÉDICO-ESPECIALIDADE
-    @GET("medico-especialidade")
-    suspend fun getMedicoEspecialidades(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20
-    ): Response<MedicoEspecialidadePageResponseDto>
 
-    // BUSCAR RELAÇÃO POR ID
-    @GET("medico-especialidade/{id}")
-    suspend fun getMedicoEspecialidadeById(
-        @Path("id") id: Long
-    ): Response<MedicoEspecialidadeResponseDto>
-
-    // CRIAR RELAÇÃO
-    @POST("medico-especialidade")
-    suspend fun createMedicoEspecialidade(
-        @Body medicoEspecialidade: MedicoEspecialidadeCreateRequestDto
-    ): Response<MedicoEspecialidadeResponseDto>
-
-    // ATUALIZAR RELAÇÃO
-    @PUT("medico-especialidade/{id}")
-    suspend fun updateMedicoEspecialidade(
-        @Path("id") id: Long,
-        @Body medicoEspecialidade: MedicoEspecialidadeUpdateRequestDto
-    ): Response<MedicoEspecialidadeResponseDto>
-
-    // DELETAR RELAÇÃO
-    @DELETE("medico-especialidade/{id}")
-    suspend fun deleteMedicoEspecialidade(
-        @Path("id") id: Long
-    ): Response<Unit>
-
-//ESPECIALIDADES
+//ESPECIALIDADES ok
     // LISTAR ESPECIALIDADES
     @GET("especialidades")
     suspend fun getEspecialidades(
@@ -169,7 +139,27 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<EspecialidadeResponseDto>
 
-//LOCAL
+// LISTAR RELAÇÕES MÉDICO-ESPECIALIDADE - ok
+    @GET("/medicos/{idMedico}/especialidades")
+    suspend fun getMedicoEspecialidades(
+        @Path("idMedico") idMedico: Long
+    ): Response<MedicoEspecialidadePageResponseDto>
+
+    // CRIAR RELAÇÃO
+    @POST("/medicos/{idMedico}/especialidades")
+    suspend fun createMedicoEspecialidade(
+        @Path("idMedico") idMedico: Long,
+        @Body medicoEspecialidade: MedicoEspecialidadeCreateRequestDto
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // DELETAR RELAÇÃO
+    @DELETE("/medicos/{idMedico}/especialidades/{id}")
+    suspend fun deleteMedicoEspecialidade(
+        @Path("idMedico") idMedico: Long,
+        @Path("id") id: Long
+    ): Response<Unit>
+
+//LOCAL -ok
     // LISTAR LOCAIS
     @GET("locais")
     suspend fun getLocais(
@@ -205,12 +195,12 @@ interface ApiService {
 
 //BLOQUEIOAGENDA
 // LISTAR BLOQUEIOS DE AGENDA
-@GET("bloqueio-agenda")
-suspend fun getBloqueiosAgenda(
-    @Query("page") page: Int = 0,
-    @Query("size") size: Int = 20,
-    @Query("sort") sort: String = "dataInicio,asc"
-): Response<BloqueioAgendaPageResponseDto>
+    @GET("bloqueio-agenda")
+    suspend fun getBloqueiosAgenda(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20,
+        @Query("sort") sort: String = "dataInicio,asc"
+    ): Response<BloqueioAgendaPageResponseDto>
 
     // BUSCAR BLOQUEIO POR ID
     @GET("bloqueio-agenda/{id}")
@@ -336,6 +326,39 @@ suspend fun getBloqueiosAgenda(
     // DELETAR CONSULTA
     @DELETE("consultas/{id}")
     suspend fun deleteConsulta(
+        @Path("id") id: Long
+    ): Response<Unit>
+
+//AGENDA
+
+    @GET("agenda")
+    suspend fun getAgendas(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20
+    ): Response<AgendaResponseDto>
+
+    // BUSCAR AGENDA POR ID
+    @GET("agendas/{id}")
+    suspend fun getAgendaById(
+        @Path("id") id: Long
+    ): Response<AgendaResponseDto>
+
+    // CRIAR AGENDA
+    @POST("agendas")
+    suspend fun createAgenda(
+        @Body agenda: AgendaRequestDTO
+    ): Response<AgendaResponseDto>
+
+    // ATUALIZAR AGENDA
+    @PUT("agendas/{id}")
+    suspend fun updateAgenda(
+        @Path("id") id: Long,
+        @Body agenda: AgendaRequestDTO
+    ): Response<AgendaResponseDto>
+
+    // DELETAR AGENDA
+    @DELETE("agendas/{id}")
+    suspend fun deleteAgenda(
         @Path("id") id: Long
     ): Response<Unit>
 }
