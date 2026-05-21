@@ -4,6 +4,14 @@ import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgen
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaResponseDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaUpdateRequestDto
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaPageResponseDto
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaPageResponseDto
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaUpdateRequestDto
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
@@ -260,6 +268,74 @@ suspend fun getBloqueiosAgenda(
     // DELETAR CONVÊNIO
     @DELETE("convenios/{id}")
     suspend fun deleteConvenio(
+        @Path("id") id: Long
+    ): Response<Unit>
+
+//AGENDA
+// LISTAR CONSULTAS OFERTADAS
+    @GET("consultas-ofertadas")
+    suspend fun getConsultasOfertadas(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20,
+        @Query("sort") sort: String = "dataHoraInicio,asc"
+    ): Response<ConsultaOfertadaPageResponseDto>
+
+    // BUSCAR CONSULTA OFERTADA POR ID
+    @GET("consultas-ofertadas/{id}")
+    suspend fun getConsultaOfertadaById(
+        @Path("id") id: Long
+    ): Response<ConsultaOfertadaResponseDto>
+
+    // CRIAR CONSULTA OFERTADA
+    @POST("consultas-ofertadas")
+    suspend fun createConsultaOfertada(
+        @Body consulta: ConsultaOfertadaCreateRequestDto
+    ): Response<ConsultaOfertadaResponseDto>
+
+    // ATUALIZAR CONSULTA OFERTADA
+    @PUT("consultas-ofertadas/{id}")
+    suspend fun updateConsultaOfertada(
+        @Path("id") id: Long,
+        @Body consulta: ConsultaOfertadaUpdateRequestDto
+    ): Response<ConsultaOfertadaResponseDto>
+
+    // DELETAR CONSULTA OFERTADA
+    @DELETE("consultas-ofertadas/{id}")
+    suspend fun deleteConsultaOfertada(
+        @Path("id") id: Long
+    ): Response<Unit>
+
+//CONSULTA
+    // LISTAR CONSULTAS
+    @GET("consultas")
+    suspend fun getConsultas(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20,
+        @Query("sort") sort: String = "id,desc"
+    ): Response<ConsultaPageResponseDto>
+
+    // BUSCAR CONSULTA POR ID
+    @GET("consultas/{id}")
+    suspend fun getConsultaById(
+        @Path("id") id: Long
+    ): Response<ConsultaResponseDto>
+
+    // CRIAR CONSULTA
+    @POST("consultas")
+    suspend fun createConsulta(
+        @Body consulta: ConsultaCreateRequestDto
+    ): Response<ConsultaResponseDto>
+
+    // ATUALIZAR CONSULTA
+    @PUT("consultas/{id}")
+    suspend fun updateConsulta(
+        @Path("id") id: Long,
+        @Body consulta: ConsultaUpdateRequestDto
+    ): Response<ConsultaResponseDto>
+
+    // DELETAR CONSULTA
+    @DELETE("consultas/{id}")
+    suspend fun deleteConsulta(
         @Path("id") id: Long
     ): Response<Unit>
 }
