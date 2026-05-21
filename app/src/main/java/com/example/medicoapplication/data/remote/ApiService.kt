@@ -193,8 +193,8 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//BLOQUEIOAGENDA
-// LISTAR BLOQUEIOS DE AGENDA -ok
+//BLOQUEIOAGENDA-ok
+// LISTAR BLOQUEIOS DE AGENDA
     @GET("/medicos/{idMedico}/bloqueio_agenda")
         suspend fun getBloqueiosAgenda(
         @Path("id") idMedico: Long
@@ -233,10 +233,8 @@ interface ApiService {
 // LISTAR CONVÊNIOS
     @GET("convenios")
     suspend fun getConvenios(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20,
         @Query("sort") sort: String = "nome,asc"
-    ): Response<ConvenioPageResponseDto>
+    ): Response<List<ConvenioPageResponseDto>>
 
     // BUSCAR CONVÊNIO POR ID
     @GET("convenios/{id}")
