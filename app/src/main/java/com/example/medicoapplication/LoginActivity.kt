@@ -100,5 +100,10 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // Navegar para o cadastro ao clicar em "Não tem uma conta?"
+        btnIrParaCadastro.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
     }
 }

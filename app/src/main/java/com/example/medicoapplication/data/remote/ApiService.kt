@@ -87,7 +87,8 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//MEDICOS
+
+    //MEDICOS
     // LISTAR MÉDICOS
     @GET("medicos")
     suspend fun getMedicos(
@@ -121,7 +122,7 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//MEDICO-ESPECIALIDADE
+    //MEDICO-ESPECIALIDADE
 // LISTAR RELAÇÕES MÉDICO-ESPECIALIDADE
     @GET("medico-especialidade")
     suspend fun getMedicoEspecialidades(
@@ -154,7 +155,7 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//ESPECIALIDADES
+    //ESPECIALIDADES
     // LISTAR ESPECIALIDADES
     @GET("especialidades")
     suspend fun getEspecialidades(
@@ -169,7 +170,7 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<EspecialidadeResponseDto>
 
-//LOCAL
+    //LOCAL
     // LISTAR LOCAIS
     @GET("locais")
     suspend fun getLocais(
@@ -203,14 +204,14 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//BLOQUEIOAGENDA
+    //BLOQUEIOAGENDA
 // LISTAR BLOQUEIOS DE AGENDA
-@GET("bloqueio-agenda")
-suspend fun getBloqueiosAgenda(
-    @Query("page") page: Int = 0,
-    @Query("size") size: Int = 20,
-    @Query("sort") sort: String = "dataInicio,asc"
-): Response<BloqueioAgendaPageResponseDto>
+    @GET("bloqueio-agenda")
+    suspend fun getBloqueiosAgenda(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20,
+        @Query("sort") sort: String = "dataInicio,asc"
+    ): Response<BloqueioAgendaPageResponseDto>
 
     // BUSCAR BLOQUEIO POR ID
     @GET("bloqueio-agenda/{id}")
@@ -237,7 +238,7 @@ suspend fun getBloqueiosAgenda(
         @Path("id") id: Long
     ): Response<Unit>
 
-//CONVENIOS
+    //CONVENIOS
 // LISTAR CONVÊNIOS
     @GET("convenios")
     suspend fun getConvenios(
@@ -271,7 +272,7 @@ suspend fun getBloqueiosAgenda(
         @Path("id") id: Long
     ): Response<Unit>
 
-//AGENDA
+    //AGENDA
 // LISTAR CONSULTAS OFERTADAS
     @GET("consultas-ofertadas")
     suspend fun getConsultasOfertadas(
@@ -305,7 +306,7 @@ suspend fun getBloqueiosAgenda(
         @Path("id") id: Long
     ): Response<Unit>
 
-//CONSULTA
+    //CONSULTA
     // LISTAR CONSULTAS
     @GET("consultas")
     suspend fun getConsultas(
