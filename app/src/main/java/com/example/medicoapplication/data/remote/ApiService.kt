@@ -247,11 +247,8 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-<<<<<<< HEAD
+
 //BLOQUEIOAGENDA-ok
-=======
-    //BLOQUEIOAGENDA
->>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
 // LISTAR BLOQUEIOS DE AGENDA
     @GET("/medicos/{idMedico}/bloqueio_agenda")
     suspend fun getBloqueiosAgenda(
@@ -287,11 +284,8 @@ interface ApiService {
         @Path("idBloqueio") idBloqueio: Long
     ): Response<Unit>
 
-<<<<<<< HEAD
+
 //CONVENIOS -ok
-=======
-    //CONVENIOS
->>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
 // LISTAR CONVÊNIOS
     @GET("convenios")
     suspend fun getConvenios(
@@ -322,11 +316,8 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-<<<<<<< HEAD
+
 //CONSULTA - OFERTADA
-=======
-    //AGENDA
->>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
 // LISTAR CONSULTAS OFERTADAS
     @GET("/medicos/{idMedico}/consultas-ofertadas")
     suspend fun getConsultasOfertadas(
@@ -361,15 +352,9 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-<<<<<<< HEAD
 //EVENTO - CONSULTA
     //PELO PACIENTE
     @GET("/pacientes/{idPaciente}/consultas")
-=======
-    //CONSULTA
-    // LISTAR CONSULTAS
-    @GET("consultas")
->>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
     suspend fun getConsultas(
         @Path("idPaciente") idPaciente: Long
     ): Response<ConsultaPageResponseDto>
