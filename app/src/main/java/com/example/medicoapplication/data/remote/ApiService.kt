@@ -233,7 +233,6 @@ interface ApiService {
 // LISTAR CONVÊNIOS
     @GET("convenios")
     suspend fun getConvenios(
-        @Query("sort") sort: String = "nome,asc"
     ): Response<List<ConvenioPageResponseDto>>
 
     // BUSCAR CONVÊNIO POR ID
