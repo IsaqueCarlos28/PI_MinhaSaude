@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
+import com.example.medicoapplication.data.remote.usuario.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.RetrofitClient
 import kotlinx.coroutines.launch
 import java.util.Locale

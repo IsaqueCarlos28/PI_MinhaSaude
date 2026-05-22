@@ -1,4 +1,4 @@
-package com.example.medicoapplication.data.remote.DTO.medico
+package com.example.medicoapplication.data.remote.usuario.medico
 
 import com.example.medicoapplication.data.remote.DTO.PageDto
 

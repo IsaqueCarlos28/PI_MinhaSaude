@@ -1,8 +1,10 @@
-package com.example.medicoapplication.data.remote.DTO.paciente
+package com.example.medicoapplication.data.remote.usuario.paciente
 
+import com.example.medicoapplication.data.remote.DTO.Genero
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
 
-data class PacienteCreateRequestDto(
+data class PacienteUpdateRequestDto(
     @SerializedName("nome")
     val nome: String,
 
@@ -16,11 +18,8 @@ data class PacienteCreateRequestDto(
     val telefone: String,
 
     @SerializedName("genero")
-    val genero: String, // Usando String para facilitar o envio do "MASCULINO" / "FEMININO"
+    val genero: Genero,
 
     @SerializedName("dataNascimento")
-    val dataNascimento: String, // Usando String para enviar o formato "yyyy-MM-dd"
-
-    @SerializedName("senha")
-    val senha: String
+    val dataNascimento: LocalDate
 )

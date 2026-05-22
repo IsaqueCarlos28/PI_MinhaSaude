@@ -28,18 +28,18 @@ import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalUpdateRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.LoginResponseDto
-import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
-import com.example.medicoapplication.data.remote.DTO.medico.MedicoPageResponseDto
-import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
-import com.example.medicoapplication.data.remote.DTO.medico.MedicoUpdateRequestDto
+import com.example.medicoapplication.data.remote.usuario.medico.MedicoCreateRequestDto
+import com.example.medicoapplication.data.remote.usuario.medico.MedicoPageResponseDto
+import com.example.medicoapplication.data.remote.usuario.medico.MedicoResponseDto
+import com.example.medicoapplication.data.remote.usuario.medico.MedicoUpdateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadePageResponseDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeUpdateRequestDto
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
-import com.example.medicoapplication.data.remote.DTO.paciente.PacientePageResponseDto
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteUpdateRequestDto
+import com.example.medicoapplication.data.remote.usuario.paciente.PacienteCreateRequestDto
+import com.example.medicoapplication.data.remote.usuario.paciente.PacientePageResponseDto
+import com.example.medicoapplication.data.remote.usuario.paciente.PacienteResponseDto
+import com.example.medicoapplication.data.remote.usuario.paciente.PacienteUpdateRequestDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -53,13 +53,13 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    //LOGIN ok
+//LOGIN ok
     @POST("auth/login")
     suspend fun login(
         @Body request: LoginRequestDto
     ): Response<LoginResponseDto>
 
-    //PACIENTES ok
+//PACIENTES ok
     // LISTAR PACIENTES
     @GET("pacientes")
     suspend fun getPacientes(
@@ -67,8 +67,6 @@ interface ApiService {
         @Query("size") size: Int = 20,
         @Query("sort") sort: String = "nome,asc"
     ): Response<PacientePageResponseDto>
-
-
 
     // BUSCAR PACIENTE POR ID
     @GET("pacientes/{id}")
@@ -81,7 +79,6 @@ interface ApiService {
     suspend fun createPaciente(
         @Body paciente: PacienteCreateRequestDto
     ): Response<PacienteResponseDto>
-
 
 
     // ATUALIZAR PACIENTE
