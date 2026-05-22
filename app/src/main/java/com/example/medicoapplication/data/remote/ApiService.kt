@@ -2,6 +2,7 @@ package com.example.medicoapplication.data.remote
 
 import com.example.medicoapplication.data.remote.DTO.agenda.AgendaRequestDTO
 import com.example.medicoapplication.data.remote.DTO.agenda.AgendaResponseDto
+import com.example.medicoapplication.data.remote.DTO.agenda.DisponibilidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaResponseDto
@@ -354,36 +355,50 @@ interface ApiService {
         @Path("id") id: Long,
         @Field("status") status: StatusConsulta
     ): Response<ConsultaResponseDto>
-//AGENDA
 
-    @GET("agenda")
+    //AGENDA
+    @GET("/medicos/{idMedico}/consultas-ofertadas/{idConsultaOfertada}/agenda")
     suspend fun getAgendas(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20
+        @Path("idMedico") idMedico: Long,
+        @Path("idConsultaOfertada") idConsultaOfertada: Long,
     ): Response<AgendaResponseDto>
 
     // BUSCAR AGENDA POR ID
-    @GET("agendas/{id}")
+    @GET("/medicos/{idMedico}/consultas-ofertadas/{idConsultaOfertada}/agenda/{id}")
     suspend fun getAgendaById(
-        @Path("id") id: Long
+        @Path("idMedico") idMedico: Long,
+        @Path("idConsultaOfertada") idConsultaOfertada: Long,
+        @Path("id") id: Long,
     ): Response<AgendaResponseDto>
 
+    @GET("/medicos/{idMedico}/consultas-ofertadas/{idConsultaOfertada}/agenda/disponibilidade")
+    suspend fun getDisponibilidade(
+        @Path("idMedico") idMedico: Long,
+        @Path("idConsultaOfertada") idConsultaOfertada: Long,
+    ): Response<DisponibilidadeResponseDto>
+
     // CRIAR AGENDA
-    @POST("agendas")
+    @POST("/medicos/{idMedico}/consultas-ofertadas/{idConsultaOfertada}/agenda")
     suspend fun createAgenda(
+        @Path("idMedico") idMedico: Long,
+        @Path("idConsultaOfertada") idConsultaOfertada: Long,
         @Body agenda: AgendaRequestDTO
     ): Response<AgendaResponseDto>
 
     // ATUALIZAR AGENDA
-    @PUT("agendas/{id}")
+    @PUT("/medicos/{idMedico}/consultas-ofertadas/{idConsultaOfertada}/agenda/{id}")
     suspend fun updateAgenda(
+        @Path("idMedico") idMedico: Long,
+        @Path("idConsultaOfertada") idConsultaOfertada: Long,
         @Path("id") id: Long,
         @Body agenda: AgendaRequestDTO
     ): Response<AgendaResponseDto>
 
     // DELETAR AGENDA
-    @DELETE("agendas/{id}")
+    @DELETE("/medicos/{idMedico}/consultas-ofertadas/{idConsultaOfertada}/agenda{id}")
     suspend fun deleteAgenda(
+        @Path("idMedico") idMedico: Long,
+        @Path("idConsultaOfertada") idConsultaOfertada: Long,
         @Path("id") id: Long
     ): Response<Unit>
 }
