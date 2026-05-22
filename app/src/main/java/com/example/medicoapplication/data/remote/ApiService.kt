@@ -10,6 +10,7 @@ import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaCreateRequ
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
+import com.example.medicoapplication.data.remote.DTO.consulta.StatusConsulta
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
@@ -41,7 +42,9 @@ import com.example.medicoapplication.data.remote.DTO.paciente.PacienteUpdateRequ
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -295,40 +298,62 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//CONSULTA
-    // LISTAR CONSULTAS
-    @GET("consultas")
+//EVENTO - CONSULTA
+    //PELO PACIENTE
+    @GET("/pacientes/{idPaciente}/consultas")
     suspend fun getConsultas(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20,
-        @Query("sort") sort: String = "id,desc"
+        @Path("idPaciente") idPaciente: Long
     ): Response<ConsultaPageResponseDto>
 
     // BUSCAR CONSULTA POR ID
-    @GET("consultas/{id}")
+    @GET("/pacientes/{idPaciente}/consultas/{id}")
     suspend fun getConsultaById(
+        @Path("idPaciente") idPaciente: Long,
         @Path("id") id: Long
     ): Response<ConsultaResponseDto>
 
     // CRIAR CONSULTA
-    @POST("consultas")
+    @POST("/pacientes/{idPaciente}/consultas")
     suspend fun createConsulta(
+        @Path("idPaciente") idPaciente: Long,
         @Body consulta: ConsultaCreateRequestDto
     ): Response<ConsultaResponseDto>
 
     // ATUALIZAR CONSULTA
-    @PUT("consultas/{id}")
+    @PUT("/pacientes/{idPaciente}/consultas/{id}")
     suspend fun updateConsulta(
+        @Path("idPaciente") idPaciente: Long,
         @Path("id") id: Long,
         @Body consulta: ConsultaUpdateRequestDto
     ): Response<ConsultaResponseDto>
 
-    // DELETAR CONSULTA
-    @DELETE("consultas/{id}")
-    suspend fun deleteConsulta(
-        @Path("id") id: Long
-    ): Response<Unit>
+    // CANCELAR CONSULTA
+    @PATCH("/pacientes/{idPaciente}/consultas/{id}/status")
+    suspend fun pacienteCancelarConsulta(
+        @Path("idPaciente") idPaciente: Long,
+        @Path("id") id: Long,
+        @Field("status") status: StatusConsulta = StatusConsulta.CANCELADA
+    ): Response<ConsultaResponseDto>
 
+    //PELO MEDICO
+
+    @GET("/medicos/{idMedico}/consultas-agendadas")
+    suspend fun medicoGetConsultas(
+        @Path("idPaciente") idPaciente: Long
+    ): Response<ConsultaPageResponseDto>
+
+    @GET("/medicos/{idMedico}/consultas-agendadas/{id}")
+    suspend fun medicoGetConsultaById(
+        @Path("idPaciente") idPaciente: Long,
+        @Path("id") id: Long,
+    ): Response<ConsultaPageResponseDto>
+
+    @PATCH("/medicos/{idMedico}/consultas-agendadas/{id}/status")
+    suspend fun medicoStatusConsulta(
+        @Path("idPaciente") idPaciente: Long,
+        @Path("id") id: Long,
+        @Field("status") status: StatusConsulta
+    ): Response<ConsultaResponseDto>
 //AGENDA
 
     @GET("agenda")
