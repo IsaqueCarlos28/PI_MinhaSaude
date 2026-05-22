@@ -21,28 +21,26 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Referências do XML
-        val tabLayout = findViewById<TabLayout>(R.id.tabUserType)
-        val inputUsuario = findViewById<EditText>(R.id.etUser)
-        val inputSenha = findViewById<EditText>(R.id.etPassword)
-        val botaoLogin = findViewById<Button>(R.id.btnLogin)
-        val btnIrParaCadastro = findViewById<TextView>(R.id.tvIrParaCadastro)
+        val tabLayout       = findViewById<TabLayout>(R.id.tabUserType)
+        val inputUsuario    = findViewById<EditText>(R.id.etUser)
+        val inputSenha      = findViewById<EditText>(R.id.etPassword)
+        val botaoLogin      = findViewById<Button>(R.id.btnLogin)
+        val btnIrParaCadastro  = findViewById<TextView>(R.id.tvIrParaCadastro)
 
-        // Alternar entre Paciente e Médico
+        // ✅ ADICIONE ESTA LINHA — ajuste o id se for diferente no seu XML
+        val tvEsqueciSenha  = findViewById<TextView>(R.id.tvEsqueciSenha)
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tipoUsuario = tab?.text.toString()
                 inputUsuario.hint =
                     if (tipoUsuario == "Medico") "CRM ou E-mail" else "Usuário ou CPF"
             }
-
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
-        // Lógica de Login
         botaoLogin.setOnClickListener {
-
             val email = inputUsuario.text.toString().trim()
             val senha = inputSenha.text.toString().trim()
 
@@ -52,58 +50,37 @@ class LoginActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
-
                 try {
-
                     val response = RetrofitClient.api.login(
-                        LoginRequestDto(
-                            email = email,
-                            senha = senha
-                        )
+                        LoginRequestDto(email = email, senha = senha)
                     )
 
                     if (response.isSuccessful) {
-
                         val usuario = response.body()
-
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Login realizado com sucesso!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@LoginActivity, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
 
                         val destino =
-                            if (usuario?.role == "MEDICO")
-                                HomeMedicoActivity::class.java
-                            else
-                                HomePacienteActivity::class.java
+                            if (usuario?.role == "MEDICO") HomeMedicoActivity::class.java
+                            else HomePacienteActivity::class.java
 
                         startActivity(Intent(this@LoginActivity, destino))
                         finish()
-
                     } else {
-
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Usuário ou senha inválidos",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@LoginActivity, "Usuário ou senha inválidos", Toast.LENGTH_SHORT).show()
                     }
-
                 } catch (e: Exception) {
-
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Erro: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@LoginActivity, "Erro: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
 
-        // Navegar para o cadastro ao clicar em "Não tem uma conta?"
         btnIrParaCadastro.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
+        // ✅ ADICIONE ESTE BLOCO — abre a tela de recuperação de senha
+        tvEsqueciSenha.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
     }
 }

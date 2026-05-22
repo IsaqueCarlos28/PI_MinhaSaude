@@ -11,12 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.RetrofitClient
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 class RegisterActivity : AppCompatActivity() {
 
-    // Declaração dos componentes da UI
     private lateinit var btnVoltar: TextView
     private lateinit var etUsuario: EditText
     private lateinit var etCpf: EditText
@@ -31,10 +29,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // 1. Referências dos componentes do XML (Binding)
         bindViews()
-
-        // 2. Configuração dos cliques (Listeners)
         setupListeners()
     }
 
@@ -51,18 +46,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Lógica do botão Voltar
-        btnVoltar.setOnClickListener {
-            finish()
-        }
-
-        // Lógica do botão Cadastrar
-        btnCadastrar.setOnClickListener {
-            tentarCadastro()
-        }
+        btnVoltar.setOnClickListener { finish() }
+        btnCadastrar.setOnClickListener { tentarCadastro() }
     }
 
-    // 3. Validação dos campos e preparação dos dados
     private fun tentarCadastro() {
         val usuario        = etUsuario.text.toString().trim()
         val cpf            = etCpf.text.toString().trim()
@@ -72,7 +59,7 @@ class RegisterActivity : AppCompatActivity() {
         val senha          = etSenha.text.toString().trim()
         val confirmarSenha = etConfirmarSenha.text.toString().trim()
 
-        // Validação de campos vazios
+        // 1. Validação de campos vazios
         if (usuario.isEmpty() || cpf.isEmpty() || email.isEmpty() ||
             genero.isEmpty() || dataNasc.isEmpty() || senha.isEmpty() ||
             confirmarSenha.isEmpty()
@@ -81,14 +68,22 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // Validação de formato de E-mail
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.error = "E-mail inválido"
-            etEmail.requestFocus()
+        // 2. Validação de Senhas
+        if (senha != confirmarSenha) {
+            etConfirmarSenha.error = "As senhas não coincidem"
+            etConfirmarSenha.requestFocus()
             return
         }
 
-        // Validação de CPF (apenas 11 dígitos)
+        // 3. Formata a Data (DD/MM/AAAA -> YYYY-MM-DD)
+        val dataFormatada = converterDataParaApi(dataNasc)
+        if (dataFormatada == null) {
+            etDataNascimento.error = "Use o formato DD/MM/AAAA"
+            etDataNascimento.requestFocus()
+            return
+        }
+
+        // 4. Limpa o CPF (apenas números)
         val cpfLimpo = cpf.replace(Regex("[^0-9]"), "")
         if (cpfLimpo.length != 11) {
             etCpf.error = "CPF deve conter 11 dígitos"
@@ -96,83 +91,67 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // Conversão de Data para padrão da API (YYYY-MM-DD)
-        val dataFormatada = converterData(dataNasc)
-        if (dataFormatada == null) {
-            etDataNascimento.error = "Use o formato DD/MM/AAAA"
-            etDataNascimento.requestFocus()
-            return
+        // 5. Trata o Gênero
+        val generoFinal = when (genero.lowercase()) {
+            "masculino", "m" -> "MASCULINO"
+            "feminino", "f" -> "FEMININO"
+            else -> genero.uppercase()
         }
 
-        // Verificação de senha idêntica
-        if (senha != confirmarSenha) {
-            etConfirmarSenha.error = "As senhas não coincidem"
-            etConfirmarSenha.requestFocus()
-            return
-        }
-
-        // Criação do objeto DTO para envio
+        // 6. Monta o objeto DTO
         val request = PacienteCreateRequestDto(
             nome           = usuario,
             cpf            = cpfLimpo,
             email          = email,
-            telefone       = "",
-            genero         = genero,
+            telefone       = "00000000000",
+            genero         = generoFinal,
             dataNascimento = dataFormatada,
             senha          = senha
         )
 
-        // Dentro de tentarCadastro(), antes de criar o request:
-        val generoFinal = when (genero.lowercase()) {
-            "masculino", "m" -> "MASCULINO"
-            "feminino", "f" -> "FEMININO"
-            else -> genero.uppercase() // Envia o que o usuário digitou em Caps
-        }
-
+        // 7. Envia para o servidor
         realizarCadastro(request)
     }
 
-    // 4. Comunicação com a API (Retrofit + Coroutines)
     private fun realizarCadastro(request: PacienteCreateRequestDto) {
         setLoading(true)
-
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.api.createPaciente(request)
-
                 if (response.isSuccessful) {
-                    Toast.makeText(this@RegisterActivity, "Cadastro realizado! Faça o login.", Toast.LENGTH_LONG).show()
-
-                    // Volta para a tela de Login limpando a pilha
-                    val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
+                    Toast.makeText(this@RegisterActivity, "Cadastro realizado!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                     finish()
-
                 } else {
-                    // Tratamento de erros específicos da API
-                    val mensagem = when (response.code()) {
-                        400  -> "Dados inválidos. Verifique as informações."
-                        409  -> "CPF ou e-mail já cadastrado."
-                        else -> "Erro ao cadastrar. Tente novamente."
-                    }
-                    mostrarErro(mensagem)
+                    // Aqui você verá se o 404 persiste
+                    mostrarErro("Erro ${response.code()}: Verifique o endereço da API.")
                 }
             } catch (e: Exception) {
-                mostrarErro("Falha de conexão: ${e.message}")
+                mostrarErro("Falha na rede: ${e.message}")
             } finally {
                 setLoading(false)
             }
         }
     }
 
-    private fun converterData(entrada: String): String? {
+    private fun converterDataParaApi(entrada: String): String? {
         return try {
-            val parseFmt = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-            val emitFmt  = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            parseFmt.isLenient = false
-            val date = parseFmt.parse(entrada) ?: return null
-            emitFmt.format(date)
+            // Padroniza separadores (aceita ponto ou traço e vira barra)
+            val dataLimpa = entrada.trim().replace(".", "/").replace("-", "/")
+
+            if (dataLimpa.length != 10 || !dataLimpa.contains("/")) {
+                return null
+            }
+
+            val partes = dataLimpa.split("/")
+            if (partes.size == 3) {
+                val dia = partes[0]
+                val mes = partes[1]
+                val ano = partes[2]
+                "$ano-$mes-$dia" // Formato ISO para a API
+            } else {
+                null
+            }
         } catch (e: Exception) {
             null
         }
@@ -184,6 +163,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setLoading(carregando: Boolean) {
         btnCadastrar.isEnabled = !carregando
-        btnCadastrar.text      = if (carregando) "Cadastrando..." else "Cadastrar"
+        btnCadastrar.text = if (carregando) "Processando..." else "Cadastrar"
     }
 }

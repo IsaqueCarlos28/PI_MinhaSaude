@@ -10,6 +10,7 @@ object RetrofitClient {
 
     private const val BASE_URL = "https://minhasaudeapi.onrender.com/"
 
+
     // Interceptor para logs completos
     private val loggingInterceptor = HttpLoggingInterceptor { message ->
         Log.d("API_REQUEST", message)
