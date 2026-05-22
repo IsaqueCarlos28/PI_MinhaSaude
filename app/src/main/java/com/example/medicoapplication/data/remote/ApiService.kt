@@ -68,6 +68,8 @@ interface ApiService {
         @Query("sort") sort: String = "nome,asc"
     ): Response<PacientePageResponseDto>
 
+
+
     // BUSCAR PACIENTE POR ID
     @GET("pacientes/{id}")
     suspend fun getPacienteById(
@@ -79,6 +81,8 @@ interface ApiService {
     suspend fun createPaciente(
         @Body paciente: PacienteCreateRequestDto
     ): Response<PacienteResponseDto>
+
+
 
     // ATUALIZAR PACIENTE
     @PUT("pacientes/{id}")
@@ -93,7 +97,12 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
+
+
+    //MEDICOS
+
 //MEDICOS ok
+
     // LISTAR MÉDICOS
     @GET("medicos")
     suspend fun getMedicos(
@@ -128,7 +137,44 @@ interface ApiService {
     ): Response<Unit>
 
 
+    //MEDICO-ESPECIALIDADE
+// LISTAR RELAÇÕES MÉDICO-ESPECIALIDADE
+    @GET("medico-especialidade")
+    suspend fun getMedicoEspecialidades(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20
+    ): Response<MedicoEspecialidadePageResponseDto>
+
+    // BUSCAR RELAÇÃO POR ID
+    @GET("medico-especialidade/{id}")
+    suspend fun getMedicoEspecialidadeById(
+        @Path("id") id: Long
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // CRIAR RELAÇÃO
+    @POST("medico-especialidade")
+    suspend fun createMedicoEspecialidade(
+        @Body medicoEspecialidade: MedicoEspecialidadeCreateRequestDto
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // ATUALIZAR RELAÇÃO
+    @PUT("medico-especialidade/{id}")
+    suspend fun updateMedicoEspecialidade(
+        @Path("id") id: Long,
+        @Body medicoEspecialidade: MedicoEspecialidadeUpdateRequestDto
+    ): Response<MedicoEspecialidadeResponseDto>
+
+    // DELETAR RELAÇÃO
+    @DELETE("medico-especialidade/{id}")
+    suspend fun deleteMedicoEspecialidade(
+        @Path("id") id: Long
+    ): Response<Unit>
+
+    //ESPECIALIDADES
+
+
 //ESPECIALIDADES ok
+
     // LISTAR ESPECIALIDADES
     @GET("especialidades")
     suspend fun getEspecialidades(
@@ -142,6 +188,9 @@ interface ApiService {
     suspend fun getEspecialidadeById(
         @Path("id") id: Long
     ): Response<EspecialidadeResponseDto>
+
+
+    //LOCAL
 
 // LISTAR RELAÇÕES MÉDICO-ESPECIALIDADE - ok
     @GET("/medicos/{idMedico}/especialidades")
@@ -164,6 +213,7 @@ interface ApiService {
     ): Response<Unit>
 
 //LOCAL -ok
+
     // LISTAR LOCAIS
     @GET("locais")
     suspend fun getLocais(
@@ -197,7 +247,11 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
+<<<<<<< HEAD
 //BLOQUEIOAGENDA-ok
+=======
+    //BLOQUEIOAGENDA
+>>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
 // LISTAR BLOQUEIOS DE AGENDA
     @GET("/medicos/{idMedico}/bloqueio_agenda")
     suspend fun getBloqueiosAgenda(
@@ -233,7 +287,11 @@ interface ApiService {
         @Path("idBloqueio") idBloqueio: Long
     ): Response<Unit>
 
+<<<<<<< HEAD
 //CONVENIOS -ok
+=======
+    //CONVENIOS
+>>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
 // LISTAR CONVÊNIOS
     @GET("convenios")
     suspend fun getConvenios(
@@ -264,7 +322,11 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
+<<<<<<< HEAD
 //CONSULTA - OFERTADA
+=======
+    //AGENDA
+>>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
 // LISTAR CONSULTAS OFERTADAS
     @GET("/medicos/{idMedico}/consultas-ofertadas")
     suspend fun getConsultasOfertadas(
@@ -299,9 +361,15 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
+<<<<<<< HEAD
 //EVENTO - CONSULTA
     //PELO PACIENTE
     @GET("/pacientes/{idPaciente}/consultas")
+=======
+    //CONSULTA
+    // LISTAR CONSULTAS
+    @GET("consultas")
+>>>>>>> cd6cb97614212bdf76aac024d1c7ab22869f5bb3
     suspend fun getConsultas(
         @Path("idPaciente") idPaciente: Long
     ): Response<ConsultaPageResponseDto>
