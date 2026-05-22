@@ -196,7 +196,7 @@ interface ApiService {
 //BLOQUEIOAGENDA-ok
 // LISTAR BLOQUEIOS DE AGENDA
     @GET("/medicos/{idMedico}/bloqueio_agenda")
-        suspend fun getBloqueiosAgenda(
+    suspend fun getBloqueiosAgenda(
         @Path("id") idMedico: Long
     ): Response<List<BloqueioAgendaPageResponseDto>>
 
@@ -229,7 +229,7 @@ interface ApiService {
         @Path("idBloqueio") idBloqueio: Long
     ): Response<Unit>
 
-//CONVENIOS
+//CONVENIOS -ok
 // LISTAR CONVÊNIOS
     @GET("convenios")
     suspend fun getConvenios(
@@ -260,36 +260,37 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<Unit>
 
-//AGENDA
+//CONSULTA - OFERTADA
 // LISTAR CONSULTAS OFERTADAS
-    @GET("consultas-ofertadas")
+    @GET("/medicos/{idMedico}/consultas-ofertadas")
     suspend fun getConsultasOfertadas(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20,
-        @Query("sort") sort: String = "dataHoraInicio,asc"
+        @Path("idMedico") idMedico: Long
     ): Response<ConsultaOfertadaPageResponseDto>
 
     // BUSCAR CONSULTA OFERTADA POR ID
-    @GET("consultas-ofertadas/{id}")
+    @GET("/medicos/{idMedico}/consultas-ofertadas/{id}")
     suspend fun getConsultaOfertadaById(
+        @Path("idMedico") idMedico: Long,
         @Path("id") id: Long
     ): Response<ConsultaOfertadaResponseDto>
 
     // CRIAR CONSULTA OFERTADA
-    @POST("consultas-ofertadas")
+    @POST("/medicos/{idMedico}/consultas-ofertadas")
     suspend fun createConsultaOfertada(
+        @Path("idMedico") idMedico: Long,
         @Body consulta: ConsultaOfertadaCreateRequestDto
     ): Response<ConsultaOfertadaResponseDto>
 
     // ATUALIZAR CONSULTA OFERTADA
-    @PUT("consultas-ofertadas/{id}")
+    @PUT("/medicos/{idMedico}/consultas-ofertadas/{id}")
     suspend fun updateConsultaOfertada(
+        @Path("idMedico") idMedico: Long,
         @Path("id") id: Long,
         @Body consulta: ConsultaOfertadaUpdateRequestDto
     ): Response<ConsultaOfertadaResponseDto>
 
     // DELETAR CONSULTA OFERTADA
-    @DELETE("consultas-ofertadas/{id}")
+    @DELETE("/medicos/{idMedico}/consultas-ofertadas/{id}")
     suspend fun deleteConsultaOfertada(
         @Path("id") id: Long
     ): Response<Unit>
