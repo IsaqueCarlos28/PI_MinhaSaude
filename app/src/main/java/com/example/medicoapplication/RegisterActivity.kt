@@ -1,16 +1,12 @@
 package com.example.medicoapplication
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-<<<<<<< HEAD
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
-import com.example.medicoapplication.data.remote.RetrofitClient
-import kotlinx.coroutines.*
-
-class RegisterActivity : AppCompatActivity() {
-
-=======
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
@@ -30,50 +26,14 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var etConfirmarSenha: EditText
     private lateinit var btnCadastrar: Button
 
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cadastro_paciente)
+        setContentView(R.layout.activity_register)
 
-        val etNome: EditText = findViewById(R.id.etNome)
-        val etCpf: EditText = findViewById(R.id.etCpf)
-        val etEmail: EditText = findViewById(R.id.etEmail)
-        val etTelefone: EditText = findViewById(R.id.etTelefone)
-        val etSenha: EditText = findViewById(R.id.etSenha)
-        val etGenero: EditText = findViewById(R.id.etGenero)
-        val etDataNascimento: EditText = findViewById(R.id.etDataNascimento)
-        val spUf: Spinner = findViewById(R.id.spUf)
-        val btnCadastrar: Button = findViewById(R.id.btnCadastrar)
-
-        btnCadastrar.setOnClickListener {
-            val paciente = PacienteCreateRequestDto(
-                nome = etNome.text.toString(),
-                cpf = etCpf.text.toString(),
-                email = etEmail.text.toString(),
-                telefone = etTelefone.text.toString(),
-                senha = etSenha.text.toString(),
-                genero = etGenero.text.toString(),
-                dataNascimento = etDataNascimento.text.toString(),
-                uf = spUf.selectedItem.toString()
-            )
-
-            cadastrarPaciente(paciente)
-        }
+        bindViews()
+        setupListeners()
     }
 
-<<<<<<< HEAD
-    private fun cadastrarPaciente(paciente: PacienteCreateRequestDto) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitClient.api.cadastrarPaciente(paciente)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@RegisterActivity, "Paciente cadastrado com sucesso!", Toast.LENGTH_LONG).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this@RegisterActivity, "Erro: ${response.code()}", Toast.LENGTH_LONG).show()
-                    }
-=======
     private fun bindViews() {
         btnVoltar        = findViewById(R.id.btnVoltar)
         etUsuario        = findViewById(R.id.etUsuario)
@@ -102,23 +62,19 @@ class RegisterActivity : AppCompatActivity() {
         val senha          = etSenha.text.toString().trim()
         val confirmarSenha = etConfirmarSenha.text.toString().trim()
 
-        // 1. Campos vazios
         if (usuario.isEmpty() || cpf.isEmpty() || email.isEmpty() || telefone.isEmpty() ||
-            genero.isEmpty() || dataNasc.isEmpty() || senha.isEmpty() ||
-            confirmarSenha.isEmpty()
+            genero.isEmpty() || dataNasc.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()
         ) {
             mostrarErro("Preencha todos os campos!")
             return
         }
 
-        // 2. Senhas coincidem
         if (senha != confirmarSenha) {
             etConfirmarSenha.error = "As senhas não coincidem"
             etConfirmarSenha.requestFocus()
             return
         }
 
-        // 3. Formata a data (DD/MM/AAAA -> YYYY-MM-DD)
         val dataFormatada = converterDataParaApi(dataNasc)
         if (dataFormatada == null) {
             etDataNascimento.error = "Use o formato DD/MM/AAAA"
@@ -126,7 +82,6 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // 4. Limpa o CPF
         val cpfLimpo = cpf.replace(Regex("[^0-9]"), "")
         if (cpfLimpo.length != 11) {
             etCpf.error = "CPF deve conter 11 dígitos"
@@ -134,17 +89,12 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // 5. Converte gênero para enum
-        // FIX: map the text input to the typed Genero enum
         val generoEnum: Genero = when (genero.lowercase()) {
             "masculino", "m" -> Genero.MASCULINO
             "feminino", "f"  -> Genero.FEMININO
             else             -> Genero.OUTRO
         }
 
-        // 6. Monta o DTO
-        // FIX: import path is now DTO.paciente, not usuario.paciente
-        // FIX: genero field is now typed as Genero enum, not String
         val request = PacienteCreateRequestDto(
             nome           = usuario,
             cpf            = cpfLimpo,
@@ -173,17 +123,14 @@ class RegisterActivity : AppCompatActivity() {
                     finish()
                 } else {
                     mostrarErro("Erro ${response.code()}: Verifique os dados e tente novamente.")
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@RegisterActivity, "Falha: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+                mostrarErro("Falha na rede: ${e.message}")
+            } finally {
+                setLoading(false)
             }
         }
     }
-<<<<<<< HEAD
-=======
 
     private fun converterDataParaApi(entrada: String): String? {
         return try {
@@ -204,5 +151,4 @@ class RegisterActivity : AppCompatActivity() {
         btnCadastrar.isEnabled = !carregando
         btnCadastrar.text = if (carregando) "Processando..." else "Cadastrar"
     }
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
 }

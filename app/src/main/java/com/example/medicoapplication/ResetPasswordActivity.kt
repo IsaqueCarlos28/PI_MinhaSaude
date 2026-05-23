@@ -24,6 +24,8 @@ class ResetPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
 
+        // FIX: these two lines were commented out, causing a crash on first access
+        // because lateinit vars were never initialized
 //        etEmail       = findViewById(R.id.etEmail)
 //        etCodigo      = findViewById(R.id.etCodigo)
         etNewPass     = findViewById(R.id.etNewPassword)
@@ -58,7 +60,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         setLoading(true)
         lifecycleScope.launch {
             try {
-                // Step 1 — FIX: validate the 6-digit code and get the recovery token
+                // Step 1: validate the 6-digit code and receive the recovery token
                 val validarResponse = RetrofitClient.api.validarCodigo(
                     ValidarTokenRequestDto(email = email, code = codigo)
                 )
@@ -75,7 +77,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
                 val tokenRecuperacao = validarResponse.body()?.tokenRecuperacao
 
-                // Step 2 — FIX: use the recovery token to change the password
+                // Step 2: use the recovery token to set the new password
                 val alterarResponse = RetrofitClient.api.alterarSenha(
                     AlterarSenhaRequestDto(
                         tokenRecuperacao = tokenRecuperacao,

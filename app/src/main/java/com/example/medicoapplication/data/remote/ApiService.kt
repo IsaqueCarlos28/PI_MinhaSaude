@@ -1,21 +1,5 @@
 package com.example.medicoapplication.data.remote
 
-<<<<<<< HEAD
-import com.example.medicoapplication.data.remote.DTO.auth.LoginRequestDto
-import com.example.medicoapplication.data.remote.DTO.auth.LoginResponseDto
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteDto
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
-import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
-import com.example.medicoapplication.data.remote.DTO.evento_consulta.EventoConsultaRequestDto
-import com.example.medicoapplication.data.remote.DTO.evento_consulta.EventoConsultaResponseDto
-import com.example.medicoapplication.data.remote.DTO.evento_consulta.EventoConsultaStatusDto
-import retrofit2.Response
-import retrofit2.http.*
-
-interface ApiService {
-
-    // Login
-=======
 import com.example.medicoapplication.data.remote.DTO.agenda.AgendaRequestDTO
 import com.example.medicoapplication.data.remote.DTO.agenda.AgendaResponseDto
 import com.example.medicoapplication.data.remote.DTO.agenda.DisponibilidadeSemanaDTO
@@ -49,11 +33,13 @@ import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.LoginResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoEditRequestDto
+import com.example.medicoapplication.data.remote.DTO.medico.MedicoPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
+import com.example.medicoapplication.data.remote.DTO.paciente.PacientePageResponseDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -69,13 +55,11 @@ interface ApiService {
 
     // ─── AUTH ────────────────────────────────────────────────────────────────────
 
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
     @POST("auth/login")
-    suspend fun login(@Body loginRequest: LoginRequestDto): Response<LoginResponseDto>
+    suspend fun login(
+        @Body loginRequest: LoginRequestDto
+    ): Response<LoginResponseDto>
 
-<<<<<<< HEAD
-    // Paciente
-=======
     @POST("auth/esqueceu-a-senha")
     suspend fun esqueceuSenha(
         @Body request: EsqueceuSenhaRequestDto
@@ -100,16 +84,16 @@ interface ApiService {
         @Query("sort") sort: String = "nome,asc"
     ): Response<PacientePageResponseDto>
 
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
     @GET("pacientes/{id}")
-    suspend fun getPacienteById(@Path("id") id: Long): Response<PacienteDto>
+    suspend fun getPacienteById(
+        @Path("id") id: Long
+    ): Response<PacienteResponseDto>
 
     @POST("pacientes")
-    suspend fun cadastrarPaciente(@Body paciente: PacienteCreateRequestDto): Response<Void>
+    suspend fun createPaciente(
+        @Body paciente: PacienteCreateRequestDto
+    ): Response<PacienteResponseDto>
 
-<<<<<<< HEAD
-    // Médico
-=======
     @PUT("pacientes/{id}")
     suspend fun updatePaciente(
         @Path("id") id: Long,
@@ -135,29 +119,11 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<MedicoResponseDto>
 
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
     @POST("medicos")
-    suspend fun cadastrarMedico(@Body medico: MedicoCreateRequestDto): Response<Void>
+    suspend fun createMedico(
+        @Body medico: MedicoCreateRequestDto
+    ): Response<MedicoResponseDto>
 
-<<<<<<< HEAD
-    // Consultas
-    @GET("pacientes/{id}/consultas")
-    suspend fun getConsultasByPaciente(@Path("id") idPaciente: Long): Response<List<EventoConsultaResponseDto>>
-
-    @PUT("pacientes/{id}/consultas/{idEvento}")
-    suspend fun reagendarConsulta(
-        @Path("id") idPaciente: Long,
-        @Path("idEvento") idEvento: Long,
-        @Body consulta: EventoConsultaRequestDto
-    ): Response<EventoConsultaResponseDto>
-
-    @PATCH("pacientes/{id}/consultas/{idEvento}/status")
-    suspend fun atualizarStatusConsulta(
-        @Path("id") idPaciente: Long,
-        @Path("idEvento") idEvento: Long,
-        @Body status: EventoConsultaStatusDto
-    ): Response<EventoConsultaResponseDto>
-=======
     @PUT("medicos/{id}")
     suspend fun updateMedico(
         @Path("id") id: Long,
@@ -432,5 +398,4 @@ interface ApiService {
         @Path("idEvento") idEvento: Long,
         @Body status: ConsultaStatusRequestDto
     ): Response<ConsultaResponseDto>
->>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
 }
