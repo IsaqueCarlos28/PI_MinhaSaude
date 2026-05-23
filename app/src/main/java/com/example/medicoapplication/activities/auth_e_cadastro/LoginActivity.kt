@@ -30,7 +30,8 @@ class LoginActivity : AppCompatActivity() {
         val inputUsuario      = findViewById<EditText>(R.id.etUser)
         val inputSenha        = findViewById<EditText>(R.id.etPassword)
         val botaoLogin        = findViewById<Button>(R.id.btnLogin)
-        val btnIrParaCadastro = findViewById<TextView>(R.id.tvIrParaCadastro)
+        val btnIrParaCadastroPaciente = findViewById<TextView>(R.id.tvIrParaCadastroPaciente)
+        val btnIrParaCadastroMedico = findViewById<TextView>(R.id.tvIrParaCadastroMedico)
         val tvEsqueciSenha    = findViewById<TextView>(R.id.tvEsqueciSenha)
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -48,7 +49,8 @@ class LoginActivity : AppCompatActivity() {
             val senha = inputSenha.text.toString().trim()
 
             if (email.isEmpty() || senha.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Preencha todos os campos!",
+                    Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -90,12 +92,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Route to the right registration screen based on selected tab
-        btnIrParaCadastro.setOnClickListener {
+        btnIrParaCadastroMedico.setOnClickListener {
             val destino =
                 if (tipoUsuario == "Medico") CadastroMedicoActivity::class.java
                 else RegisterActivity::class.java
             startActivity(Intent(this, destino))
         }
+
 
         tvEsqueciSenha.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))

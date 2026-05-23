@@ -15,7 +15,7 @@ import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequ
 import com.example.medicoapplication.data.remote.RetrofitClient
 import kotlinx.coroutines.launch
 
-class CadastroMedicoActivity : AppCompatActivity() {
+class CadastroPacienteActivity : AppCompatActivity() {
 
     private lateinit var etNome: EditText
     private lateinit var etEmail: EditText
@@ -30,7 +30,7 @@ class CadastroMedicoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cadastro_medico)
+        setContentView(R.layout.activity_cadastro_paciente)
 
         etNome           = findViewById(R.id.etUsuario)
         etEmail          = findViewById(R.id.etEmail)
@@ -39,9 +39,6 @@ class CadastroMedicoActivity : AppCompatActivity() {
         etDataNascimento = findViewById(R.id.etDataNascimento)
         etGenero         = findViewById(R.id.etGenero)
         etSenha          = findViewById(R.id.etSenha)
-        // FIX: was etCrm — the DTO field is crmDigits (6 digits only, UF comes from spinner)
-        etCrmDigitos     = findViewById(R.id.etCrm)
-        spUf             = findViewById(R.id.spUf)
         btnCadastrar     = findViewById(R.id.btnCadastrar)
 
         btnCadastrar.setOnClickListener { tentarCadastro() }
@@ -121,22 +118,22 @@ class CadastroMedicoActivity : AppCompatActivity() {
                 val response = RetrofitClient.api.createMedico(medico)
                 if (response.isSuccessful) {
                     Toast.makeText(
-                        this@CadastroMedicoActivity,
+                        this@CadastroPacienteActivity,
                         "Médico cadastrado com sucesso!",
                         Toast.LENGTH_LONG
                     ).show()
-                    startActivity(Intent(this@CadastroMedicoActivity, LoginActivity::class.java))
+                    startActivity(Intent(this@CadastroPacienteActivity, LoginActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(
-                        this@CadastroMedicoActivity,
+                        this@CadastroPacienteActivity,
                         "Erro ${response.code()}: Verifique os dados.",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
-                    this@CadastroMedicoActivity,
+                    this@CadastroPacienteActivity,
                     "Falha na rede: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()

@@ -45,6 +45,7 @@
             android:layout_height="50dp"
             android:background="@drawable/bg_tab_selector"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorHeight="0dp"
@@ -52,6 +53,7 @@
             app:tabTextColor="#757575">
 
             <com.google.android.material.tabs.TabItem android:text="Paciente" />
+
             <com.google.android.material.tabs.TabItem android:text="Medico" />
         </com.google.android.material.tabs.TabLayout>
 

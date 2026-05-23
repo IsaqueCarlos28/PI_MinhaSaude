@@ -1,66 +1,314 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@drawable/background_gradient"
+    android:fillViewport="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="40dp"
+        android:background="@drawable/bg_login_card"
+        android:paddingStart="24dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="40dp">
 
+        <!-- Botão Voltar -->
+        <TextView
+            android:id="@+id/btnVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_arrow_back"
+            android:drawablePadding="4dp"
+            android:drawableTint="#3B82F6"
+            android:fontFamily="sans-serif-medium"
+            android:text="Voltar"
+            android:textColor="#3B82F6"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvTituloCadastro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Cadastro de Médico"
+            android:textColor="#1A1A2E"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnVoltar" />
+
+        <!-- Subtítulo -->
+        <TextView
+            android:id="@+id/tvSubtituloCadastro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Preencha seus dados profissionais para se cadastrar."
+            android:textColor="#6B7280"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTituloCadastro" />
+
+        <!-- ── SEÇÃO: DADOS PESSOAIS ─────────────────────────────────── -->
+
+        <TextView
+            android:id="@+id/tvSecaoPessoal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Dados Pessoais"
+            android:textColor="#3B82F6"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtituloCadastro" />
+
+        <!-- Campo: Nome -->
         <EditText
             android:id="@+id/etNome"
-            android:hint="Nome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="Nome completo"
+            android:inputType="textPersonName"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSecaoPessoal" />
+
+        <!-- Campo: CPF -->
+        <EditText
+            android:id="@+id/etCpf"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_cpf"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="CPF"
+            android:inputType="number"
+            android:maxLength="14"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etNome" />
+
+        <!-- Campo: E-mail -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etCpf" />
+
+        <!-- Campo: Telefone -->
+        <EditText
+            android:id="@+id/etTelefone"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="11 912345678"
+            android:inputType="phone"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etEmail" />
+
+        <!-- Campo: Gênero -->
+        <Spinner
+            android:id="@+id/etGenero"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_genero"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:entries="@array/uf_list"
+            android:inputType="text"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etTelefone" />
+
+
+        <!-- Campo: Data de Nascimento -->
+        <EditText
+            android:id="@+id/etDataNascimento"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_calendar"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="Data de Nascimento (DD/MM/AAAA)"
+            android:inputType="date"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etGenero" />
+
+        <!-- Label UF do CRM -->
+        <TextView
+            android:id="@+id/tvLabelCrm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="CRM"
+            android:textColor="#374151"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etGenero" />
+
+        <!-- CRM: UF (spinner) + Dígitos (EditText) side by side -->
+        <Spinner
+            android:id="@+id/spUf"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_input_field"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:entries="@array/uf_list"
+            app:layout_constraintEnd_toStartOf="@id/etCrm"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLabelCrm"
+            app:layout_constraintWidth_percent="0.35" />
 
         <EditText
             android:id="@+id/etCrm"
-            android:hint="CRM"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_cpf"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="000000"
             android:inputType="number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:maxLength="6"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/spUf"
+            app:layout_constraintTop_toBottomOf="@id/tvLabelCrm" />
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <!-- Helper text under CRM row -->
+        <TextView
+            android:id="@+id/tvCrmHelper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Selecione o estado do seu CRM e insira os 6 dígitos"
+            android:textColor="#9E9E9E"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etCrm" />
 
-        <EditText
-            android:id="@+id/etTelefone"
-            android:hint="Telefone"
-            android:inputType="phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
+        <!-- Campo: Senha -->
         <EditText
             android:id="@+id/etSenha"
-            android:hint="Senha"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_password"
+            android:drawablePadding="16dp"
+            android:drawableTint="#60A5FA"
+            android:hint="Senha (mínimo 8 caracteres)"
             android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCrmHelper" />
 
-        <EditText
-            android:id="@+id/etEspecialidade"
-            android:hint="Especialidade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
-        <!-- Spinner para UF -->
-        <Spinner
-            android:id="@+id/spUf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/ufs"/>
-
+        <!-- Botão Cadastrar -->
         <Button
             android:id="@+id/btnCadastrar"
-            android:text="Cadastrar Médico"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
-    </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#3B82F6"
+            android:text="Cadastrar"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="28dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etSenha" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>
