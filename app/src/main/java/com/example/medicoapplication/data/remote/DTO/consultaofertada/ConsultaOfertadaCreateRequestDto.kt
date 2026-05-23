@@ -1,9 +1,11 @@
 package com.example.medicoapplication.data.remote.DTO.consultaofertada
 
 data class ConsultaOfertadaCreateRequestDto(
-    val medicoId: Long,
-    val localId: Long,
-    val dataHoraInicio: String,
-    val dataHoraFim: String,
-    val valor: Double
+    val idEspecialidade: Long,
+    val idLocal: Long?,
+    val tipoConsulta: TipoConsulta,
+    val valorConsulta: Double,
+    val aceitaParticular: Boolean,
+    val duracaoMinutos: Int,
+    val conveniosAceitosIds: Set<Long>
 )

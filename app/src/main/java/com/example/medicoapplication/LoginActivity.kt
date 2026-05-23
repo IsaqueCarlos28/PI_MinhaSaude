@@ -8,7 +8,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+<<<<<<< HEAD
 import com.example.medicoapplication.data.remote.DTO.auth.LoginRequestDto
+=======
+import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
+import com.example.medicoapplication.data.remote.DTO.login.Role
+>>>>>>> 2ace8766d38c78a681c89f28b8086b9ad78212c2
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
@@ -61,8 +66,9 @@ class LoginActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
+                        // FIX: compare against the typed Role enum, not a raw String
                         val destino =
-                            if (usuario?.role == "MEDICO") HomeMedicoActivity::class.java
+                            if (usuario?.role == Role.MEDICO) HomeMedicoActivity::class.java
                             else HomePacienteActivity::class.java
 
                         startActivity(Intent(this@LoginActivity, destino))
@@ -75,7 +81,11 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(this@LoginActivity, "Erro: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Erro: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }

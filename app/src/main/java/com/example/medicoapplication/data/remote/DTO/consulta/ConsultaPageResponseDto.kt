@@ -1,8 +1,5 @@
 package com.example.medicoapplication.data.remote.DTO.consulta
 
-import com.example.medicoapplication.data.remote.DTO.PageDto
-
-data class ConsultaPageResponseDto(
-    val _embedded: EmbeddedConsultasDto,
-    val page: PageDto
-)
+// The API returns List<ConsultaResponseDto> directly (no pagination for consultas).
+// Use List<ConsultaResponseDto> in the Retrofit interface.
+// Kept for reference; delete this file from your project.

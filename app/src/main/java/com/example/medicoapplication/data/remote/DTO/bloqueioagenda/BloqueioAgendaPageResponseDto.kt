@@ -1,8 +1,5 @@
 package com.example.medicoapplication.data.remote.DTO.bloqueioagenda
 
-import com.example.medicoapplication.data.remote.DTO.PageDto
-
-data class BloqueioAgendaPageResponseDto(
-    val _embedded: EmbeddedBloqueiosAgendaDto,
-    val page: PageDto
-)
+// The API returns List<BloqueioAgendaResponseDto> directly (no pagination).
+// Use List<BloqueioAgendaResponseDto> in the Retrofit interface instead of this class.
+// Kept for reference; delete this file from your project.

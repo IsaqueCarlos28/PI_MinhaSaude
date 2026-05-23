@@ -1,10 +1,12 @@
 package com.example.medicoapplication.data.remote.DTO.medico
 
+import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
+import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
+
 data class MedicoResponseDto(
     val id: Long,
-    val nome: String,
-    val crm: String,
-    val especialidade: String,
-    val email: String,
-    val telefone: String
+    val usuario: PacienteResponseDto?,
+    val crmUf: String?,      // UF enum string e.g. "SP"
+    val crmDigitos: String?,
+    val especialidades: List<MedicoEspecialidadeResponseDto>
 )

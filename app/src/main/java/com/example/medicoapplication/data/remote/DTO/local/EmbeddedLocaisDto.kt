@@ -1,5 +1,8 @@
 package com.example.medicoapplication.data.remote.DTO.local
 
+import com.google.gson.annotations.SerializedName
+
 data class EmbeddedLocaisDto(
-    val locais: List<LocalResponseDto>
+    @SerializedName("localResponseDTOList")
+    val localResponseDTOList: List<LocalResponseDto>
 )

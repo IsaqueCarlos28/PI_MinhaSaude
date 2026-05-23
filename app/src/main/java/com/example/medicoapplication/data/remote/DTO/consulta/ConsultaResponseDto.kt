@@ -2,8 +2,15 @@ package com.example.medicoapplication.data.remote.DTO.consulta
 
 data class ConsultaResponseDto(
     val id: Long,
-    val pacienteId: Long,
-    val consultaOfertadaId: Long,
-    val status: StatusConsulta,
-    val observacoes: String?
+    val idPaciente: Long,
+    val nomePaciente: String?,
+    val idConsultaOfertada: Long,
+    val idMedico: Long,
+    val nomeMedico: String?,
+    val idConvenio: Long?,
+    val nomeConvenio: String?,
+    val data: String,
+    val horaInicio: String,
+    val horaFim: String?,
+    val status: StatusConsulta
 )

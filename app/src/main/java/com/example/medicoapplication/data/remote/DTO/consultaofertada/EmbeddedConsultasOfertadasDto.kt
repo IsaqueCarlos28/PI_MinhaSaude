@@ -1,5 +1,3 @@
 package com.example.medicoapplication.data.remote.DTO.consultaofertada
 
-data class EmbeddedConsultasOfertadasDto(
-    val consultasOfertadas: List<ConsultaOfertadaResponseDto>
-)
+// Not used by the API. Kept for reference; delete this file from your project.

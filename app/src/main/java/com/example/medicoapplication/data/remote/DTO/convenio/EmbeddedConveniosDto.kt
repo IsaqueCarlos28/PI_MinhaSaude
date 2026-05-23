@@ -1,5 +1,8 @@
 package com.example.medicoapplication.data.remote.DTO.convenio
 
+import com.google.gson.annotations.SerializedName
+
 data class EmbeddedConveniosDto(
-    val convenios: List<ConvenioResponseDto>
+    @SerializedName("convenioResponseDTOList")
+    val convenioResponseDTOList: List<ConvenioResponseDto>
 )
