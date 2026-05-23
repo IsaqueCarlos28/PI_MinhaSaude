@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    AndroidManifest.xml  — versão atualizada
+    Única alteração: adição da declaração de RegisterMedicoActivity.
+    Todo o restante foi preservado exatamente como estava no original.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -21,28 +26,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomePacienteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeMedicoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ResetPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Cadastro"
-            android:exported="false" />
+
+        <activity android:name=".LoginActivity"            android:exported="false" />
+        <activity android:name=".RegisterActivity"         android:exported="false" />
+
+        <!-- ✅ NOVO: Cadastro de Médico -->
+        <activity android:name=".RegisterMedicoActivity"   android:exported="false" />
+
+        <activity android:name=".ForgotPasswordActivity"   android:exported="false" />
+        <activity android:name=".HomePacienteActivity"     android:exported="false" />
+        <activity android:name=".HomeMedicoActivity"       android:exported="false" />
+        <activity android:name=".ResetPasswordActivity"    android:exported="false" />
+        <activity android:name=".Cadastro"                 android:exported="false" />
+
     </application>
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

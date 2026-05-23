@@ -1,12 +1,12 @@
 package com.example.medicoapplication.data.remote.DTO.paciente
 
-data class PacienteCreateRequestDto(
+// DTO para detalhes do paciente (GET /pacientes/{id})
+data class PacienteDto(
+    val id: Long,
     val nome: String,
     val cpf: String,
     val email: String,
     val telefone: String,
-    val senha: String,
     val genero: String,
-    val dataNascimento: String,
-    val uf: String
+    val dataNascimento: String
 )
