@@ -27,16 +27,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity"            android:exported="false" />
-        <activity android:name=".RegisterActivity"         android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.LoginActivity"            android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.RegisterActivity"         android:exported="false" />
 
         <!-- ✅ NOVO: Cadastro de Médico -->
         <activity android:name=".RegisterMedicoActivity"   android:exported="false" />
 
-        <activity android:name=".ForgotPasswordActivity"   android:exported="false" />
-        <activity android:name=".HomePacienteActivity"     android:exported="false" />
-        <activity android:name=".HomeMedicoActivity"       android:exported="false" />
-        <activity android:name=".ResetPasswordActivity"    android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ForgotPasswordActivity"   android:exported="false" />
+        <activity android:name=".activities.paciente.HomePacienteActivity"     android:exported="false" />
+        <activity android:name=".activities.medico.HomeMedicoActivity"       android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ResetPasswordActivity"    android:exported="false" />
         <activity android:name=".Cadastro"                 android:exported="false" />
 
     </application>

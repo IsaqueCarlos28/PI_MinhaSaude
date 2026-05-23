@@ -1,9 +1,11 @@
-package com.example.medicoapplication
+package com.example.medicoapplication.activities.paciente
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.medicoapplication.R
+import com.example.medicoapplication.activities.auth_e_cadastro.LoginActivity
 
 class HomePacienteActivity : AppCompatActivity() {
 

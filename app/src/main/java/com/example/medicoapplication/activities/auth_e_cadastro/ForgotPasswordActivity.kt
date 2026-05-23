@@ -1,4 +1,4 @@
-package com.example.medicoapplication
+package com.example.medicoapplication.activities.auth_e_cadastro
 
 import android.os.Bundle
 import android.util.Patterns
@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.medicoapplication.R
 import com.example.medicoapplication.data.remote.DTO.auth.EsqueceuSenhaRequestDto
 import com.example.medicoapplication.data.remote.RetrofitClient
 import kotlinx.coroutines.launch

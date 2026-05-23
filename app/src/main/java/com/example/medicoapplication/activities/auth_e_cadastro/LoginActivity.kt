@@ -1,4 +1,4 @@
-package com.example.medicoapplication
+package com.example.medicoapplication.activities.auth_e_cadastro
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.medicoapplication.activities.medico.HomeMedicoActivity
+import com.example.medicoapplication.activities.paciente.HomePacienteActivity
+import com.example.medicoapplication.R
+import com.example.medicoapplication.activities.auth_e_cadastro.RegisterActivity
 import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.Role
 import com.example.medicoapplication.data.remote.RetrofitClient
