@@ -7,10 +7,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.medicoapplication.data.remote.DTO.auth.EsqueceuSenhaRequestDto
+import com.example.medicoapplication.data.remote.RetrofitClient
+import kotlinx.coroutines.launch
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
-    // ── Views ─────────────────────────────────────────────────────────────────
     private lateinit var btnVoltar: TextView
     private lateinit var etEmail: EditText
     private lateinit var btnEnviarLink: Button
@@ -23,51 +26,68 @@ class ForgotPasswordActivity : AppCompatActivity() {
         setupListeners()
     }
 
-    // ── Bind ──────────────────────────────────────────────────────────────────
     private fun bindViews() {
         btnVoltar     = findViewById(R.id.btnVoltar)
         etEmail       = findViewById(R.id.etEmail)
         btnEnviarLink = findViewById(R.id.btnEnviarLink)
     }
 
-    // ── Listeners ─────────────────────────────────────────────────────────────
     private fun setupListeners() {
         btnVoltar.setOnClickListener { finish() }
         btnEnviarLink.setOnClickListener { tentarEnviarLink() }
     }
 
-    // ── Lógica principal ──────────────────────────────────────────────────────
     private fun tentarEnviarLink() {
         val email = etEmail.text.toString().trim()
 
-        // Validação: campo vazio
         if (email.isEmpty()) {
             etEmail.error = "Informe o e-mail cadastrado"
             etEmail.requestFocus()
             return
         }
 
-        // Validação: formato de e-mail
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.error = "E-mail inválido"
             etEmail.requestFocus()
             return
         }
 
-        // TODO: integrar com o endpoint da API quando disponível.
-        // Exemplo:
-        //   lifecycleScope.launch {
-        //       val response = RetrofitClient.api.solicitarRecuperacaoSenha(email)
-        //       if (response.isSuccessful) { ... } else { ... }
-        //   }
+        setLoading(true)
+        // FIX: was a TODO — now calls POST auth/esqueceu-a-senha with EsqueceuSenhaRequestDto
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.api.esqueceuSenha(
+                    EsqueceuSenhaRequestDto(email = email)
+                )
+                // API always returns 200 regardless of whether the e-mail exists (security)
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this@ForgotPasswordActivity,
+                        "Se o e-mail estiver cadastrado, você receberá o código em breve.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@ForgotPasswordActivity,
+                        "Erro ao enviar solicitação (${response.code()})",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@ForgotPasswordActivity,
+                    "Falha na rede: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            } finally {
+                setLoading(false)
+            }
+        }
+    }
 
-        // Por enquanto exibe confirmação e volta para o Login
-        Toast.makeText(
-            this,
-            "Link de recuperação enviado para $email",
-            Toast.LENGTH_LONG
-        ).show()
-
-        finish() // volta para LoginActivity
+    private fun setLoading(carregando: Boolean) {
+        btnEnviarLink.isEnabled = !carregando
+        btnEnviarLink.text = if (carregando) "Enviando..." else "Enviar link"
     }
 }

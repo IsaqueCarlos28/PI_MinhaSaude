@@ -1,5 +1,8 @@
 package com.example.medicoapplication.data.remote.DTO.especialidades
 
+import com.google.gson.annotations.SerializedName
+
 data class EmbeddedEspecialidadesDto(
-    val especialidades: List<EspecialidadeResponseDto>
+    @SerializedName("especialidadeResponseDTOList")
+    val especialidadeResponseDTOList: List<EspecialidadeResponseDto>
 )

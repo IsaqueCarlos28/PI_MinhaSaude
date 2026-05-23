@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
+import com.example.medicoapplication.data.remote.DTO.login.Role
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
@@ -21,14 +22,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val tabLayout       = findViewById<TabLayout>(R.id.tabUserType)
-        val inputUsuario    = findViewById<EditText>(R.id.etUser)
-        val inputSenha      = findViewById<EditText>(R.id.etPassword)
-        val botaoLogin      = findViewById<Button>(R.id.btnLogin)
-        val btnIrParaCadastro  = findViewById<TextView>(R.id.tvIrParaCadastro)
-
-        // ✅ ADICIONE ESTA LINHA — ajuste o id se for diferente no seu XML
-        val tvEsqueciSenha  = findViewById<TextView>(R.id.tvEsqueciSenha)
+        val tabLayout         = findViewById<TabLayout>(R.id.tabUserType)
+        val inputUsuario      = findViewById<EditText>(R.id.etUser)
+        val inputSenha        = findViewById<EditText>(R.id.etPassword)
+        val botaoLogin        = findViewById<Button>(R.id.btnLogin)
+        val btnIrParaCadastro = findViewById<TextView>(R.id.tvIrParaCadastro)
+        val tvEsqueciSenha    = findViewById<TextView>(R.id.tvEsqueciSenha)
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -57,19 +56,32 @@ class LoginActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         val usuario = response.body()
-                        Toast.makeText(this@LoginActivity, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Login realizado com sucesso!",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
+                        // FIX: compare against the typed Role enum, not a raw String
                         val destino =
-                            if (usuario?.role == "MEDICO") HomeMedicoActivity::class.java
+                            if (usuario?.role == Role.MEDICO) HomeMedicoActivity::class.java
                             else HomePacienteActivity::class.java
 
                         startActivity(Intent(this@LoginActivity, destino))
                         finish()
                     } else {
-                        Toast.makeText(this@LoginActivity, "Usuário ou senha inválidos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Usuário ou senha inválidos",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(this@LoginActivity, "Erro: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Erro: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -78,7 +90,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        // ✅ ADICIONE ESTE BLOCO — abre a tela de recuperação de senha
         tvEsqueciSenha.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }

@@ -1,9 +1,7 @@
 package com.example.medicoapplication.data.remote.DTO.agenda
 
-import java.time.LocalDate
-
 data class DisponibilidadeSemanaDTO(
-    val inicioSemana: LocalDate,
-    val fimSemana: LocalDate,
+    val inicioSemana: String,
+    val fimSemana: String,
     val dias: List<DisponibilidadeDiaDTO>
 )

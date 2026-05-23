@@ -1,4 +1,4 @@
-package com.example.medicoapplication.data.remote.usuario.medico
+package com.example.medicoapplication.data.remote.DTO.medico
 
 data class EmbeddedMedicosDto(
     val medicos: List<MedicoResponseDto>

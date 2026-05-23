@@ -1,6 +1,5 @@
 package com.example.medicoapplication.data.remote.DTO.especialidades
 
-data class EspecialidadeResponseDto(
-    val id: Long,
+data class EspecialidadeUpdateRequestDto(
     val nome: String
 )
