@@ -61,11 +61,17 @@ class LoginActivity : AppCompatActivity() {
                         val usuario = response.body()
                         Toast.makeText(this@LoginActivity, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
 
-                        val destino =
-                            if (usuario?.role == Role.MEDICO) HomeMedicoActivity::class.java
-                            else HomePacienteActivity::class.java
-
-                        startActivity(Intent(this@LoginActivity, destino))
+                        if (usuario?.role == Role.MEDICO) {
+                            startActivity(Intent(this@LoginActivity, HomeMedicoActivity::class.java).apply {
+                                putExtra("ID_MEDICO", usuario.id)
+                                putExtra("NOME_MEDICO", usuario.email.substringBefore("@"))
+                            })
+                        } else {
+                            startActivity(Intent(this@LoginActivity, HomePacienteActivity::class.java).apply {
+                                putExtra("ID_PACIENTE", usuario?.id ?: -1L)
+                                putExtra("NOME_PACIENTE", usuario?.email?.substringBefore("@") ?: "Paciente")
+                            })
+                        }
                         finish()
                     } else {
                         Toast.makeText(this@LoginActivity, "Usuário ou senha inválidos", Toast.LENGTH_SHORT).show()

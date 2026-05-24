@@ -39,8 +39,12 @@
         <activity android:name=".activities.paciente.AgendarConsultaActivity"   android:exported="false" />
         <activity android:name=".activities.paciente.PerfilPacienteActivity"    android:exported="false" />
 
-        <!-- ── MÉDICO (telas serão criadas na sequência) ─ -->
+        <!-- ── MÉDICO ─────────────────────────────────── -->
         <activity android:name=".activities.medico.HomeMedicoActivity"          android:exported="false" />
+        <activity android:name=".activities.medico.AgendaMedicoActivity"         android:exported="false" />
+        <activity android:name=".activities.medico.ConsultasMedicoActivity"      android:exported="false" />
+        <activity android:name=".activities.medico.PerfilMedicoActivity"         android:exported="false" />
+        <activity android:name=".activities.medico.ConfiguracoesMedicoActivity"  android:exported="false" />
 
     </application>
 
