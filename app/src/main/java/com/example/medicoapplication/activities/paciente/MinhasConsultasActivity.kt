@@ -1,6 +1,5 @@
 package com.example.medicoapplication.activities.paciente
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.widget.GridView
@@ -18,26 +17,28 @@ import java.util.Locale
 class MinhasConsultasActivity : AppCompatActivity() {
 
     private val calendar = Calendar.getInstance()
-    private val formatoMesAno = SimpleDateFormat("MMMM, yyyy", Locale("pt", "BR"))
+    private val formatoMesAno    = SimpleDateFormat("MMMM, yyyy", Locale("pt", "BR"))
     private val formatoDataLabel = SimpleDateFormat("EEEE, dd 'de' MMMM", Locale("pt", "BR"))
+
+    // ID do paciente recebido pelo Intent
+    private var idPaciente: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_minhas_consultas)
 
-        val tvMesAno           = findViewById<TextView>(R.id.tvMesAno)
+        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
+
+        val tvMesAno          = findViewById<TextView>(R.id.tvMesAno)
         val tvDataSelecionada  = findViewById<TextView>(R.id.tvDataSelecionada)
+        // CORRIGIDO: ID real no XML e btnMesAnterior e btnProximoMes (nao existe btnVoltarConsultas)
         val btnMesAnterior     = findViewById<ImageButton>(R.id.btnMesAnterior)
         val btnProximoMes      = findViewById<ImageButton>(R.id.btnProximoMes)
         val gridCalendario     = findViewById<GridView>(R.id.gridViewCalendario)
-        val btnVoltar          = findViewById<ImageButton>(R.id.btnVoltarConsultas)
         val rvConsultas        = findViewById<RecyclerView>(R.id.rvConsultasDoDia)
 
         rvConsultas.layoutManager = LinearLayoutManager(this)
-        // TODO: carregar consultas do dia via API na semana que vem
-        // rvConsultas.adapter = ConsultasPacienteAdapter(listaFiltradaPorDia) { ... }
-
-        btnVoltar.setOnClickListener { finish() }
+        // TODO: criar ConsultasPacienteAdapter e conectar aqui filtrando por dia selecionado
 
         atualizarCalendario(tvMesAno, tvDataSelecionada, gridCalendario)
 
@@ -65,17 +66,16 @@ class MinhasConsultasActivity : AppCompatActivity() {
         tvDataSelecionada.text = formatoDataLabel.format(calendar.time)
             .replaceFirstChar { it.uppercase() }
 
-        // Calcular dias do mês para popular o grid
         val calTemp = calendar.clone() as Calendar
         calTemp.set(Calendar.DAY_OF_MONTH, 1)
-        val primeiroDiaSemana = calTemp.get(Calendar.DAY_OF_WEEK) - 1 // 0 = Dom
+        val primeiroDiaSemana = calTemp.get(Calendar.DAY_OF_WEEK) - 1
         val totalDias = calTemp.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         val dias = mutableListOf<String>()
-        repeat(primeiroDiaSemana) { dias.add("") } // células vazias antes do dia 1
+        repeat(primeiroDiaSemana) { dias.add("") }
         for (d in 1..totalDias) dias.add(d.toString())
 
-        // TODO: passar lista de datas com consultas para o adapter marcar pontos azuis
+        // TODO: passar lista de datas com consultas para o adapter marcar pontos
         // gridCalendario.adapter = CalendarioAdapter(this, dias, datasComConsulta) { dia -> ... }
     }
 
@@ -86,16 +86,24 @@ class MinhasConsultasActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomePacienteActivity::class.java))
+                    startActivity(
+                        Intent(this, HomePacienteActivity::class.java).apply {
+                            putExtra("ID_PACIENTE", idPaciente)
+                        }
+                    )
                     false
                 }
                 R.id.nav_consultas -> true
-                R.id.nav_medicos -> {
+                R.id.nav_medicos   -> {
                     startActivity(Intent(this, BuscaMedicosActivity::class.java))
                     false
                 }
-                R.id.nav_perfil -> {
-                    startActivity(Intent(this, PerfilPacienteActivity::class.java))
+                R.id.nav_perfil    -> {
+                    startActivity(
+                        Intent(this, PerfilPacienteActivity::class.java).apply {
+                            putExtra("ID_PACIENTE", idPaciente)
+                        }
+                    )
                     false
                 }
                 else -> false

@@ -20,20 +20,18 @@ class PerfilMedicoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_medico)
 
-        val nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
-        val idMedico = intent.getLongExtra("ID_MEDICO", -1L)
+        val nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Medico"
+        val idMedico   = intent.getLongExtra("ID_MEDICO", -1L)
 
-        findViewById<TextView>(R.id.tvSaudacaoPerfil).text = "Olá, $nomeMedico"
+        findViewById<TextView>(R.id.tvSaudacaoPerfil).text = "Ola, $nomeMedico"
         findViewById<TextView>(R.id.tvNomeCompletoMedico).text = nomeMedico.uppercase()
 
-        // Carregar dados do médico via API
         if (idMedico != -1L) {
             carregarPerfilMedico(idMedico)
         }
 
-        // Botão editar
         findViewById<Button>(R.id.btnEditarPerfilMedico).setOnClickListener {
-            Toast.makeText(this, "Edição de perfil em breve!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Edicao de perfil em breve!", Toast.LENGTH_SHORT).show()
         }
 
         configurarBottomNav(R.id.nav_usuario, idMedico, nomeMedico)
@@ -42,16 +40,32 @@ class PerfilMedicoActivity : AppCompatActivity() {
     private fun carregarPerfilMedico(idMedico: Long) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitClient.apiService.getMedicoById(idMedico)
+                // CORRIGIDO: era RetrofitClient.apiService — correto e RetrofitClient.api
+                val response = RetrofitClient.api.getMedicoById(idMedico)
                 if (response.isSuccessful) {
                     val medico = response.body()
                     withContext(Dispatchers.Main) {
                         medico?.let {
-                            findViewById<TextView>(R.id.tvNomeCompletoMedico).text = it.nome.uppercase()
-                            findViewById<TextView>(R.id.tvCrm).text = it.crm ?: "-"
-                            findViewById<TextView>(R.id.tvCpfMedico).text = it.cpf ?: "-"
-                            findViewById<TextView>(R.id.tvEmailMedico).text = it.email ?: "-"
-                            // especialidade, telefone e nascimento dependem da resposta do DTO
+                            // nome vem dentro de usuario (PacienteResponseDto)
+                            val nome = it.usuario?.nome ?: "—"
+                            findViewById<TextView>(R.id.tvNomeCompletoMedico).text = nome.uppercase()
+                            findViewById<TextView>(R.id.tvSaudacaoPerfil).text = "Ola, ${nome.split(" ").firstOrNull() ?: nome}"
+
+                            // CRM montado a partir dos dois campos separados
+                            val crm = if (!it.crmDigitos.isNullOrBlank() && !it.crmUf.isNullOrBlank())
+                                "${it.crmDigitos}/${it.crmUf}"
+                            else "—"
+                            findViewById<TextView>(R.id.tvCrm).text = crm
+
+                            findViewById<TextView>(R.id.tvCpfMedico).text   = it.usuario?.cpf    ?: "—"
+                            findViewById<TextView>(R.id.tvEmailMedico).text = it.usuario?.email  ?: "—"
+
+                            val especialidade = it.especialidades
+                                .firstOrNull()?.especialidade?.nome ?: "—"
+                            findViewById<TextView>(R.id.tvEspecialidadeMedico).text = especialidade
+
+                            findViewById<TextView>(R.id.tvTelefoneMedico).text    = it.usuario?.telefone        ?: "—"
+                            findViewById<TextView>(R.id.tvNascimentoMedico).text  = it.usuario?.dataNascimento  ?: "—"
                         }
                     }
                 }
@@ -85,7 +99,7 @@ class PerfilMedicoActivity : AppCompatActivity() {
                     }); false
                 }
                 R.id.nav_usuario -> true
-                R.id.nav_config -> {
+                R.id.nav_config  -> {
                     startActivity(Intent(this, ConfiguracoesMedicoActivity::class.java).apply {
                         putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
                     }); false

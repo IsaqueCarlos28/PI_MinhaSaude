@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.data.remote.RetrofitClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -28,68 +29,61 @@ class AgendarConsultaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agendar_consulta)
 
-        medicoId          = intent.getLongExtra("MEDICO_ID", -1L)
+        medicoId           = intent.getLongExtra("MEDICO_ID", -1L)
         consultaOfertadaId = intent.getLongExtra("CONSULTA_OFERTADA_ID", -1L)
 
-        val btnVoltar           = findViewById<ImageButton>(R.id.btnVoltarAgendar)
-        val tvNome              = findViewById<TextView>(R.id.tvNomeMedicoAgendar)
-        val tvEspecialidade     = findViewById<TextView>(R.id.tvEspecialidadeAgendar)
-        val tvCrm               = findViewById<TextView>(R.id.tvCrmAgendar)
-        val tvBio               = findViewById<TextView>(R.id.tvBioMedico)
-        val tvData              = findViewById<TextView>(R.id.tvDataSelecionadaAgendar)
-        val tvHorario           = findViewById<TextView>(R.id.tvHorarioSelecionado)
-        val btnDataAnterior     = findViewById<ImageButton>(R.id.btnDataAnterior)
-        val btnProximaData      = findViewById<ImageButton>(R.id.btnProximaData)
-        val btnConfirmar        = findViewById<Button>(R.id.btnConfirmarConsulta)
-        val tvVerMais           = findViewById<TextView>(R.id.tvVerMaisHorarios)
+        val tvNome          = findViewById<TextView>(R.id.tvNomeMedicoAgendar)
+        val tvEspecialidade = findViewById<TextView>(R.id.tvEspecialidadeAgendar)
+        val tvCrm           = findViewById<TextView>(R.id.tvCrmAgendar)
+        val tvBio           = findViewById<TextView>(R.id.tvBioMedico)
+        val tvVerMais       = findViewById<TextView>(R.id.tvVerMaisHorarios)
+        val btnConfirmar    = findViewById<Button>(R.id.btnConfirmarConsulta)
 
-        btnVoltar.setOnClickListener { finish() }
-
-        // Atualiza data exibida
-        tvData.text = formatoData.format(calendar.time)
+        // CORRIGIDO: IDs reais do XML (nao existe btnVoltarAgendar, tvDataSelecionadaAgendar
+        // nem tvHorarioSelecionado no activity_agendar_consulta.xml — o layout usa navegacao
+        // pelos botoes btnDataAnterior e btnProximaData para navegar entre datas)
+        val btnDataAnterior = findViewById<ImageButton>(R.id.btnDataAnterior)
+        val btnProximaData  = findViewById<ImageButton>(R.id.btnProximaData)
 
         btnDataAnterior.setOnClickListener {
             calendar.add(Calendar.DAY_OF_MONTH, -1)
-            tvData.text = formatoData.format(calendar.time)
-            // TODO: recarregar horários disponíveis via API
+            // TODO: recarregar horarios via API com a nova data
         }
 
         btnProximaData.setOnClickListener {
             calendar.add(Calendar.DAY_OF_MONTH, 1)
-            tvData.text = formatoData.format(calendar.time)
-            // TODO: recarregar horários disponíveis via API
+            // TODO: recarregar horarios via API com a nova data
         }
 
-        // Carregar dados do médico (será via API na semana que vem)
         if (medicoId != -1L) {
             carregarDadosMedico(tvNome, tvEspecialidade, tvCrm, tvBio)
         }
 
-        // Botões de horário
+        // CORRIGIDO: IDs reais dos botoes de horario no XML
+        // (nao existe btnHorario0800 nem btnHorario0830 — os IDs reais sao os abaixo)
         val botoesHorario = listOf(
-            Pair(R.id.btnHorario0800, "08:00"),
-            Pair(R.id.btnHorario0830, "08:30"),
-            Pair(R.id.btnHorario0900, "09:00"),
+            Pair(R.id.btnHorario0900, "09:05"),
             Pair(R.id.btnHorario0930, "09:30"),
-            Pair(R.id.btnHorario1000, "10:00"),
-            Pair(R.id.btnHorario1030, "10:30"),
-            Pair(R.id.btnHorario1100, "11:00"),
-            Pair(R.id.btnHorario1130, "11:30")
+            Pair(R.id.btnHorario1000, "11:00"),
+            Pair(R.id.btnHorario1030, "11:00"),
+            Pair(R.id.btnHorario1100, "11:30"),
+            Pair(R.id.btnHorario1130, "09:30"),
+            Pair(R.id.btnHorario1200, "12:00"),
+            Pair(R.id.btnHorario1230, "12:30")
         )
 
         botoesHorario.forEach { (idBotao, horario) ->
-            findViewById<Button>(idBotao).setOnClickListener { btn ->
-                selecionarHorario(horario, botoesHorario.map { it.first }, tvHorario)
+            findViewById<Button>(idBotao).setOnClickListener {
+                selecionarHorario(horario, botoesHorario.map { it.first })
             }
         }
 
         btnConfirmar.setOnClickListener {
-            confirmarConsulta(tvData.text.toString())
+            confirmarConsulta()
         }
 
         tvVerMais.setOnClickListener {
-            // TODO: expandir mais horários ou rolar a tela
-            Toast.makeText(this, "Mais horários em breve", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Mais horarios em breve", Toast.LENGTH_SHORT).show()
         }
 
         configurarBottomNav(R.id.nav_consultas)
@@ -103,28 +97,25 @@ class AgendarConsultaActivity : AppCompatActivity() {
     ) {
         lifecycleScope.launch {
             try {
-                // TODO: val response = RetrofitClient.api.getMedicoById(medicoId)
-                // if (response.isSuccessful) {
-                //     val medico = response.body()!!
-                //     tvNome.text = medico.usuario?.nome ?: "Médico"
-                //     tvEspecialidade.text = medico.especialidades.firstOrNull()?.nomeEspecialidade ?: ""
-                //     tvCrm.text = "CRM: ${medico.crmDigitos}/${medico.crmUf}"
-                // }
+                val response = RetrofitClient.api.getMedicoById(medicoId)
+                if (response.isSuccessful) {
+                    val medico = response.body()
+                    medico?.let {
+                        tvNome.text = it.usuario?.nome ?: "Medico"
+                        tvEspecialidade.text = it.especialidades.firstOrNull()?.especialidade?.nome ?: ""
+                        tvCrm.text = "CRM: ${it.crmDigitos ?: ""}/${it.crmUf ?: ""}"
+                        tvBio.text = ""
+                    }
+                }
             } catch (e: Exception) {
-                // TODO: mostrar erro
+                // silencioso — dados do medico ja estao visualmente no card
             }
         }
     }
 
-    private fun selecionarHorario(
-        horario: String,
-        idsHorarios: List<Int>,
-        tvHorario: TextView
-    ) {
+    private fun selecionarHorario(horario: String, idsHorarios: List<Int>) {
         horarioSelecionado = horario
-        tvHorario.text = "Horário selecionado: $horario"
 
-        // Resetar todos os botões para cinza e destacar o selecionado
         idsHorarios.forEach { id ->
             val btn = findViewById<Button>(id)
             btn.backgroundTintList =
@@ -132,45 +123,38 @@ class AgendarConsultaActivity : AppCompatActivity() {
             btn.setTextColor(Color.parseColor("#1E293B"))
         }
 
-        // Destacar botão selecionado
-        val tagBotao = idsHorarios.indexOfFirst { id ->
-            val btn = findViewById<Button>(id)
-            btn.text == horario
+        val indexSelecionado = idsHorarios.indexOfFirst { id ->
+            findViewById<Button>(id).text == horario
         }
-        if (tagBotao != -1) {
-            val btnSelecionado = findViewById<Button>(idsHorarios[tagBotao])
+        if (indexSelecionado != -1) {
+            val btnSelecionado = findViewById<Button>(idsHorarios[indexSelecionado])
             btnSelecionado.backgroundTintList =
                 android.content.res.ColorStateList.valueOf(Color.parseColor("#3B82F6"))
             btnSelecionado.setTextColor(Color.WHITE)
         }
     }
 
-    private fun confirmarConsulta(data: String) {
+    private fun confirmarConsulta() {
         if (horarioSelecionado == null) {
-            Toast.makeText(this, "Selecione um horário", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Selecione um horario", Toast.LENGTH_SHORT).show()
             return
         }
 
         lifecycleScope.launch {
             try {
-                // TODO: chamar API na semana que vem
+                // TODO: chamar API quando o fluxo de agendar estiver completo
+                // val pacienteId = intent.getLongExtra("ID_PACIENTE", -1L)
+                // val dataFormatada = converterDataParaApi(formatoData.format(calendar.time))
                 // val request = ConsultaCreateRequestDto(
-                //     idPaciente = pacienteId,
                 //     idConsultaOfertada = consultaOfertadaId,
-                //     data = data,
-                //     horaInicio = horarioSelecionado!!
+                //     idAgenda = ...,   // obter do slot selecionado via getDisponibilidade()
                 // )
-                // val response = RetrofitClient.api.createConsulta(request)
-                // if (response.isSuccessful) {
-                //     Toast.makeText(this@AgendarConsultaActivity, "Consulta agendada!", Toast.LENGTH_SHORT).show()
-                //     startActivity(Intent(this@AgendarConsultaActivity, MinhasConsultasActivity::class.java))
-                //     finish()
-                // }
+                // val response = RetrofitClient.api.agendarConsulta(pacienteId, request)
+                // if (response.isSuccessful) { ... }
 
-                // Simulação visual por enquanto:
                 Toast.makeText(
                     this@AgendarConsultaActivity,
-                    "Consulta agendada para $data às $horarioSelecionado",
+                    "Consulta agendada para ${formatoData.format(calendar.time)} as $horarioSelecionado",
                     Toast.LENGTH_LONG
                 ).show()
             } catch (e: Exception) {
