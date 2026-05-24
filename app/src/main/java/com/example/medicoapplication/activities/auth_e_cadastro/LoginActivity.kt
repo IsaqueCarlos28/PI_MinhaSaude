@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.activities.paciente.HomePacienteActivity
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.auth_e_cadastro.RegisterActivity
 import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
 import com.example.medicoapplication.data.remote.DTO.login.Role
 import com.example.medicoapplication.data.remote.RetrofitClient
@@ -26,13 +25,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val tabLayout         = findViewById<TabLayout>(R.id.tabUserType)
-        val inputUsuario      = findViewById<EditText>(R.id.etUser)
-        val inputSenha        = findViewById<EditText>(R.id.etPassword)
-        val botaoLogin        = findViewById<Button>(R.id.btnLogin)
-        val btnIrParaCadastroPaciente = findViewById<TextView>(R.id.tvIrParaCadastroPaciente)
-        val btnIrParaCadastroMedico = findViewById<TextView>(R.id.tvIrParaCadastroMedico)
-        val tvEsqueciSenha    = findViewById<TextView>(R.id.tvEsqueciSenha)
+        val tabLayout      = findViewById<TabLayout>(R.id.tabUserType)
+        val inputUsuario   = findViewById<EditText>(R.id.etUser)
+        val inputSenha     = findViewById<EditText>(R.id.etPassword)
+        val botaoLogin     = findViewById<Button>(R.id.btnLogin)
+        val tvIrCadastro   = findViewById<TextView>(R.id.tvIrParaCadastro)   // ID real no XML
+        val tvEsqueciSenha = findViewById<TextView>(R.id.tvEsqueciSenha)
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -49,8 +47,7 @@ class LoginActivity : AppCompatActivity() {
             val senha = inputSenha.text.toString().trim()
 
             if (email.isEmpty() || senha.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos!",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -62,11 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         val usuario = response.body()
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Login realizado com sucesso!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@LoginActivity, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
 
                         val destino =
                             if (usuario?.role == Role.MEDICO) HomeMedicoActivity::class.java
@@ -75,30 +68,21 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(Intent(this@LoginActivity, destino))
                         finish()
                     } else {
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Usuário ou senha inválidos",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@LoginActivity, "Usuário ou senha inválidos", Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Erro: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@LoginActivity, "Erro: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
 
-        // Route to the right registration screen based on selected tab
-        btnIrParaCadastroMedico.setOnClickListener {
+        // Botão de cadastro — direciona para a tela certa conforme a aba selecionada
+        tvIrCadastro.setOnClickListener {
             val destino =
                 if (tipoUsuario == "Medico") CadastroMedicoActivity::class.java
-                else RegisterActivity::class.java
+                else CadastroPacienteActivity::class.java   // era RegisterActivity (não existe)
             startActivity(Intent(this, destino))
         }
-
 
         tvEsqueciSenha.setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    AndroidManifest.xml  — versão atualizada
-    Única alteração: adição da declaração de RegisterMedicoActivity.
-    Todo o restante foi preservado exatamente como estava no original.
--->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -18,6 +13,7 @@
         android:theme="@style/Theme.MedicoApplication"
         tools:targetApi="31">
 
+        <!-- ENTRY POINT -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -27,17 +23,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.auth_e_cadastro.LoginActivity"            android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.RegisterActivity"         android:exported="false" />
+        <!-- AUTH -->
+        <activity android:name=".activities.auth_e_cadastro.LoginActivity"          android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.RegisterActivity"       android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ForgotPasswordActivity" android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ResetPasswordActivity"  android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.CadastroMedicoActivity" android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.CadastroPacienteActivity" android:exported="false" />
 
-        <!-- ✅ NOVO: Cadastro de Médico -->
-        <activity android:name=".RegisterMedicoActivity"   android:exported="false" />
+        <!-- ── PACIENTE ────────────────────────────────── -->
+        <activity android:name=".activities.paciente.HomePacienteActivity"      android:exported="false" />
+        <activity android:name=".activities.paciente.MinhasConsultasActivity"   android:exported="false" />
+        <activity android:name=".activities.paciente.BuscaMedicosActivity"      android:exported="false" />
+        <activity android:name=".activities.paciente.PesquisaMedicosActivity"   android:exported="false" />
+        <activity android:name=".activities.paciente.AgendarConsultaActivity"   android:exported="false" />
+        <activity android:name=".activities.paciente.PerfilPacienteActivity"    android:exported="false" />
 
-        <activity android:name=".activities.auth_e_cadastro.ForgotPasswordActivity"   android:exported="false" />
-        <activity android:name=".activities.paciente.HomePacienteActivity"     android:exported="false" />
-        <activity android:name=".activities.medico.HomeMedicoActivity"       android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.ResetPasswordActivity"    android:exported="false" />
-        <activity android:name=".Cadastro"                 android:exported="false" />
+        <!-- ── MÉDICO (telas serão criadas na sequência) ─ -->
+        <activity android:name=".activities.medico.HomeMedicoActivity"          android:exported="false" />
 
     </application>
 
