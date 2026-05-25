@@ -5,18 +5,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.data.remote.DTO.auth.AlterarSenhaRequestDto
-import com.example.medicoapplication.data.remote.DTO.auth.ValidarTokenRequestDto
-import com.example.medicoapplication.data.remote.RetrofitClient
+import com.example.medicoapplication.activities.auth_e_cadastro.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
 class ResetPasswordActivity : AppCompatActivity() {
 
-    private lateinit var etEmail: EditText
-    private lateinit var etCodigo: EditText
+    private val viewModel: AuthViewModel by viewModels()
+
     private lateinit var etNewPass: EditText
     private lateinit var etConfirmPass: EditText
     private lateinit var btnReset: Button
@@ -25,92 +24,49 @@ class ResetPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
 
-        // FIX: these two lines were commented out, causing a crash on first access
-        // because lateinit vars were never initialized
-//        etEmail       = findViewById(R.id.etEmail)
-//        etCodigo      = findViewById(R.id.etCodigo)
         etNewPass     = findViewById(R.id.etNewPassword)
         etConfirmPass = findViewById(R.id.etConfirmNewPassword)
         btnReset      = findViewById(R.id.btnResetPassword)
 
-        btnReset.setOnClickListener { tentarRedefinir() }
+        // Receive the token that ValidarCodigoResetPasswordActivity put in the Intent
+        val token = this.intent.getStringExtra("Token")
+
+        btnReset.setOnClickListener { tentarRedefinir(token) }
+        observeViewModel()
     }
 
-    private fun tentarRedefinir() {
-        val email   = etEmail.text.toString().trim()
-        val codigo  = etCodigo.text.toString().trim()
+    private fun tentarRedefinir(token: String?) {
         val pass    = etNewPass.text.toString()
         val confirm = etConfirmPass.text.toString()
 
-        if (email.isEmpty() || codigo.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
-            return
-        }
+        if (pass != confirm) { Toast.makeText(this, "As senhas não coincidem!", Toast.LENGTH_SHORT).show(); return }
+        if (pass.length < 8) { etNewPass.error = "A senha deve ter pelo menos 8 caracteres"; etNewPass.requestFocus(); return }
 
-        if (pass != confirm) {
-            Toast.makeText(this, "As senhas não coincidem!", Toast.LENGTH_SHORT).show()
-            return
-        }
+        // Inject the token into the ViewModel so alterarSenha() can use it
+        viewModel.setToken(token)
+        viewModel.alterarSenha(pass)
+    }
 
-        if (pass.length < 8) {
-            etNewPass.error = "A senha deve ter pelo menos 8 caracteres"
-            etNewPass.requestFocus()
-            return
-        }
-
-        setLoading(true)
+    private fun observeViewModel() {
         lifecycleScope.launch {
-            try {
-                // Step 1: validate the 6-digit code and receive the recovery token
-                val validarResponse = RetrofitClient.api.validarCodigo(
-                    ValidarTokenRequestDto(email = email, code = codigo)
-                )
-
-                if (!validarResponse.isSuccessful) {
-                    Toast.makeText(
-                        this@ResetPasswordActivity,
-                        "Código inválido ou expirado (${validarResponse.code()})",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    setLoading(false)
-                    return@launch
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is AuthViewModel.UiState.Idle    -> setLoading(false)
+                    is AuthViewModel.UiState.Loading -> setLoading(true)
+                    is AuthViewModel.UiState.Error   -> {
+                        setLoading(false)
+                        Toast.makeText(this@ResetPasswordActivity, state.message, Toast.LENGTH_LONG).show()
+                        viewModel.resetState()
+                    }
+                    is AuthViewModel.UiState.Success -> {
+                        Toast.makeText(this@ResetPasswordActivity, "Senha alterada com sucesso!", Toast.LENGTH_LONG).show()
+                        startActivity(
+                            Intent(this@ResetPasswordActivity, LoginActivity::class.java)
+                                .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }
+                        )
+                        finish()
+                    }
                 }
-
-                val tokenRecuperacao = validarResponse.body()?.tokenRecuperacao
-
-                // Step 2: use the recovery token to set the new password
-                val alterarResponse = RetrofitClient.api.alterarSenha(
-                    AlterarSenhaRequestDto(
-                        tokenRecuperacao = tokenRecuperacao,
-                        novaSenha        = pass
-                    )
-                )
-
-                if (alterarResponse.isSuccessful) {
-                    Toast.makeText(
-                        this@ResetPasswordActivity,
-                        "Senha alterada com sucesso!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Toast.makeText(
-                        this@ResetPasswordActivity,
-                        "Erro ao alterar senha (${alterarResponse.code()})",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this@ResetPasswordActivity,
-                    "Falha na rede: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-            } finally {
-                setLoading(false)
             }
         }
     }

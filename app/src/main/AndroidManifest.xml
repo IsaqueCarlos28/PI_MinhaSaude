@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -24,14 +26,14 @@
         </activity>
 
         <!-- AUTH -->
-        <activity android:name=".activities.auth_e_cadastro.LoginActivity"          android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.RegisterActivity"       android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.ForgotPasswordActivity" android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.ResetPasswordActivity"  android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.CadastroMedicoActivity" android:exported="false" />
-        <activity android:name=".activities.auth_e_cadastro.CadastroPacienteActivity" android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.LoginActivity"                       android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.CadastroMedicoActivity"              android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.CadastroPacienteActivity"            android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ForgotPasswordActivity"              android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ValidarCodigoResetPasswordActivity"  android:exported="false" />
+        <activity android:name=".activities.auth_e_cadastro.ResetPasswordActivity"               android:exported="false" />
 
-        <!-- ── PACIENTE ────────────────────────────────── -->
+        <!-- PACIENTE -->
         <activity android:name=".activities.paciente.HomePacienteActivity"      android:exported="false" />
         <activity android:name=".activities.paciente.MinhasConsultasActivity"   android:exported="false" />
         <activity android:name=".activities.paciente.BuscaMedicosActivity"      android:exported="false" />
@@ -39,15 +41,13 @@
         <activity android:name=".activities.paciente.AgendarConsultaActivity"   android:exported="false" />
         <activity android:name=".activities.paciente.PerfilPacienteActivity"    android:exported="false" />
 
-        <!-- ── MÉDICO ─────────────────────────────────── -->
+        <!-- MÉDICO -->
         <activity android:name=".activities.medico.HomeMedicoActivity"          android:exported="false" />
-        <activity android:name=".activities.medico.AgendaMedicoActivity"         android:exported="false" />
-        <activity android:name=".activities.medico.ConsultasMedicoActivity"      android:exported="false" />
-        <activity android:name=".activities.medico.PerfilMedicoActivity"         android:exported="false" />
-        <activity android:name=".activities.medico.ConfiguracoesMedicoActivity"  android:exported="false" />
+        <activity android:name=".activities.medico.AgendaMedicoActivity"        android:exported="false" />
+        <activity android:name=".activities.medico.ConsultasMedicoActivity"     android:exported="false" />
+        <activity android:name=".activities.medico.PerfilMedicoActivity"        android:exported="false" />
+        <activity android:name=".activities.medico.ConfiguracoesMedicoActivity" android:exported="false" />
 
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

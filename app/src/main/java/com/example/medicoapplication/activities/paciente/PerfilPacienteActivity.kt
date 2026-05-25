@@ -4,17 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.auth_e_cadastro.LoginActivity
-import com.example.medicoapplication.data.remote.RetrofitClient
+import com.example.medicoapplication.activities.paciente.viewmodel.PerfilPacienteViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PerfilPacienteActivity : AppCompatActivity() {
+
+    private val viewModel: PerfilPacienteViewModel by viewModels()
 
     private var idPaciente: Long = -1L
 
@@ -24,37 +24,28 @@ class PerfilPacienteActivity : AppCompatActivity() {
 
         idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
 
-        if (idPaciente != -1L) {
-            carregarPerfilPaciente()
-        }
+        observeViewModel()
 
-        // CORRIGIDO: o XML nao tem btnLogoutPaciente — o layout nao possui botao de logout.
-        // O logout e feito pelo proprio item de perfil na BottomNav ou pode ser adicionado
-        // ao XML futuramente com id btnLogoutPaciente.
-        // Por enquanto o logout esta disponivel navegando de volta para o Login manualmente.
+        if (idPaciente != -1L) viewModel.carregarPerfil(idPaciente)
 
         configurarBottomNav(R.id.nav_perfil)
     }
 
-    private fun carregarPerfilPaciente() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitClient.api.getPacienteById(idPaciente)
-                if (response.isSuccessful) {
-                    val paciente = response.body()
-                    withContext(Dispatchers.Main) {
-                        paciente?.let {
-                            findViewById<TextView>(R.id.tvNomePerfil).text   = it.nome?.uppercase() ?: "—"
-                            findViewById<TextView>(R.id.tvEmailPerfil).text  = it.email             ?: "—"
-                            findViewById<TextView>(R.id.tvCpfPerfil).text    = it.cpf               ?: "—"
-                            findViewById<TextView>(R.id.tvTelefonePerfil).text   = it.telefone          ?: "—"
-                            findViewById<TextView>(R.id.tvNascimentoPerfil).text = it.dataNascimento    ?: "—"
-                        }
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is PerfilPacienteViewModel.UiState.Idle    -> Unit
+                    is PerfilPacienteViewModel.UiState.Loading -> Unit
+                    is PerfilPacienteViewModel.UiState.Error   -> Toast.makeText(this@PerfilPacienteActivity, state.message, Toast.LENGTH_SHORT).show()
+                    is PerfilPacienteViewModel.UiState.Success -> {
+                        val p = state.paciente
+                        findViewById<TextView>(R.id.tvNomePerfil).text       = p.nome?.uppercase()  ?: "—"
+                        findViewById<TextView>(R.id.tvEmailPerfil).text      = p.email              ?: "—"
+                        findViewById<TextView>(R.id.tvCpfPerfil).text        = p.cpf                ?: "—"
+                        findViewById<TextView>(R.id.tvTelefonePerfil).text   = p.telefone           ?: "—"
+                        findViewById<TextView>(R.id.tvNascimentoPerfil).text = p.dataNascimento     ?: "—"
                     }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@PerfilPacienteActivity, "Erro ao carregar perfil", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -63,30 +54,12 @@ class PerfilPacienteActivity : AppCompatActivity() {
     private fun configurarBottomNav(itemSelecionado: Int) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavPerfil)
         bottomNav.selectedItemId = itemSelecionado
-
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(
-                        Intent(this, HomePacienteActivity::class.java).apply {
-                            putExtra("ID_PACIENTE", idPaciente)
-                        }
-                    )
-                    false
-                }
-                R.id.nav_consultas -> {
-                    startActivity(
-                        Intent(this, MinhasConsultasActivity::class.java).apply {
-                            putExtra("ID_PACIENTE", idPaciente)
-                        }
-                    )
-                    false
-                }
-                R.id.nav_medicos -> {
-                    startActivity(Intent(this, BuscaMedicosActivity::class.java))
-                    false
-                }
-                R.id.nav_perfil -> true
+                R.id.nav_home      -> { startActivity(Intent(this, HomePacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
+                R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
+                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java)); false }
+                R.id.nav_perfil    -> true
                 else -> false
             }
         }

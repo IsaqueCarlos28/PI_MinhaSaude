@@ -122,18 +122,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etCpf" />
 
-        <!-- Campo: Gênero -->
+        <!-- Campo: Telefone -->
         <EditText
             android:id="@+id/etTelefone"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_input_field"
-            android:drawableStart="@drawable/ic_email"
             android:drawablePadding="16dp"
             android:drawableTint="#60A5FA"
-            android:hint="E-mail"
-            android:inputType="textEmailAddress"
+            android:hint="Telefone"
+            android:inputType="phone"
+            android:maxLength="15"
             android:paddingStart="20dp"
             android:paddingEnd="16dp"
             android:textColor="#000000"
@@ -141,7 +141,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etCpf" />
+            app:layout_constraintTop_toBottomOf="@id/etEmail" />
 
         <EditText
             android:id="@+id/etGenero"

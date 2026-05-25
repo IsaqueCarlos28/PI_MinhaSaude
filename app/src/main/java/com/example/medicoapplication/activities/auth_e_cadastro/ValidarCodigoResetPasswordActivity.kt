@@ -2,7 +2,6 @@ package com.example.medicoapplication.activities.auth_e_cadastro
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,33 +13,34 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.activities.auth_e_cadastro.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
-class ForgotPasswordActivity : AppCompatActivity() {
+class ValidarCodigoResetPasswordActivity : AppCompatActivity() {
 
     private val viewModel: AuthViewModel by viewModels()
 
     private lateinit var btnVoltar: TextView
-    private lateinit var etEmail: EditText
-    private lateinit var btnEnviarLink: Button
+    private lateinit var etCodigo: EditText
+    private lateinit var btnEnviarCodigo: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgot_password)
+        setContentView(R.layout.activity_validar_code_reset_password)
 
-        btnVoltar     = findViewById(R.id.btnVoltar)
-        etEmail       = findViewById(R.id.etEmail)
-        btnEnviarLink = findViewById(R.id.btnEnviarLink)
+        btnVoltar       = findViewById(R.id.btnVoltar)
+        etCodigo        = findViewById(R.id.etCodigo)
+        btnEnviarCodigo = findViewById(R.id.btnEnviarLink)
 
         btnVoltar.setOnClickListener { finish() }
-        btnEnviarLink.setOnClickListener { tentarEnviarLink() }
+        btnEnviarCodigo.setOnClickListener { validarCodigo() }
         observeViewModel()
     }
 
-    private fun tentarEnviarLink() {
-        val email = etEmail.text.toString().trim()
-        if (email.isEmpty()) { etEmail.error = "Informe o e-mail cadastrado"; etEmail.requestFocus(); return }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) { etEmail.error = "E-mail inválido"; etEmail.requestFocus(); return }
+    private fun validarCodigo() {
+        val email  = this.intent.getStringExtra("Email")
+        val codigo = etCodigo.text.toString().trim()
 
-        viewModel.esqueceuSenha(email)
+        if (codigo.isEmpty()) { etCodigo.error = "Informe o código enviado para o e-mail"; etCodigo.requestFocus(); return }
+
+        viewModel.validarCodigo(email, codigo)
     }
 
     private fun observeViewModel() {
@@ -51,19 +51,16 @@ class ForgotPasswordActivity : AppCompatActivity() {
                     is AuthViewModel.UiState.Loading -> setLoading(true)
                     is AuthViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@ForgotPasswordActivity, state.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ValidarCodigoResetPasswordActivity, state.message, Toast.LENGTH_LONG).show()
                         viewModel.resetState()
                     }
                     is AuthViewModel.UiState.Success -> {
-                        Toast.makeText(
-                            this@ForgotPasswordActivity,
-                            "Se o e-mail estiver cadastrado, você receberá o código em breve.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        val email = etEmail.text.toString().trim()
+                        // token is stored in viewModel.tokenRecuperacao;
+                        // ResetPasswordActivity will receive its own AuthViewModel instance
+                        // via viewModels(), so we pass the token via Intent.
                         startActivity(
-                            Intent(this@ForgotPasswordActivity, ValidarCodigoResetPasswordActivity::class.java)
-                                .putExtra("Email", email)
+                            Intent(this@ValidarCodigoResetPasswordActivity, ResetPasswordActivity::class.java)
+                                .putExtra("Token", viewModel.tokenRecuperacao)
                         )
                         finish()
                     }
@@ -73,7 +70,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     }
 
     private fun setLoading(carregando: Boolean) {
-        btnEnviarLink.isEnabled = !carregando
-        btnEnviarLink.text = if (carregando) "Enviando..." else "Enviar link"
+        btnEnviarCodigo.isEnabled = !carregando
+        btnEnviarCodigo.text = if (carregando) "Validando..." else "Validar código"
     }
 }

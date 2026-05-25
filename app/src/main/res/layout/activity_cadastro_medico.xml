@@ -170,13 +170,9 @@
             android:drawableStart="@drawable/ic_genero"
             android:drawablePadding="16dp"
             android:drawableTint="#60A5FA"
-            android:entries="@array/uf_list"
-            android:inputType="text"
+            android:entries="@array/genero_list"
             android:paddingStart="20dp"
             android:paddingEnd="16dp"
-            android:textColor="#000000"
-            android:textColorHint="#9E9E9E"
-            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etTelefone" />
@@ -193,7 +189,7 @@
             android:drawablePadding="16dp"
             android:drawableTint="#60A5FA"
             android:hint="Data de Nascimento (DD/MM/AAAA)"
-            android:inputType="date"
+            android:inputType="text"
             android:paddingStart="20dp"
             android:paddingEnd="16dp"
             android:textColor="#000000"
@@ -215,7 +211,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etGenero" />
+            app:layout_constraintTop_toBottomOf="@id/etDataNascimento" />
 
         <!-- CRM: UF (spinner) + Dígitos (EditText) side by side -->
         <Spinner

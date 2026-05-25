@@ -6,23 +6,24 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.activities.paciente.HomePacienteActivity
-import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
+import com.example.medicoapplication.activities.auth_e_cadastro.viewmodel.LoginViewModel
 import com.example.medicoapplication.data.remote.DTO.login.Role
-import com.example.medicoapplication.data.remote.RetrofitClient
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private var tipoUsuario = "Paciente"
+    private val viewModel: LoginViewModel by viewModels()
 
+    private var tipoUsuario = "Paciente"
     private lateinit var tabLayout: TabLayout
-    private lateinit var inputUsuario: EditText
+    private lateinit var inputEmail: EditText
     private lateinit var inputSenha: EditText
     private lateinit var botaoLogin: Button
     private lateinit var tvIrCadastro: TextView
@@ -35,11 +36,12 @@ class LoginActivity : AppCompatActivity() {
         bindViews()
         setupTabListener()
         setupClickListeners()
+        observeViewModel()
     }
 
     private fun bindViews() {
         tabLayout      = findViewById(R.id.tabUserType)
-        inputUsuario   = findViewById(R.id.etUser)
+        inputEmail     = findViewById(R.id.etEmail)
         inputSenha     = findViewById(R.id.etPassword)
         botaoLogin     = findViewById(R.id.btnLogin)
         tvIrCadastro   = findViewById(R.id.tvIrParaCadastro)
@@ -50,8 +52,7 @@ class LoginActivity : AppCompatActivity() {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tipoUsuario = tab?.text.toString()
-                inputUsuario.hint = if (tipoUsuario == "Medico") "CRM ou E-mail" else "E-mail ou CPF"
-                inputUsuario.text?.clear()
+                inputEmail.text?.clear()
                 inputSenha.text?.clear()
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -76,76 +77,51 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun tentarLogin() {
-        val email = inputUsuario.text.toString().trim()
+        val email = inputEmail.text.toString().trim()
         val senha = inputSenha.text.toString().trim()
 
-        if (email.isEmpty()) {
-            inputUsuario.error = "Informe o e-mail"
-            inputUsuario.requestFocus()
-            return
-        }
-        if (senha.isEmpty()) {
-            inputSenha.error = "Informe a senha"
-            inputSenha.requestFocus()
-            return
-        }
+        if (email.isEmpty()) { inputEmail.error = "Informe o e-mail"; inputEmail.requestFocus(); return }
+        if (senha.isEmpty()) { inputSenha.error = "Informe a senha"; inputSenha.requestFocus(); return }
 
-        setLoading(true)
+        viewModel.login(email, senha)
+    }
 
+    private fun observeViewModel() {
         lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.api.login(
-                    LoginRequestDto(email = email, senha = senha)
-                )
-
-                if (response.isSuccessful) {
-                    val usuario = response.body()
-
-                    if (usuario == null) {
-                        Toast.makeText(this@LoginActivity, "Resposta inesperada do servidor.", Toast.LENGTH_LONG).show()
-                        return@launch
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is LoginViewModel.UiState.Idle    -> setLoading(false)
+                    is LoginViewModel.UiState.Loading -> setLoading(true)
+                    is LoginViewModel.UiState.Error   -> {
+                        setLoading(false)
+                        Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_LONG).show()
+                        viewModel.resetState()
                     }
-
-                    when (usuario.role) {
-                        Role.PACIENTE -> {
-                            startActivity(
+                    is LoginViewModel.UiState.Success -> {
+                        val usuario = state.usuario
+                        when (usuario.role) {
+                            Role.PACIENTE -> startActivity(
                                 Intent(this@LoginActivity, HomePacienteActivity::class.java).apply {
                                     putExtra("ID_PACIENTE", usuario.id)
                                     putExtra("EMAIL_PACIENTE", usuario.email)
                                 }
                             )
-                            finish()
-                        }
-                        Role.MEDICO -> {
-                            startActivity(
+                            Role.MEDICO -> startActivity(
                                 Intent(this@LoginActivity, HomeMedicoActivity::class.java).apply {
                                     putExtra("ID_MEDICO", usuario.id)
                                     putExtra("NOME_MEDICO", usuario.email.substringBefore("@"))
                                 }
                             )
-                            finish()
                         }
+                        finish()
                     }
-
-                } else {
-                    val mensagem = when (response.code()) {
-                        401  -> "E-mail ou senha incorretos."
-                        403  -> "Acesso negado. Verifique seu tipo de conta."
-                        else -> "Erro ${response.code()}. Tente novamente."
-                    }
-                    Toast.makeText(this@LoginActivity, mensagem, Toast.LENGTH_LONG).show()
                 }
-
-            } catch (e: Exception) {
-                Toast.makeText(this@LoginActivity, "Sem conexao com o servidor. Verifique sua internet.", Toast.LENGTH_LONG).show()
-            } finally {
-                setLoading(false)
             }
         }
     }
 
     private fun setLoading(carregando: Boolean) {
         botaoLogin.isEnabled = !carregando
-        botaoLogin.text      = if (carregando) "Entrando..." else "Login"
+        botaoLogin.text = if (carregando) "Entrando..." else "Login"
     }
 }
