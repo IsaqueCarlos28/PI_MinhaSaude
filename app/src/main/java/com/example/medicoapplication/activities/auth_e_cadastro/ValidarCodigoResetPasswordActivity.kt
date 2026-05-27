@@ -10,7 +10,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.auth_e_cadastro.viewmodel.AuthViewModel
+import com.example.medicoapplication.viewmodel.AuthViewModel
+
 import kotlinx.coroutines.launch
 
 class ValidarCodigoResetPasswordActivity : AppCompatActivity() {

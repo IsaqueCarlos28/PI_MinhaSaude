@@ -46,13 +46,13 @@ class MedicoAdapter(
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val medico = medicos[position]
-        holder.tvNome.text = medico.nome
-        holder.tvEspecialidade.text = medico.especialidade.nome
+        holder.tvNome.text = medico.usuario?.nome ?: "Médico"
+        holder.tvEspecialidade.text = medico.especialidades.firstOrNull()?.especialidade?.nome ?: "Clínico Geral"
         holder.btnSelecionar.setOnClickListener {
             onSelecionar(medico)
         }
     }
-    fun atualizarLista(novaLista: List<MedicoResponseDTO>) {
+    fun atualizarLista(novaLista: List<MedicoResponseDto>) {
         medicos = novaLista
         notifyDataSetChanged()
     }

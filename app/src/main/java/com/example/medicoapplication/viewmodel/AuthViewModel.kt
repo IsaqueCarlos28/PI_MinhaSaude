@@ -1,8 +1,91 @@
 package com.example.medicoapplication.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.repository.AuthRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val repository: AuthRepository = AuthRepository()
-) : ViewModel()
+) : ViewModel() {
+    sealed class UiState {
+        object Idle : UiState()
+        object Loading : UiState()
+        object Success : UiState()
+
+        data class Error(
+            val message: String
+        ) : UiState()
+    }
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    var tokenRecuperacao: String? = null
+        private set
+
+    private var token: String? = null
+
+    fun setToken(token: String?) {
+        this.token = token
+    }
+
+    fun resetState() {
+        _uiState.value = UiState.Idle
+    }
+
+    fun esqueceuSenha(email: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            repository.esqueceuSenha(email)
+                .onSuccess {
+                    _uiState.value = UiState.Success
+                }
+                .onFailure { exception ->
+                    _uiState.value = UiState.Error(
+                        exception.message ?: "Erro ao enviar solicitação."
+                    )
+                }
+        }
+    }
+
+    fun validarCodigo(email: String?, codigo: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            repository.validarCodigo(email, codigo)
+                .onSuccess { response ->
+
+                    // Adjust this if your DTO field name differs
+                    tokenRecuperacao = response.tokenRecuperacao
+
+                    _uiState.value = UiState.Success
+                }
+                .onFailure { exception ->
+                    _uiState.value = UiState.Error(
+                        exception.message ?: "Código inválido."
+                    )
+                }
+        }
+    }
+
+    fun alterarSenha(novaSenha: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            repository.alterarSenha(token, novaSenha)
+                .onSuccess {
+                    _uiState.value = UiState.Success
+                }
+                .onFailure { exception ->
+                    _uiState.value = UiState.Error(
+                        exception.message ?: "Erro ao alterar senha."
+                    )
+                }
+        }
+    }
+}
