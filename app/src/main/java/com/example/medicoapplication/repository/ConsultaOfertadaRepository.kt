@@ -17,7 +17,12 @@ class ConsultaOfertadaRepository {
     ): Result<ConsultaOfertadaResponseDto> =
         runCatching {
             val response = api.getConsultaOfertadaById(idMedico, id)
-            response.body() ?: error("Consulta ofertada não encontrada.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun createConsultaOfertada(
@@ -26,7 +31,12 @@ class ConsultaOfertadaRepository {
     ): Result<ConsultaOfertadaResponseDto> =
         runCatching {
             val response = api.createConsultaOfertada(idMedico, dto)
-            response.body() ?: error("Erro ao criar consulta ofertada.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun updateConsultaOfertada(
@@ -36,7 +46,12 @@ class ConsultaOfertadaRepository {
     ): Result<ConsultaOfertadaResponseDto> =
         runCatching {
             val response = api.updateConsultaOfertada(idMedico, id, dto)
-            response.body() ?: error("Erro ao atualizar consulta ofertada.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun deleteConsultaOfertada(

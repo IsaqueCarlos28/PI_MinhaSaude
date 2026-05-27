@@ -18,7 +18,6 @@ class BloqueioAgendaAdapter(
         val btnExcluir: ImageButton =
             itemView.findViewById(R.id.btnExcluirBloqueio)
     }
-    8
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -26,6 +25,24 @@ class BloqueioAgendaAdapter(
         return ViewHolder(view)
     }
     override fun getItemCount(): Int = bloqueios.size
+
+    fun updateData(newList: List<Any>) {
+        @Suppress("UNCHECKED_CAST")
+        when {
+            true -> {
+                try {
+                    val field = this::class.java.declaredFields.firstOrNull {
+                        java.util.List::class.java.isAssignableFrom(it.type)
+                    }
+
+                    field?.isAccessible = true
+                    field?.set(this, newList)
+                    notifyDataSetChanged()
+                } catch (_: Exception) {
+                }
+            }
+        }
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bloqueio = bloqueios[position]
         holder.tvPeriodo.text = "${bloqueio.dataInicio} até ${bloqueio.dataFim}"

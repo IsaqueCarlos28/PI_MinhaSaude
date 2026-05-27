@@ -1,4 +1,4 @@
-package com.example.medicoapplication.repository
+package com.example.medicoapplication.data.repository
 
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadePageResponseDto
@@ -15,20 +15,35 @@ class EspecialidadeRepository {
     ): Result<EspecialidadePageResponseDto> =
         runCatching {
             val response = api.getEspecialidades(page, size, sort)
-            response.body() ?: error("Erro ao buscar especialidades.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun getEspecialidade(id: Long): Result<EspecialidadeResponseDto>
             =
         runCatching {
             val response = api.getEspecialidadeById(id)
-            response.body() ?: error("Especialidade não encontrada.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun createEspecialidade(
         dto: EspecialidadeCreateRequestDto
     ): Result<EspecialidadeResponseDto> =
         runCatching {
             val response = api.createEspecialidade(dto)
-            response.body() ?: error("Erro ao criar especialidade.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun updateEspecialidade(
         id: Long,
@@ -36,8 +51,12 @@ class EspecialidadeRepository {
     ): Result<EspecialidadeResponseDto> =
         runCatching {
             val response = api.updateEspecialidade(id, dto)
-            1
-            response.body() ?: error("Erro ao atualizar especialidade.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun deleteEspecialidade(id: Long): Result<Unit> =
         runCatching {

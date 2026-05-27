@@ -13,7 +13,12 @@ class PacienteRepository {
     suspend fun getPaciente(idPaciente: Long): Result<PacienteResponseDto> =
         runCatching {
             val response = api.getPacienteById(idPaciente)
-            response.body() ?: error("Paciente não encontrado.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun getConsultas(idPaciente: Long): Result<List<ConsultaResponseDto>> =
@@ -35,6 +40,11 @@ class PacienteRepository {
     suspend fun getMedico(idMedico: Long): Result<MedicoResponseDto> =
         runCatching {
             val response = api.getMedicoById(idMedico)
-            response.body() ?: error("Médico não encontrado.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 }

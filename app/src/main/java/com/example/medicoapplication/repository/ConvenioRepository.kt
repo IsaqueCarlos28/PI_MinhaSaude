@@ -10,19 +10,34 @@ class ConvenioRepository {
     ): Result<ConvenioPageResponseDto> =
         runCatching {
             val response = api.getConvenios(page, size, sort)
-            response.body() ?: error("Erro ao buscar convênios.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun getConvenio(id: Long): Result<ConvenioResponseDto> =
         runCatching {
             val response = api.getConvenioById(id)
-            response.body() ?: error("Convênio não encontrado.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun createConvenio(
         dto: ConvenioCreateRequestDto
     ): Result<ConvenioResponseDto> =
         runCatching {
             val response = api.createConvenio(dto)
-            response.body() ?: error("Erro ao criar convênio.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun updateConvenio(
         id: Long,
@@ -30,7 +45,12 @@ class ConvenioRepository {
     ): Result<ConvenioResponseDto> =
         runCatching {
             val response = api.updateConvenio(id, dto)
-            response.body() ?: error("Erro ao atualizar convênio.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun deleteConvenio(id: Long): Result<Unit> =
         runCatching {

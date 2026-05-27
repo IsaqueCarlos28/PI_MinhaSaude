@@ -26,6 +26,24 @@ class MedicoAdapter(
         return ViewHolder(view)
     }
     override fun getItemCount(): Int = medicos.size
+
+    fun updateData(newList: List<Any>) {
+        @Suppress("UNCHECKED_CAST")
+        when {
+            true -> {
+                try {
+                    val field = this::class.java.declaredFields.firstOrNull {
+                        java.util.List::class.java.isAssignableFrom(it.type)
+                    }
+
+                    field?.isAccessible = true
+                    field?.set(this, newList)
+                    notifyDataSetChanged()
+                } catch (_: Exception) {
+                }
+            }
+        }
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val medico = medicos[position]
         holder.tvNome.text = medico.nome

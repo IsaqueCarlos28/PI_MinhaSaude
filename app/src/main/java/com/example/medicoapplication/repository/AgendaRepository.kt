@@ -17,9 +17,13 @@ class AgendaRepository {
         idAgenda: Long
     ): Result<AgendaResponseDto> =
         runCatching {
-            4
             val response = api.getAgendaById(idMedico, idConsulta, idAgenda)
-            response.body() ?: error("Agenda não encontrada.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun getDisponibilidade(
         idMedico: Long,
@@ -38,7 +42,12 @@ class AgendaRepository {
     ): Result<AgendaResponseDto> =
         runCatching {
             val response = api.createAgenda(idMedico, idConsulta, dto)
-            response.body() ?: error("Erro ao criar agenda.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun updateAgenda(
         idMedico: Long,

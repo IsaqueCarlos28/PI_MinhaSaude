@@ -1,6 +1,4 @@
 package com.example.medicoapplication.adapters
-
-package com.example.medicoapplication.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +28,24 @@ class LocalAdapter(
         return ViewHolder(view)
     }
     override fun getItemCount(): Int = locais.size
+
+    fun updateData(newList: List<Any>) {
+        @Suppress("UNCHECKED_CAST")
+        when {
+            true -> {
+                try {
+                    val field = this::class.java.declaredFields.firstOrNull {
+                        java.util.List::class.java.isAssignableFrom(it.type)
+                    }
+
+                    field?.isAccessible = true
+                    field?.set(this, newList)
+                    notifyDataSetChanged()
+                } catch (_: Exception) {
+                }
+            }
+        }
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val local = locais[position]
         holder.tvNome.text = local.nome

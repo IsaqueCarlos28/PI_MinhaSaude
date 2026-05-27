@@ -17,7 +17,12 @@ class AuthRepository {
     suspend fun login(email: String, senha: String): Result<LoginResponseDto> =
         runCatching {
             val response = api.login(LoginRequestDto(email, senha))
-            response.body() ?: error("Resposta inesperada do servidor.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun cadastrarPaciente(dto: PacienteCreateRequestDto): Result<Unit> =
@@ -41,7 +46,12 @@ class AuthRepository {
     suspend fun validarCodigo(email: String?, codigo: String): Result<TokenDeRecuperacaoDto> =
         runCatching {
             val response = api.validarCodigo(ValidarTokenRequestDto(email, codigo))
-            response.body() ?: error("Código inválido.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun alterarSenha(token: String?, novaSenha: String): Result<Unit> =

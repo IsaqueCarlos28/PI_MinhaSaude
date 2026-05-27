@@ -16,7 +16,12 @@ class BloqueioAgendaRepository {
     ): Result<BloqueioAgendaResponseDto> =
         runCatching {
             val response = api.createBloqueioAgenda(idMedico, dto)
-            response.body() ?: error("Erro ao criar bloqueio.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun updateBloqueio(
         idMedico: Long,

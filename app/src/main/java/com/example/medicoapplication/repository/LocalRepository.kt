@@ -11,19 +11,34 @@ class LocalRepository {
     ): Result<LocalPageResponseDto> =
         runCatching {
             val response = api.getLocais(page, size, sort)
-            response.body() ?: error("Erro ao buscar locais.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun getLocal(id: Long): Result<LocalResponseDto> =
         runCatching {
             val response = api.getLocalById(id)
-            response.body() ?: error("Local não encontrado.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun createLocal(
         dto: LocalCreateRequestDto
     ): Result<LocalResponseDto> =
         runCatching {
             val response = api.createLocal(dto)
-            response.body() ?: error("Erro ao criar local.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun updateLocal(
         id: Long,
@@ -31,7 +46,12 @@ class LocalRepository {
     ): Result<LocalResponseDto> =
         runCatching {
             val response = api.updateLocal(id, dto)
-            response.body() ?: error("Erro ao atualizar local.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun deleteLocal(id: Long): Result<Unit> =
         runCatching {

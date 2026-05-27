@@ -9,7 +9,12 @@ class ConsultaRepository {
     ): Result<ConsultaResponseDto> =
         runCatching {
             val response = api.agendarConsulta(idPaciente, dto)
-            response.body() ?: error("Erro ao agendar consulta.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun reagendarConsulta(
         idPaciente: Long,
@@ -18,7 +23,12 @@ class ConsultaRepository {
     ): Result<ConsultaResponseDto> =
         runCatching {
             val response = api.reagendarConsulta(idPaciente, idEvento, dto)
-            response.body() ?: error("Erro ao reagendar consulta.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
     suspend fun atualizarStatusPaciente(
         idPaciente: Long,

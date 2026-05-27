@@ -11,7 +11,12 @@ class MedicoRepository {
     suspend fun getMedico(idMedico: Long): Result<MedicoResponseDto> =
         runCatching {
             val response = api.getMedicoById(idMedico)
-            response.body() ?: error("Médico não encontrado.")
+
+            if (response.isSuccessful) {
+                response.body() ?: error("Resposta vazia do servidor")
+            } else {
+                error("Erro ${response.code()}: ${response.message()}")
+            }
         }
 
     suspend fun getConsultas(idMedico: Long): Result<List<ConsultaResponseDto>> =
