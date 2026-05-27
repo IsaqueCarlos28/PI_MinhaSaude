@@ -8,53 +8,34 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
+
 class ConvenioAdapter(
     private var convenios: List<ConvenioResponseDto>,
     private val onEditar: (ConvenioResponseDto) -> Unit,
     private val onExcluir: (ConvenioResponseDto) -> Unit
 ) : RecyclerView.Adapter<ConvenioAdapter.ViewHolder>() {
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNome: TextView = itemView.findViewById(R.id.tvNomeConvenio)
-        val btnEditar: ImageButton =
-            itemView.findViewById(R.id.btnEditarConvenio)
-        val btnExcluir: ImageButton =
-            itemView.findViewById(R.id.btnExcluirConvenio)
+        val btnEditar: ImageButton  = itemView.findViewById(R.id.btnEditarConvenio)
+        val btnExcluir: ImageButton = itemView.findViewById(R.id.btnExcluirConvenio)
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            ViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_convenio, parent, false)
         return ViewHolder(view)
     }
+
     override fun getItemCount(): Int = convenios.size
 
-    fun updateData(newList: List<Any>) {
-        @Suppress("UNCHECKED_CAST")
-        when {
-            true -> {
-                try {
-                    val field = this::class.java.declaredFields.firstOrNull {
-                        java.util.List::class.java.isAssignableFrom(it.type)
-                    }
-
-                    field?.isAccessible = true
-                    field?.set(this, newList)
-                    notifyDataSetChanged()
-                } catch (_: Exception) {
-                }
-            }
-        }
-    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val convenio = convenios[position]
         holder.tvNome.text = convenio.nome
-        holder.btnEditar.setOnClickListener {
-            onEditar(convenio)
-        }
-        holder.btnExcluir.setOnClickListener {
-            onExcluir(convenio)
-        }
+        holder.btnEditar.setOnClickListener  { onEditar(convenio) }
+        holder.btnExcluir.setOnClickListener { onExcluir(convenio) }
     }
+
     fun atualizarLista(novaLista: List<ConvenioResponseDto>) {
         convenios = novaLista
         notifyDataSetChanged()

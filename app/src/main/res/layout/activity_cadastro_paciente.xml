@@ -161,7 +161,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEmail" />
+            app:layout_constraintTop_toBottomOf="@id/etTelefone" />
 
         <!-- Campo: Data de Nascimento -->
         <EditText
@@ -174,7 +174,7 @@
             android:drawablePadding="16dp"
             android:drawableTint="#60A5FA"
             android:hint="Data de Nascimento (DD-MM-AAAA)"
-            android:inputType="date"
+            android:inputType="text"
             android:paddingStart="20dp"
             android:paddingEnd="16dp"
             android:textColor="#000000"

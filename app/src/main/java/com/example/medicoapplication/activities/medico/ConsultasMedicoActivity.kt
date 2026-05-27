@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.activities.medico.viewmodel.ConsultasMedicoViewModel
+import com.example.medicoapplication.adapters.ConsultasMedicoAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class ConsultasMedicoActivity : AppCompatActivity() {
 
     private val viewModel: ConsultasMedicoViewModel by viewModels()
+    private lateinit var adapter: ConsultasMedicoAdapter
 
     private var idMedico: Long = -1L
     private var nomeMedico: String = "Médico"
@@ -31,9 +33,13 @@ class ConsultasMedicoActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tvSaudacaoConsultas).text = "Olá, $nomeMedico"
 
+        // Configurar RecyclerView
         val rv = findViewById<RecyclerView>(R.id.rvConsultasMedico)
         rv.layoutManager = LinearLayoutManager(this)
+        adapter = ConsultasMedicoAdapter(emptyList())
+        rv.adapter = adapter
 
+        // Botões de filtro
         val btnTodas      = findViewById<Button>(R.id.btnFiltroTodas)
         val btnAgendadas  = findViewById<Button>(R.id.btnFiltroAgendadas)
         val btnRealizadas = findViewById<Button>(R.id.btnFiltroRealizadas)
@@ -65,9 +71,9 @@ class ConsultasMedicoActivity : AppCompatActivity() {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is ConsultasMedicoViewModel.UiState.Idle    -> Unit
-                    is ConsultasMedicoViewModel.UiState.Loading -> Unit // optional: show shimmer/progress
+                    is ConsultasMedicoViewModel.UiState.Loading -> Unit
                     is ConsultasMedicoViewModel.UiState.Success -> {
-                        // TODO: set adapter with state.consultas
+                        adapter.atualizarLista(state.consultas)
                     }
                     is ConsultasMedicoViewModel.UiState.Error -> {
                         Toast.makeText(this@ConsultasMedicoActivity, state.message, Toast.LENGTH_SHORT).show()
@@ -82,11 +88,11 @@ class ConsultasMedicoActivity : AppCompatActivity() {
         bottomNav.selectedItemId = itemSelecionado
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio -> { startActivity(Intent(this, HomeMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
-                R.id.nav_agenda -> { startActivity(Intent(this, AgendaMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
+                R.id.nav_inicio        -> { startActivity(Intent(this, HomeMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
+                R.id.nav_agenda        -> { startActivity(Intent(this, AgendaMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
                 R.id.nav_consultas_med -> true
-                R.id.nav_usuario -> { startActivity(Intent(this, PerfilMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
-                R.id.nav_config  -> { startActivity(Intent(this, ConfiguracoesMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
+                R.id.nav_usuario       -> { startActivity(Intent(this, PerfilMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
+                R.id.nav_config        -> { startActivity(Intent(this, ConfiguracoesMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
                 else -> false
             }
         }

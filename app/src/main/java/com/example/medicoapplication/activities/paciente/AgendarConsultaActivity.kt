@@ -26,37 +26,38 @@ class AgendarConsultaActivity : AppCompatActivity() {
     private val formatoData = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
     private var horarioSelecionado: String? = null
     private var medicoId: Long = -1L
-    private var consultaOfertadaId: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agendar_consulta)
 
-        medicoId           = intent.getLongExtra("MEDICO_ID", -1L)
-        consultaOfertadaId = intent.getLongExtra("CONSULTA_OFERTADA_ID", -1L)
+        medicoId = intent.getLongExtra("ID_MEDICO", intent.getLongExtra("MEDICO_ID", -1L))
+
+        val nomeExtra = intent.getStringExtra("NOME_MEDICO")
+        if (!nomeExtra.isNullOrBlank()) {
+            findViewById<TextView>(R.id.tvNomeMedicoAgendar).text = nomeExtra
+        }
 
         findViewById<ImageButton>(R.id.btnDataAnterior).setOnClickListener {
             calendar.add(Calendar.DAY_OF_MONTH, -1)
-            // TODO: recarregar horários com nova data
         }
         findViewById<ImageButton>(R.id.btnProximaData).setOnClickListener {
             calendar.add(Calendar.DAY_OF_MONTH, 1)
-            // TODO: recarregar horários com nova data
         }
 
         val botoesHorario = listOf(
-            Pair(R.id.btnHorario0900, "09:05"),
+            Pair(R.id.btnHorario0900, "09:00"),
             Pair(R.id.btnHorario0930, "09:30"),
-            Pair(R.id.btnHorario1000, "11:00"),
-            Pair(R.id.btnHorario1030, "11:00"),
-            Pair(R.id.btnHorario1100, "11:30"),
-            Pair(R.id.btnHorario1130, "09:30"),
+            Pair(R.id.btnHorario1000, "10:00"),
+            Pair(R.id.btnHorario1030, "10:30"),
+            Pair(R.id.btnHorario1100, "11:00"),
+            Pair(R.id.btnHorario1130, "11:30"),
             Pair(R.id.btnHorario1200, "12:00"),
             Pair(R.id.btnHorario1230, "12:30")
         )
         botoesHorario.forEach { (idBotao, horario) ->
             findViewById<Button>(idBotao).setOnClickListener {
-                selecionarHorario(horario, botoesHorario.map { it.first })
+                selecionarHorario(idBotao, horario, botoesHorario.map { it.first })
             }
         }
 
@@ -78,34 +79,31 @@ class AgendarConsultaActivity : AppCompatActivity() {
                 when (state) {
                     is AgendarConsultaViewModel.UiState.Idle    -> Unit
                     is AgendarConsultaViewModel.UiState.Loading -> Unit
-                    is AgendarConsultaViewModel.UiState.Error   -> Unit // silencioso — dados do médico já estão no card
+                    is AgendarConsultaViewModel.UiState.Error   -> Unit
                     is AgendarConsultaViewModel.UiState.MedicoCarregado -> {
                         val medico = state.medico
-                        findViewById<TextView>(R.id.tvNomeMedicoAgendar).text = medico.usuario?.nome ?: "Médico"
+                        findViewById<TextView>(R.id.tvNomeMedicoAgendar).text =
+                            medico.usuario?.nome ?: "Médico"
                         findViewById<TextView>(R.id.tvEspecialidadeAgendar).text =
                             medico.especialidades.firstOrNull()?.especialidade?.nome ?: ""
                         findViewById<TextView>(R.id.tvCrmAgendar).text =
                             "CRM: ${medico.crmDigitos ?: ""}/${medico.crmUf ?: ""}"
-                        findViewById<TextView>(R.id.tvBioMedico).text = ""
                     }
                 }
             }
         }
     }
 
-    private fun selecionarHorario(horario: String, idsHorarios: List<Int>) {
+    private fun selecionarHorario(idSelecionado: Int, horario: String, idsHorarios: List<Int>) {
         horarioSelecionado = horario
         idsHorarios.forEach { id ->
             val btn = findViewById<Button>(id)
             btn.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#E2E8F0"))
             btn.setTextColor(Color.parseColor("#1E293B"))
         }
-        val idx = idsHorarios.indexOfFirst { id -> findViewById<Button>(id).text == horario }
-        if (idx != -1) {
-            val btnSel = findViewById<Button>(idsHorarios[idx])
-            btnSel.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#3B82F6"))
-            btnSel.setTextColor(Color.WHITE)
-        }
+        val btnSel = findViewById<Button>(idSelecionado)
+        btnSel.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#3B82F6"))
+        btnSel.setTextColor(Color.WHITE)
     }
 
     private fun confirmarConsulta() {
@@ -113,7 +111,6 @@ class AgendarConsultaActivity : AppCompatActivity() {
             Toast.makeText(this, "Selecione um horário", Toast.LENGTH_SHORT).show()
             return
         }
-        // TODO: chamar API quando o fluxo de agendar estiver completo
         Toast.makeText(
             this,
             "Consulta agendada para ${formatoData.format(calendar.time)} às $horarioSelecionado",
