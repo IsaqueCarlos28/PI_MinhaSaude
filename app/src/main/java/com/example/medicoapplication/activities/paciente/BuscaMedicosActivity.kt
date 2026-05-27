@@ -31,8 +31,8 @@ class BuscaMedicosActivity : AppCompatActivity() {
 
         adapter = MedicoAdapter(emptyList()) { medico ->
             startActivity(
-                Intent(this, AgendarConsultaActivity::class.java).apply {
-                    putExtra("ID_MEDICO", medico.id)
+                Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
+                    putExtra("MEDICO_ID", medico.id)
                     putExtra("NOME_MEDICO", medico.usuario?.nome ?: "Médico")
                 }
             )

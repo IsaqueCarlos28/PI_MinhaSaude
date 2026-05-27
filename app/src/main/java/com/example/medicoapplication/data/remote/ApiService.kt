@@ -110,8 +110,7 @@ interface ApiService {
     @GET("medicos")
     suspend fun getMedicos(
         @Query("page") page: Int = 0,
-        @Query("size") size: Int = 20,
-        @Query("sort") sort: String = "nome,asc"
+        @Query("size") size: Int = 50
     ): Response<MedicoPageResponseDto>
 
     @GET("medicos/{id}")

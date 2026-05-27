@@ -39,7 +39,8 @@
         <activity android:name=".activities.paciente.BuscaMedicosActivity"      android:exported="false" />
         <activity android:name=".activities.paciente.PesquisaMedicosActivity"   android:exported="false" />
         <activity android:name=".activities.paciente.AgendarConsultaActivity"   android:exported="false" />
-        <activity android:name=".activities.paciente.PerfilPacienteActivity"    android:exported="false" />
+        <activity android:name=".activities.paciente.PerfilPacienteActivity"      android:exported="false" />
+        <activity android:name=".activities.paciente.PerfilMedicoPublicoActivity" android:exported="false" />
 
         <!-- MÉDICO -->
         <activity android:name=".activities.medico.HomeMedicoActivity"          android:exported="false" />
