@@ -28,6 +28,14 @@ class ConfiguracoesMedicoActivity : AppCompatActivity() {
             })
         }
 
+
+        // Consultas Ofertadas
+        findViewById<LinearLayout>(R.id.itemConsultasOfertadas).setOnClickListener {
+            startActivity(Intent(this, ConsultasOfertadasActivity::class.java).apply {
+                putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
+            })
+        }
+
         // Segurança → ResetPassword
         findViewById<LinearLayout>(R.id.itemSegurancaMedico).setOnClickListener {
             startActivity(Intent(this, com.example.medicoapplication.activities.auth_e_cadastro.ResetPasswordActivity::class.java))

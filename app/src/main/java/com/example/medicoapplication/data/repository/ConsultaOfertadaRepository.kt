@@ -1,6 +1,7 @@
 package com.example.medicoapplication.data.repository
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.*
 import com.example.medicoapplication.data.remote.RetrofitClient
+
 class ConsultaOfertadaRepository {
     private val api = RetrofitClient.api
     suspend fun getConsultasOfertadas(

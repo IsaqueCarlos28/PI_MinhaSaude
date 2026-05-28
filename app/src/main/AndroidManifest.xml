@@ -48,6 +48,8 @@
         <activity android:name=".activities.medico.ConsultasMedicoActivity"     android:exported="false" />
         <activity android:name=".activities.medico.PerfilMedicoActivity"        android:exported="false" />
         <activity android:name=".activities.medico.ConfiguracoesMedicoActivity" android:exported="false" />
+        <activity android:name=".activities.medico.ConsultasOfertadasActivity"     android:exported="false" />
+        <activity android:name=".activities.medico.CriarConsultaOfertadaActivity"  android:exported="false" />
 
     </application>
 

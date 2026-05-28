@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Especialidade + tipo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/tvEspecialidadeOfertada"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cardiologia"
+                android:textColor="#111827"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvTipoConsultaOfertada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Presencial"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:background="@drawable/bg_button_primary"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+        </LinearLayout>
+
+        <!-- Valor e duração -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:id="@+id/tvValorOfertada"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="R$ 150,00"
+                android:textColor="#3B82F6"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvDuracaoOfertada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 min"
+                android:textColor="#6B7280"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+        <!-- Particular + convênios -->
+        <TextView
+            android:id="@+id/tvParticularOfertada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aceita particular"
+            android:textColor="#10B981"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvConveniosOfertada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Convênios: Unimed, Bradesco"
+            android:textColor="#6B7280"
+            android:textSize="12sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Botão excluir -->
+        <Button
+            android:id="@+id/btnExcluirConsultaOfertada"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:text="Excluir"
+            android:textColor="#EF4444"
+            android:textSize="13sp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="#EF4444"/>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
