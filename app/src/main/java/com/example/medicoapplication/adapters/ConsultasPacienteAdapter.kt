@@ -13,14 +13,12 @@ import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDt
 class ConsultasPacienteAdapter(
     private var consultas: List<ConsultaResponseDto>,
     private val onReagendar: (ConsultaResponseDto) -> Unit,
-    private val onCancelar:  (ConsultaResponseDto) -> Unit
 ) : RecyclerView.Adapter<ConsultasPacienteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNomeMedico: TextView = itemView.findViewById(R.id.tvNomeMedicoItem)
         val tvData:       TextView = itemView.findViewById(R.id.tvDataConsultaItem)
-        val btnReagendar: Button   = itemView.findViewById(R.id.btnReagendar)
-        val btnCancelar:  Button   = itemView.findViewById(R.id.btnCancelar)
+        val btnVerConsulta: Button   = itemView.findViewById(R.id.btnReagendar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,11 +43,8 @@ class ConsultasPacienteAdapter(
         holder.tvData.text = formatarDataHora(consulta.data, consulta.horaInicio)
 
         val podeAcionar = consulta.status == StatusConsulta.AGENDADA
-        holder.btnReagendar.visibility = if (podeAcionar) View.VISIBLE else View.GONE
-        holder.btnCancelar.visibility  = if (podeAcionar) View.VISIBLE else View.GONE
-
-        holder.btnReagendar.setOnClickListener { onReagendar(consulta) }
-        holder.btnCancelar.setOnClickListener  { onCancelar(consulta)  }
+        holder.btnVerConsulta.visibility = if (podeAcionar) View.VISIBLE else View.GONE
+        holder.btnVerConsulta.setOnClickListener { onReagendar(consulta) }
     }
 
     fun atualizarLista(novaLista: List<ConsultaResponseDto>) {

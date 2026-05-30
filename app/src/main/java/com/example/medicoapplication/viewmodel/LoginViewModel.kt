@@ -19,7 +19,7 @@ class LoginViewModel(
         data class Error(val message: String) : UiState()
     }
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState
 
     fun login(email: String, senha: String) {

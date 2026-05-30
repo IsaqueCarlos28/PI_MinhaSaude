@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.widget.GridView
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.adapters.ConsultasPacienteAdapter
+import com.example.medicoapplication.viewmodel.ConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -16,10 +20,19 @@ import java.util.Locale
 
 class MinhasConsultasActivity : AppCompatActivity() {
 
+    private val viewModel: ConsultaViewModel by viewModels()
+
+    private lateinit var adapter : ConsultasPacienteAdapter
     private val calendar = Calendar.getInstance()
     private val formatoMesAno    = SimpleDateFormat("MMMM, yyyy", Locale("pt", "BR"))
     private val formatoDataLabel = SimpleDateFormat("EEEE, dd 'de' MMMM", Locale("pt", "BR"))
 
+    private lateinit var tvMesAno: TextView
+    private lateinit var tvDataSelecionada:TextView
+    private lateinit var btnMesAnterior: ImageButton
+    private lateinit var btnProximoMes: ImageButton
+    private lateinit var gridCalendario : GridView
+    private lateinit var rvConsultas: RecyclerView
     // ID do paciente recebido pelo Intent
     private var idPaciente: Long = -1L
 
@@ -29,36 +42,41 @@ class MinhasConsultasActivity : AppCompatActivity() {
 
         idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
 
-        val tvMesAno          = findViewById<TextView>(R.id.tvMesAno)
-        val tvDataSelecionada  = findViewById<TextView>(R.id.tvDataSelecionada)
-        // CORRIGIDO: ID real no XML e btnMesAnterior e btnProximoMes (nao existe btnVoltarConsultas)
-        val btnMesAnterior     = findViewById<ImageButton>(R.id.btnMesAnterior)
-        val btnProximoMes      = findViewById<ImageButton>(R.id.btnProximoMes)
-        val gridCalendario     = findViewById<GridView>(R.id.gridViewCalendario)
-        val rvConsultas        = findViewById<RecyclerView>(R.id.rvConsultasDoDia)
-
+        bindViews()
         rvConsultas.layoutManager = LinearLayoutManager(this)
         // TODO: criar ConsultasPacienteAdapter e conectar aqui filtrando por dia selecionado
+        adapter = ConsultasPacienteAdapter(
+            emptyList(),
+            {reagendarConsulta()},
+            {cancelarConsulta()}
+        )
 
-        atualizarCalendario(tvMesAno, tvDataSelecionada, gridCalendario)
+        atualizarCalendario()
 
         btnMesAnterior.setOnClickListener {
             calendar.add(Calendar.MONTH, -1)
-            atualizarCalendario(tvMesAno, tvDataSelecionada, gridCalendario)
+            atualizarCalendario()
         }
 
         btnProximoMes.setOnClickListener {
             calendar.add(Calendar.MONTH, 1)
-            atualizarCalendario(tvMesAno, tvDataSelecionada, gridCalendario)
+            atualizarCalendario()
         }
 
         configurarBottomNav(R.id.nav_consultas)
     }
 
+    fun bindViews(){
+        tvMesAno          = findViewById(R.id.tvMesAno)
+        tvDataSelecionada  = findViewById(R.id.tvDataSelecionada)
+        // CORRIGIDO: ID real no XML e btnMesAnterior e btnProximoMes (nao existe btnVoltarConsultas)
+        btnMesAnterior     = findViewById(R.id.btnMesAnterior)
+        btnProximoMes      = findViewById(R.id.btnProximoMes)
+        gridCalendario     = findViewById(R.id.gridViewCalendario)
+        rvConsultas        = findViewById(R.id.rvConsultasDoDia)
+    }
+
     private fun atualizarCalendario(
-        tvMesAno: TextView,
-        tvDataSelecionada: TextView,
-        gridCalendario: GridView
     ) {
         tvMesAno.text = formatoMesAno.format(calendar.time)
             .replaceFirstChar { it.uppercase() }
@@ -110,4 +128,13 @@ class MinhasConsultasActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun cancelarConsulta(){
+        //TODO: função cancelar consulta
+    }
+
+    private fun reagendarConsulta(){
+        //TODO: função reagendar consulta
+    }
+
 }

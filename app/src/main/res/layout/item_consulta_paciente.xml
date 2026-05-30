@@ -41,7 +41,8 @@
                 android:text="Nome do medico | Especialidade"
                 android:textColor="#1E293B"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"/>
 
             <TextView
                 android:id="@+id/tvDataConsultaItem"
@@ -50,41 +51,23 @@
                 android:layout_marginTop="2dp"
                 android:text="XX:Xx"
                 android:textColor="#64748B"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginBottom="2dp"/>
 
             <!-- Botões abaixo do texto -->
-            <LinearLayout
+            <Button
+                android:id="@+id/btnReagendar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
-
-                <Button
-                    android:id="@+id/btnReagendar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/bg_button_primary"
-                    android:backgroundTint="#3B82F6"
-                    android:text="Reagendar"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:paddingHorizontal="12dp" />
-
-                <Button
-                    android:id="@+id/btnCancelar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/bg_button_primary"
-                    android:backgroundTint="#EF4444"
-                    android:text="Cancelar"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:paddingHorizontal="12dp" />
-
-            </LinearLayout>
+                android:layout_height="32dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_button_primary"
+                android:backgroundTint="#3B82F6"
+                android:text="Reagendar"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="2dp"/>
 
         </LinearLayout>
 
