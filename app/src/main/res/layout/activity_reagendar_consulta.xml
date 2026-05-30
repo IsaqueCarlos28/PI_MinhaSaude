@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F4F8">
+
+    <!-- HEADER -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_gradient"
+        android:padding="20dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="20dp">
+
+        <ImageButton
+            android:id="@+id/btnVoltarReagendar"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="#FFFFFF"
+            android:contentDescription="Voltar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Reagendar Consulta"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- CARD MÉDICO -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_doctor"
+                        android:background="@drawable/bg_button_primary"
+                        android:backgroundTint="#E8F0FF"
+                        android:padding="10dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvNomeMedicoReagendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Médico"
+                        android:textColor="#1E293B"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- SELETOR DE DATA -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp">
+
+                        <ImageButton
+                            android:id="@+id/btnDataAnteriorReagendar"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_arrow_back"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:tint="#3B82F6"
+                            android:contentDescription="Data anterior" />
+
+                        <TextView
+                            android:id="@+id/tvDataSelecionadaReagendar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="01/01/2025"
+                            android:textColor="#1E293B"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:id="@+id/btnProximaDataReagendar"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_arrow_forward"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:tint="#3B82F6"
+                            android:contentDescription="Próxima data" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- GRADE DE HORÁRIOS -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <Button android:id="@+id/btnReagHorario0900"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1" android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="09:00" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                        <Button android:id="@+id/btnReagHorario0930"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1" android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="09:30" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                        <Button android:id="@+id/btnReagHorario1000"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1" android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="10:00" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                        <Button android:id="@+id/btnReagHorario1030"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="10:30" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button android:id="@+id/btnReagHorario1100"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1" android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="11:00" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                        <Button android:id="@+id/btnReagHorario1130"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1" android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="11:30" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                        <Button android:id="@+id/btnReagHorario1200"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1" android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="12:00" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                        <Button android:id="@+id/btnReagHorario1230"
+                            android:layout_width="0dp" android:layout_height="38dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_button_primary"
+                            android:backgroundTint="#E2E8F0"
+                            android:text="12:30" android:textColor="#1E293B"
+                            android:textSize="12sp" android:textAllCaps="false" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- BOTÃO CONFIRMAR -->
+            <Button
+                android:id="@+id/btnConfirmarReagendamento"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_button_primary"
+                android:backgroundTint="#3B82F6"
+                android:text="Confirmar Reagendamento"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- BOTTOM NAVIGATION -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavReagendar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#FFFFFF"
+        app:menu="@menu/bottom_nav_paciente"
+        app:itemIconTint="@color/selector_bottom_nav"
+        app:itemTextColor="@color/selector_bottom_nav"
+        app:labelVisibilityMode="labeled" />
+
+</LinearLayout>

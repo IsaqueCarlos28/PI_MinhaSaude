@@ -2,6 +2,8 @@ package com.example.medicoapplication.activities.paciente
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -28,6 +30,24 @@ class PerfilPacienteActivity : AppCompatActivity() {
 
         if (idPaciente != -1L) viewModel.carregarPerfil(idPaciente)
 
+        // ✅ Ícone de configurações no header
+        findViewById<ImageButton>(R.id.btnConfiguracoes).setOnClickListener {
+            startActivity(
+                Intent(this, ConfiguracoesPacienteActivity::class.java).apply {
+                    putExtra("ID_PACIENTE", idPaciente)
+                }
+            )
+        }
+
+        // ✅ Botão Editar Perfil
+        findViewById<Button>(R.id.btnEditarPerfil).setOnClickListener {
+            startActivity(
+                Intent(this, EditarPerfilPacienteActivity::class.java).apply {
+                    putExtra("ID_PACIENTE", idPaciente)
+                }
+            )
+        }
+
         configurarBottomNav(R.id.nav_perfil)
     }
 
@@ -40,11 +60,11 @@ class PerfilPacienteActivity : AppCompatActivity() {
                     is PerfilPacienteViewModel.UiState.Error   -> Toast.makeText(this@PerfilPacienteActivity, state.message, Toast.LENGTH_SHORT).show()
                     is PerfilPacienteViewModel.UiState.Success -> {
                         val p = state.paciente
-                        findViewById<TextView>(R.id.tvNomePerfil).text       = p.nome?.uppercase()  ?: "—"
-                        findViewById<TextView>(R.id.tvEmailPerfil).text      = p.email              ?: "—"
-                        findViewById<TextView>(R.id.tvCpfPerfil).text        = p.cpf                ?: "—"
-                        findViewById<TextView>(R.id.tvTelefonePerfil).text   = p.telefone           ?: "—"
-                        findViewById<TextView>(R.id.tvNascimentoPerfil).text = p.dataNascimento     ?: "—"
+                        findViewById<TextView>(R.id.tvNomePerfil).text       = p.nome           ?: "—"
+                        findViewById<TextView>(R.id.tvEmailPerfil).text      = p.email          ?: "—"
+                        findViewById<TextView>(R.id.tvCpfPerfil).text        = p.cpf            ?: "—"
+                        findViewById<TextView>(R.id.tvTelefonePerfil).text   = p.telefone       ?: "—"
+                        findViewById<TextView>(R.id.tvNascimentoPerfil).text = p.dataNascimento ?: "—"
                     }
                 }
             }

@@ -1,0 +1,49 @@
+package com.example.medicoapplication.viewmodel.paciente
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaStatusRequestDto
+import com.example.medicoapplication.data.remote.DTO.consulta.StatusConsulta
+import com.example.medicoapplication.data.repository.ConsultaRepository
+import com.example.medicoapplication.data.repository.PacienteRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+class MinhasConsultasViewModel(
+    private val pacienteRepository: PacienteRepository = PacienteRepository(),
+    private val consultaRepository:  ConsultaRepository  = ConsultaRepository()
+) : ViewModel() {
+
+    sealed class UiState {
+        object Idle    : UiState()
+        object Loading : UiState()
+        data class Success(val consultas: List<ConsultaResponseDto>) : UiState()
+        data class Error(val message: String) : UiState()
+    }
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
+    val uiState: StateFlow<UiState> = _uiState
+
+    fun carregarConsultas(idPaciente: Long) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            pacienteRepository.getConsultas(idPaciente)
+                .onSuccess { _uiState.value = UiState.Success(it) }
+                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar consultas") }
+        }
+    }
+
+    fun cancelarConsulta(idPaciente: Long, consulta: ConsultaResponseDto, onSucesso: () -> Unit) {
+        viewModelScope.launch {
+            consultaRepository.atualizarStatusPaciente(
+                idPaciente,
+                consulta.id,
+                ConsultaStatusRequestDto(StatusConsulta.CANCELADA)
+            )
+                .onSuccess { onSucesso() }
+                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao cancelar") }
+        }
+    }
+}

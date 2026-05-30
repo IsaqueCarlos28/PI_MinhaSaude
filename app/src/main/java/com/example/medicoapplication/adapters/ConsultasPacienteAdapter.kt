@@ -12,6 +12,7 @@ import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDt
 
 class ConsultasPacienteAdapter(
     private var consultas: List<ConsultaResponseDto>,
+    private val onItemClick: (ConsultaResponseDto) -> Unit = {},
     private val onReagendar: (ConsultaResponseDto) -> Unit,
     private val onCancelar:  (ConsultaResponseDto) -> Unit
 ) : RecyclerView.Adapter<ConsultasPacienteAdapter.ViewHolder>() {
@@ -31,18 +32,18 @@ class ConsultasPacienteAdapter(
 
     override fun getItemCount(): Int = consultas.size
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val consulta = consultas[position]
 
         val labelMedico = buildString {
-            append(consulta.nomeMedico ?: "Medico nao informado")
-            if (!consulta.nomeConvenio.isNullOrBlank()) {
-                append(" - ${consulta.nomeConvenio}")
-            }
+            append(consulta.nomeMedico ?: "Médico não informado")
+            if (!consulta.nomeConvenio.isNullOrBlank()) append(" - ${consulta.nomeConvenio}")
         }
         holder.tvNomeMedico.text = labelMedico
         holder.tvData.text = formatarDataHora(consulta.data, consulta.horaInicio)
+
+        // Clique no item abre o detalhe
+        holder.itemView.setOnClickListener { onItemClick(consulta) }
 
         val podeAcionar = consulta.status == StatusConsulta.AGENDADA
         holder.btnReagendar.visibility = if (podeAcionar) View.VISIBLE else View.GONE
@@ -62,9 +63,9 @@ class ConsultasPacienteAdapter(
             val partes = data.split("-")
             val dataFormatada = "${partes[2]}/${partes[1]}/${partes[0]}"
             val horaFormatada = hora.substring(0, 5)
-            "$dataFormatada as $horaFormatada"
+            "$dataFormatada às $horaFormatada"
         } catch (e: Exception) {
-            "$data as $hora"
+            "$data às $hora"
         }
-}
+    }
 }
