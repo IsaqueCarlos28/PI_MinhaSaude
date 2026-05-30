@@ -2,6 +2,7 @@ package com.example.medicoapplication.data.repository
 
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 
 class MedicoRepository {
@@ -28,5 +29,12 @@ class MedicoRepository {
         runCatching {
             val response = api.getConsultasByMedico(idMedico)
             response.body() ?: emptyList()
+        }
+
+    suspend fun getConsultasOfertadas(idMedico: Long): Result<List<ConsultaOfertadaResponseDto>> =
+        runCatching {
+            val response = api.getConsultasOfertadas(idMedico)
+            if (response.isSuccessful) response.body() ?: emptyList()
+            else error("Erro ${response.code()}")
         }
 }

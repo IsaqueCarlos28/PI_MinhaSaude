@@ -6,25 +6,18 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.medico.PerfilMedicoActivity
-import com.example.medicoapplication.activities.paciente.viewmodel.AgendarConsultaViewModel
 import com.example.medicoapplication.data.repository.MedicoRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-/**
- * Shows a public read-only profile of a doctor, visible to patients.
- * Receives MEDICO_ID and NOME_MEDICO via Intent extras.
- * Has a "Agendar Consulta" button that navigates to AgendarConsultaActivity.
- */
 class PerfilMedicoPublicoActivity : AppCompatActivity() {
 
     private var medicoId: Long = -1L
     private var nomeMedico: String = "Médico"
+    private var especialidadeMedico: String = "Clínico Geral"  // ✅ guarda especialidade
 
     private val repository = MedicoRepository()
 
@@ -35,24 +28,44 @@ class PerfilMedicoPublicoActivity : AppCompatActivity() {
         medicoId   = intent.getLongExtra("MEDICO_ID", -1L)
         nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
 
-        // Back button
         findViewById<ImageButton>(R.id.btnVoltarPerfilPublico).setOnClickListener {
             finish()
         }
 
-        // Populate name immediately from intent (fast feedback)
         findViewById<TextView>(R.id.tvNomeMedicoPublico).text = nomeMedico
 
-        // Load full data from API
         if (medicoId != -1L) carregarMedico()
 
-        // Schedule button
+        // ✅ Botão Agendar — completo e dentro do onCreate
         findViewById<Button>(R.id.btnAgendarComEsteMedico).setOnClickListener {
-            val intent = Intent(this, AgendarConsultaActivity::class.java).apply {
-                putExtra("ID_MEDICO", medicoId)
-                putExtra("NOME_MEDICO", nomeMedico)
+            lifecycleScope.launch {
+                val consultasResult = repository.getConsultasOfertadas(medicoId)
+                consultasResult.onSuccess { lista ->
+                    // ✅ bloqueia se médico não tem consultas ofertadas
+                    if (lista.isEmpty()) {
+                        Toast.makeText(
+                            this@PerfilMedicoPublicoActivity,
+                            "Este médico não possui consultas disponíveis no momento.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@onSuccess
+                    }
+                    val idConsultaOfertada = lista.first().id
+                    val intent = Intent(this@PerfilMedicoPublicoActivity, AgendarConsultaActivity::class.java).apply {
+                        putExtra("ID_MEDICO",            medicoId)
+                        putExtra("NOME_MEDICO",          nomeMedico)
+                        putExtra("ESPECIALIDADE",        especialidadeMedico)  // ✅ passa especialidade
+                        putExtra("ID_CONSULTA_OFERTADA", idConsultaOfertada)
+                    }
+                    startActivity(intent)
+                }.onFailure {
+                    Toast.makeText(
+                        this@PerfilMedicoPublicoActivity,
+                        "Erro ao buscar consultas do médico",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-            startActivity(intent)
         }
 
         configurarBottomNav(R.id.nav_medicos)
@@ -71,6 +84,8 @@ class PerfilMedicoPublicoActivity : AppCompatActivity() {
                         .mapNotNull { it.especialidade?.nome }
                         .joinToString(", ")
                         .ifBlank { "Clínico Geral" }
+
+                    especialidadeMedico = esp  // ✅ salva para usar no Intent
 
                     findViewById<TextView>(R.id.tvEspecialidadePublico).text = esp
                     findViewById<TextView>(R.id.tvEspecialidadesPublico).text = esp

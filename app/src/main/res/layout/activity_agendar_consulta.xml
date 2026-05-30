@@ -38,7 +38,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- CARD MÉDICO (foto centralizada, info centralizada) -->
+            <!-- CARD MÉDICO -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +54,6 @@
                     android:gravity="center"
                     android:padding="20dp">
 
-                    <!-- Foto médico circular -->
                     <ImageView
                         android:id="@+id/imgMedicoAgendar"
                         android:layout_width="80dp"
@@ -69,7 +68,7 @@
                         android:id="@+id/tvNomeMedicoAgendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Doutor Luis Carlos Persi"
+                        android:text="Médico"
                         android:textColor="#1E293B"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -80,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Psicólogo"
+                        android:text=""
                         android:textColor="#64748B"
                         android:textSize="13sp"
                         android:gravity="center" />
@@ -90,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="CRM: #31120"
+                        android:text=""
                         android:textColor="#64748B"
                         android:textSize="12sp"
                         android:gravity="center" />
@@ -100,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Biografia do médico,\nLorem psunLorem ipsum"
+                        android:text=""
                         android:textColor="#94A3B8"
                         android:textSize="12sp"
                         android:gravity="center"
@@ -111,7 +110,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- SELETOR DE DATAS (scroll horizontal com dias) -->
+            <!-- SELETOR DE DATAS -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,7 +127,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="52dp">
 
                         <ImageButton
                             android:id="@+id/btnDataAnterior"
@@ -141,7 +140,6 @@
                             android:tint="#3B82F6"
                             android:contentDescription="Data anterior" />
 
-                        <!-- Dias da semana em linha -->
                         <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -156,69 +154,111 @@
                                 android:orientation="horizontal"
                                 android:gravity="center_vertical">
 
-                                <!-- Dia 1 -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp">
+                                <!-- Dia 0 -->
+                                <LinearLayout
+                                    android:id="@+id/diaBloco0"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:paddingVertical="4dp">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                         android:text="SEG" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="09" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
+                                        android:text="00" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
+                                </LinearLayout>
+
+                                <!-- Dia 1 -->
+                                <LinearLayout
+                                    android:id="@+id/diaBloco1"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:paddingVertical="4dp">
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                        android:text="TER" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                        android:text="00" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
                                 </LinearLayout>
 
                                 <!-- Dia 2 -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp">
+                                <LinearLayout
+                                    android:id="@+id/diaBloco2"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:paddingVertical="4dp">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                         android:text="QUA" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="11" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
+                                        android:text="00" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
                                 </LinearLayout>
 
-                                <!-- Dia 3 - SELECIONADO -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp"
-                                    android:background="@drawable/bg_button_primary" android:backgroundTint="#3B82F6"
+                                <!-- Dia 3 — SELECIONADO (centro) -->
+                                <LinearLayout
+                                    android:id="@+id/diaBloco3"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:background="@drawable/bg_button_primary"
+                                    android:backgroundTint="#3B82F6"
                                     android:paddingVertical="4dp">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="TER" android:textColor="#FFFFFF" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
+                                        android:text="QUI" android:textColor="#FFFFFF" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="13" android:textColor="#FFFFFF" android:textSize="13sp" android:gravity="center"/>
+                                        android:text="00" android:textColor="#FFFFFF" android:textSize="13sp" android:gravity="center"/>
                                 </LinearLayout>
 
                                 <!-- Dia 4 -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp">
+                                <LinearLayout
+                                    android:id="@+id/diaBloco4"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:paddingVertical="4dp">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="QUA" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
+                                        android:text="SEX" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="16" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
+                                        android:text="00" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
                                 </LinearLayout>
 
                                 <!-- Dia 5 -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="SEX" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="18" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
-                                </LinearLayout>
-
-                                <!-- Dia 6 -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp">
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="SEX" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="20" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
-                                </LinearLayout>
-
-                                <!-- Dia 7 -->
-                                <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content"
-                                    android:orientation="vertical" android:gravity="center" android:layout_marginHorizontal="2dp">
+                                <LinearLayout
+                                    android:id="@+id/diaBloco5"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:paddingVertical="4dp">
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                         android:text="SAB" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                        android:text="22" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
+                                        android:text="00" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
+                                </LinearLayout>
+
+                                <!-- Dia 6 -->
+                                <LinearLayout
+                                    android:id="@+id/diaBloco6"
+                                    android:layout_width="44dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:paddingVertical="4dp">
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                        android:text="DOM" android:textColor="#64748B" android:textSize="10sp" android:textStyle="bold" android:gravity="center"/>
+                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                        android:text="00" android:textColor="#64748B" android:textSize="13sp" android:gravity="center"/>
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -242,7 +282,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- GRADE DE HORÁRIOS (4 colunas x 2 linhas) -->
+            <!-- GRADE DE HORÁRIOS -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -257,7 +297,6 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <!-- Linha 1 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -269,7 +308,7 @@
                             android:layout_weight="1" android:layout_marginEnd="6dp"
                             android:background="@drawable/bg_button_primary"
                             android:backgroundTint="#E2E8F0"
-                            android:text="09:05" android:textColor="#1E293B"
+                            android:text="09:00" android:textColor="#1E293B"
                             android:textSize="12sp" android:textAllCaps="false" />
 
                         <Button android:id="@+id/btnHorario0930"
@@ -285,7 +324,7 @@
                             android:layout_weight="1" android:layout_marginEnd="6dp"
                             android:background="@drawable/bg_button_primary"
                             android:backgroundTint="#E2E8F0"
-                            android:text="11:00" android:textColor="#1E293B"
+                            android:text="10:00" android:textColor="#1E293B"
                             android:textSize="12sp" android:textAllCaps="false" />
 
                         <Button android:id="@+id/btnHorario1030"
@@ -293,12 +332,11 @@
                             android:layout_weight="1"
                             android:background="@drawable/bg_button_primary"
                             android:backgroundTint="#E2E8F0"
-                            android:text="11:00" android:textColor="#1E293B"
+                            android:text="10:30" android:textColor="#1E293B"
                             android:textSize="12sp" android:textAllCaps="false" />
 
                     </LinearLayout>
 
-                    <!-- Linha 2 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -309,7 +347,7 @@
                             android:layout_weight="1" android:layout_marginEnd="6dp"
                             android:background="@drawable/bg_button_primary"
                             android:backgroundTint="#E2E8F0"
-                            android:text="11:30" android:textColor="#1E293B"
+                            android:text="11:00" android:textColor="#1E293B"
                             android:textSize="12sp" android:textAllCaps="false" />
 
                         <Button android:id="@+id/btnHorario1130"
@@ -317,7 +355,7 @@
                             android:layout_weight="1" android:layout_marginEnd="6dp"
                             android:background="@drawable/bg_button_primary"
                             android:backgroundTint="#E2E8F0"
-                            android:text="09:30" android:textColor="#1E293B"
+                            android:text="11:30" android:textColor="#1E293B"
                             android:textSize="12sp" android:textAllCaps="false" />
 
                         <Button android:id="@+id/btnHorario1200"
@@ -355,7 +393,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- LINK VOLTAR A AGENDAR -->
             <TextView
                 android:id="@+id/tvVerMaisHorarios"
                 android:layout_width="wrap_content"

@@ -59,7 +59,24 @@ class HomePacienteActivity : AppCompatActivity() {
     private fun configurarRecyclerView() {
         adaptadorConsultas = ConsultasPacienteAdapter(
             consultas   = emptyList(),
-            onReagendar = { Toast.makeText(this, "Reagendamento disponível em breve.", Toast.LENGTH_SHORT).show() },
+            onItemClick = { consulta ->
+                startActivity(
+                    Intent(this, DetalheConsultaActivity::class.java).apply {
+                        putExtra("ID_PACIENTE", idPaciente)
+                        putExtra("ID_EVENTO",   consulta.id)
+                    }
+                )
+            },
+            onReagendar = { consulta ->
+                startActivity(
+                    Intent(this, ReagendarConsultaActivity::class.java).apply {
+                        putExtra("ID_PACIENTE", idPaciente)
+                        putExtra("ID_EVENTO",   consulta.id)
+                        putExtra("ID_MEDICO",   consulta.idMedico)
+                        putExtra("NOME_MEDICO", consulta.nomeMedico ?: "")
+                    }
+                )
+            },
             onCancelar  = { consulta ->
                 viewModel.cancelarConsulta(idPaciente, consulta) {
                     viewModel.carregarConsultas(idPaciente)
@@ -76,7 +93,7 @@ class HomePacienteActivity : AppCompatActivity() {
             startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) })
         }
         findViewById<LinearLayout>(R.id.btnAcaoMedicos).setOnClickListener {
-            startActivity(Intent(this, BuscaMedicosActivity::class.java))
+            startActivity(Intent(this, BuscaMedicosActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) })
         }
         findViewById<Button>(R.id.btnVerTodasConsultas).setOnClickListener {
             startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) })
@@ -110,7 +127,7 @@ class HomePacienteActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home      -> true
                 R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java)); false }
+                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
                 R.id.nav_perfil    -> { startActivity(Intent(this, PerfilPacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
                 else -> false
             }
