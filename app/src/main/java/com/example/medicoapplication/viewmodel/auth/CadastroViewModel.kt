@@ -2,9 +2,12 @@ package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.AuthRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,7 +20,7 @@ class CadastroViewModel(
         object Idle : UiState()
         object Loading : UiState()
         object Success : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -28,7 +31,8 @@ class CadastroViewModel(
             _uiState.value = UiState.Loading
             repository.cadastrarPaciente(dto)
                 .onSuccess { _uiState.value = UiState.Success }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro desconhecido") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())  }
         }
     }
 
@@ -37,7 +41,8 @@ class CadastroViewModel(
             _uiState.value = UiState.Loading
             repository.cadastrarMedico(dto)
                 .onSuccess { _uiState.value = UiState.Success }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro desconhecido") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())  }
         }
     }
 

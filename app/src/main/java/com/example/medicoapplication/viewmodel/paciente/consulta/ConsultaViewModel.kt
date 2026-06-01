@@ -1,10 +1,12 @@
-package com.example.medicoapplication.viewmodel
+package com.example.medicoapplication.viewmodel.paciente.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaStatusRequestDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.ConsultaRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,20 +20,22 @@ class ConsultaViewModel(
         object Idle : UiState()
         object Loanding : UiState()
         data class Success(val consulta: ConsultaResponseDto) : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
-    var uiState: StateFlow<UiState>  = _uiState.asStateFlow()
+    var uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun cancelarConsulta(idPaciente: Long,
                          idEvento: Long,
-                         dto: ConsultaStatusRequestDto){
+                         dto: ConsultaStatusRequestDto
+    ){
         _uiState.value = UiState.Loanding
         viewModelScope.launch {
             repository.atualizarStatusPaciente(idPaciente,idEvento,dto)
                 .onSuccess { _uiState.value = UiState.Success(it) }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro desconhecido") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())}
         }
     }
 

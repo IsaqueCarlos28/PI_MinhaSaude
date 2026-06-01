@@ -1,17 +1,17 @@
-package com.example.medicoapplication.viewmodel
+package com.example.medicoapplication.viewmodel.medico.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
+import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
-import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
 import com.example.medicoapplication.data.repository.ConsultaOfertadaRepository
+import com.example.medicoapplication.data.repository.ConvenioRepository
 import com.example.medicoapplication.data.repository.EspecialidadeRepository
 import com.example.medicoapplication.data.repository.LocalRepository
-import com.example.medicoapplication.data.repository.ConvenioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

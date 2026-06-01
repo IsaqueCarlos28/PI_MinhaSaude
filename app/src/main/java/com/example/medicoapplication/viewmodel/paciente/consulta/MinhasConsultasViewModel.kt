@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaStatusRequestDto
 import com.example.medicoapplication.data.remote.DTO.consulta.StatusConsulta
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.ConsultaRepository
 import com.example.medicoapplication.data.repository.PacienteRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +22,7 @@ class MinhasConsultasViewModel(
         object Idle    : UiState()
         object Loading : UiState()
         data class Success(val consultas: List<ConsultaResponseDto>) : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -31,7 +33,8 @@ class MinhasConsultasViewModel(
             _uiState.value = UiState.Loading
             pacienteRepository.getConsultas(idPaciente)
                 .onSuccess { _uiState.value = UiState.Success(it) }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar consultas") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())}
         }
     }
 
@@ -43,7 +46,8 @@ class MinhasConsultasViewModel(
                 ConsultaStatusRequestDto(StatusConsulta.CANCELADA)
             )
                 .onSuccess { onSucesso() }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao cancelar") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())}
         }
     }
 }

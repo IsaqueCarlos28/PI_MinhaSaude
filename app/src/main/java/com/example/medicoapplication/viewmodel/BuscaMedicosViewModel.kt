@@ -1,8 +1,11 @@
 package com.example.medicoapplication.viewmodel.paciente
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.activities.paciente.viewmodel.EditarPerfilPacienteViewModel
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.MedicoRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,26 +24,26 @@ class BuscaMedicosViewModel : ViewModel() {
         object Idle : UiState()
         object Loading : UiState()
         data class Success(val medicos: List<MedicoResponseDto>) : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
-    fun carregarMedicos() {
+    fun carregarMedicos(
+        page: Int,
+        size: Int) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
-            repository.getMedicos()
-                .onSuccess { medicos ->
-                    listaCompleta = medicos
-                    _uiState.value = UiState.Success(medicos)
+            repository.getMedicos(page,size)
+                .onSuccess {
+                    _uiState.value = UiState.Success(it._embedded.medicos)
                 }
-                .onFailure { erro ->
-                    _uiState.value = UiState.Error(
-                        erro.message ?: "Erro ao carregar médicos"
-                    )
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
                 }
         }
     }
 
+    //Verificar o que faz
     fun filtrar(texto: String) {
 
         if (texto.isBlank()) {

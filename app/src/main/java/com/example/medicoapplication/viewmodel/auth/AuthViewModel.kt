@@ -2,7 +2,10 @@ package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.AuthRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,10 +18,7 @@ class AuthViewModel(
         object Idle : UiState()
         object Loading : UiState()
         object Success : UiState()
-
-        data class Error(
-            val message: String
-        ) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -45,10 +45,8 @@ class AuthViewModel(
                 .onSuccess {
                     _uiState.value = UiState.Success
                 }
-                .onFailure { exception ->
-                    _uiState.value = UiState.Error(
-                        exception.message ?: "Erro ao enviar solicitação."
-                    )
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
                 }
         }
     }

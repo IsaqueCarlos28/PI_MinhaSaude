@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.repository.PacienteRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +22,7 @@ class EditarPerfilPacienteViewModel(
         object Loading : UiState()
         object Salvo   : UiState()
         data class Carregado(val paciente: PacienteResponseDto) : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -31,38 +33,21 @@ class EditarPerfilPacienteViewModel(
             _uiState.value = UiState.Loading
             repository.getPaciente(idPaciente)
                 .onSuccess { _uiState.value = UiState.Carregado(it) }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar perfil") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError()) }
         }
     }
 
     fun salvarPerfil(
         idPaciente: Long,
-        nome: String,
-        cpf: String,
-        email: String,
-        telefone: String,
-        genero: Genero,
-        dataNascimento: String
+        dto : PacienteEditRequestDto
     ) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            val dto = PacienteEditRequestDto(
-                nome           = nome,
-                cpf            = cpf,
-                email          = email,
-                telefone       = telefone,
-                genero         = genero,
-                dataNascimento = dataNascimento
-            )
-            runCatching {
-                val response = RetrofitClient.api.updatePaciente(idPaciente, dto)
-                if (response.isSuccessful) {
-                    _uiState.value = UiState.Salvo
-                } else {
-                    _uiState.value = UiState.Error("Erro ${response.code()}: não foi possível salvar")
-                }
-            }.onFailure {
-                _uiState.value = UiState.Error(it.message ?: "Erro de rede")
+            repository.updatePaciente(idPaciente, dto)
+            .onSuccess{_uiState.value = UiState.Carregado(it) }
+            .onFailure {throwable ->
+                _uiState.value = UiState.Error(throwable.toNetworkError(""))
             }
         }
     }

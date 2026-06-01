@@ -4,6 +4,7 @@ import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaStatusRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
+import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
 
 class PacienteRepository {
@@ -15,6 +16,11 @@ class PacienteRepository {
     ): Result<PacienteResponseDto> =
         safeApiCall { api.getPacienteById(idPaciente) }
 
+    suspend fun updatePaciente(
+        idPaciente: Long,
+        dto : PacienteEditRequestDto
+    ) : Result<PacienteResponseDto> =
+    safeApiCall { api.updatePaciente(idPaciente, dto)}
     suspend fun getConsultas(
         idPaciente: Long
     ): Result<List<ConsultaResponseDto>> =
