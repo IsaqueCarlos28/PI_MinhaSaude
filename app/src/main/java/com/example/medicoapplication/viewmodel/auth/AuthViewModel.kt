@@ -63,10 +63,8 @@ class AuthViewModel(
 
                     _uiState.value = UiState.Success
                 }
-                .onFailure { exception ->
-                    _uiState.value = UiState.Error(
-                        exception.message ?: "Código inválido."
-                    )
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
                 }
         }
     }
@@ -79,10 +77,9 @@ class AuthViewModel(
                 .onSuccess {
                     _uiState.value = UiState.Success
                 }
-                .onFailure { exception ->
-                    _uiState.value = UiState.Error(
-                        exception.message ?: "Erro ao alterar senha."
-                    )
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+
                 }
         }
     }
