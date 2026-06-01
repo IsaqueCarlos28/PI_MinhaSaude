@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.paciente.viewmodel.ConfirmacaoConsultaViewModel
+import com.example.medicoapplication.viewmodel.paciente.consulta.ConfirmacaoConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 

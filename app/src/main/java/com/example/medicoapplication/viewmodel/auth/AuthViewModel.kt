@@ -1,4 +1,4 @@
-package com.example.medicoapplication.viewmodel
+package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

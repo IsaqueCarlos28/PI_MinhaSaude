@@ -1,9 +1,11 @@
-package com.example.medicoapplication.activities.medico.viewmodel
+package com.example.medicoapplication.viewmodel.medico.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.MedicoRepository
+import com.example.medicoapplication.data.repository.NetworkException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +18,7 @@ class ConsultasMedicoViewModel(
         object Idle : UiState()
         object Loading : UiState()
         data class Success(val consultas: List<ConsultaResponseDto>) : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -26,13 +28,14 @@ class ConsultasMedicoViewModel(
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             repository.getConsultas(idMedico)
-                .onSuccess { todas ->
-                    val filtradas = if (filtroStatus != null)
-                        todas.filter { it.status?.name == filtroStatus }
-                    else todas
-                    _uiState.value = UiState.Success(filtradas)
-                }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar consultas") }
+            .onSuccess {
+                _uiState.value = UiState.Success(it)
+            }
+            .onFailure { throwable ->
+                val erro = (throwable as? NetworkException)?.error
+                    ?: NetworkError.Desconhecido(throwable.message ?: "")
+                _uiState.value = UiState.Error(erro)
+            }
         }
     }
 }

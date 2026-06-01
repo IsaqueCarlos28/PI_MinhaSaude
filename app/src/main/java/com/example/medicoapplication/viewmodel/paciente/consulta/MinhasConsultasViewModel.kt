@@ -1,4 +1,4 @@
-package com.example.medicoapplication.viewmodel.paciente
+package com.example.medicoapplication.viewmodel.paciente.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class MinhasConsultasViewModel(
     private val pacienteRepository: PacienteRepository = PacienteRepository(),
-    private val consultaRepository:  ConsultaRepository  = ConsultaRepository()
+    private val consultaRepository: ConsultaRepository = ConsultaRepository()
 ) : ViewModel() {
 
     sealed class UiState {

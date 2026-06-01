@@ -1,4 +1,4 @@
-package com.example.medicoapplication.activities.auth_e_cadastro.viewmodel
+package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -9,55 +9,30 @@ class LocalRepository {
         size: Int = 20,
         sort: String = "nome,asc"
     ): Result<LocalPageResponseDto> =
-        runCatching {
-            val response = api.getLocais(page, size, sort)
+        safeApiCall { api.getLocais(page, size, sort) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
-    suspend fun getLocal(id: Long): Result<LocalResponseDto> =
-        runCatching {
-            val response = api.getLocalById(id)
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
+    suspend fun getLocal(
+        id: Long
+    ): Result<LocalResponseDto> =
+        safeApiCall { api.getLocalById(id) }
+
+
     suspend fun createLocal(
         dto: LocalCreateRequestDto
     ): Result<LocalResponseDto> =
-        runCatching {
-            val response = api.createLocal(dto)
+        safeApiCall { api.createLocal(dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
+
     suspend fun updateLocal(
         id: Long,
         dto: LocalUpdateRequestDto
     ): Result<LocalResponseDto> =
-        runCatching {
-            val response = api.updateLocal(id, dto)
+        safeApiCall { api.updateLocal(id, dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
-    suspend fun deleteLocal(id: Long): Result<Unit> =
-        runCatching {
-            val response = api.deleteLocal(id)
-            if (!response.isSuccessful) {
-                error("Erro ao deletar local (${response.code()})")
-            }
-        }
+
+    suspend fun deleteLocal(
+        id: Long
+    ): Result<Unit> =
+        safeApiCall { api.deleteLocal(id) }
 }

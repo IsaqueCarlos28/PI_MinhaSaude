@@ -7,47 +7,26 @@ class ConsultaRepository {
         idPaciente: Long,
         dto: ConsultaCreateRequestDto
     ): Result<ConsultaResponseDto> =
-        runCatching {
-            val response = api.agendarConsulta(idPaciente, dto)
+        safeApiCall { api.agendarConsulta(idPaciente, dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
     suspend fun reagendarConsulta(
         idPaciente: Long,
         idEvento: Long,
         dto: ConsultaUpdateRequestDto
     ): Result<ConsultaResponseDto> =
-        runCatching {
-            val response = api.reagendarConsulta(idPaciente, idEvento, dto)
+        safeApiCall { api.reagendarConsulta(idPaciente, idEvento, dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
     suspend fun atualizarStatusPaciente(
         idPaciente: Long,
         idEvento: Long,
         dto: ConsultaStatusRequestDto
     ): Result<ConsultaResponseDto> =
-        runCatching {
-            val response = api.atualizarStatusPeloPaciente(idPaciente,
-                idEvento, dto)
-            response.body() ?: error("Erro ao atualizar status.")
-        }
+        safeApiCall { api.atualizarStatusPeloPaciente(idPaciente, idEvento, dto) }
+
     suspend fun atualizarStatusMedico(
         idMedico: Long,
         idEvento: Long,
         dto: ConsultaStatusRequestDto
     ): Result<ConsultaResponseDto> =
-        runCatching {
-            val response = api.atualizarStatusPeloMedico(idMedico, idEvento,
-                dto)
-            response.body() ?: error("Erro ao atualizar status.")
-        }
+        safeApiCall {  api.atualizarStatusPeloMedico(idMedico, idEvento, dto) }
 }

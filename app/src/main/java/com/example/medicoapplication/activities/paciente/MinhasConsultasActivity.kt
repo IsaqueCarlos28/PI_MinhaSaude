@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.adapters.ConsultasPacienteAdapter
-import com.example.medicoapplication.viewmodel.paciente.MinhasConsultasViewModel
+import com.example.medicoapplication.viewmodel.paciente.consulta.MinhasConsultasViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat

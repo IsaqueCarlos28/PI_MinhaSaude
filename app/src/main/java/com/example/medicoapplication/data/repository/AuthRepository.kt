@@ -3,39 +3,28 @@ package com.example.medicoapplication.data.repository
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.remote.DTO.auth.AlterarSenhaRequestDto
 import com.example.medicoapplication.data.remote.DTO.auth.EsqueceuSenhaRequestDto
+import com.example.medicoapplication.data.remote.DTO.auth.LoginRequestDto
+import com.example.medicoapplication.data.remote.DTO.auth.LoginResponseDto
 import com.example.medicoapplication.data.remote.DTO.auth.ValidarTokenRequestDto
-import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
-import com.example.medicoapplication.data.remote.DTO.login.LoginResponseDto
 import com.example.medicoapplication.data.remote.DTO.auth.TokenDeRecuperacaoDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
+
 
 class AuthRepository {
 
     private val api = RetrofitClient.api
 
     suspend fun login(email: String, senha: String): Result<LoginResponseDto> =
-        runCatching {
-            val response = api.login(LoginRequestDto(email, senha))
+        safeApiCall { api.login(LoginRequestDto(email, senha)) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
+    suspend fun cadastrarPaciente(dto: PacienteCreateRequestDto): Result<PacienteResponseDto> =
+       safeApiCall { api.createPaciente(dto)}
 
-    suspend fun cadastrarPaciente(dto: PacienteCreateRequestDto): Result<Unit> =
-        runCatching {
-            val response = api.createPaciente(dto)
-            if (!response.isSuccessful) error("Erro ${response.code()}: Verifique os dados.")
-        }
-
-    suspend fun cadastrarMedico(dto: MedicoCreateRequestDto): Result<Unit> =
-        runCatching {
-            val response = api.createMedico(dto)
-            if (!response.isSuccessful) error("Erro ${response.code()}: Verifique os dados.")
-        }
+    suspend fun cadastrarMedico(dto: MedicoCreateRequestDto): Result<MedicoResponseDto> =
+        safeApiCall {api.createMedico(dto)}
 
     suspend fun esqueceuSenha(email: String): Result<Unit> =
         runCatching {

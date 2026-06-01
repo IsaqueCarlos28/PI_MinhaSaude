@@ -11,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.paciente.viewmodel.DetalheConsultaViewModel
+import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch

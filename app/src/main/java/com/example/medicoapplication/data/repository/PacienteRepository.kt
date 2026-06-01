@@ -10,41 +10,25 @@ class PacienteRepository {
 
     private val api = RetrofitClient.api
 
-    suspend fun getPaciente(idPaciente: Long): Result<PacienteResponseDto> =
-        runCatching {
-            val response = api.getPacienteById(idPaciente)
+    suspend fun getPaciente(
+        idPaciente: Long
+    ): Result<PacienteResponseDto> =
+        safeApiCall { api.getPacienteById(idPaciente) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
-
-    suspend fun getConsultas(idPaciente: Long): Result<List<ConsultaResponseDto>> =
-        runCatching {
-            val response = api.getConsultasByPaciente(idPaciente)
-            response.body() ?: emptyList()
-        }
+    suspend fun getConsultas(
+        idPaciente: Long
+    ): Result<List<ConsultaResponseDto>> =
+        safeApiCall { api.getConsultasByPaciente(idPaciente) }
 
     suspend fun cancelarConsulta(
         idPaciente: Long,
         idEvento: Long,
         status: ConsultaStatusRequestDto
-    ): Result<Unit> =
-        runCatching {
-            val response = api.atualizarStatusPeloPaciente(idPaciente, idEvento, status)
-            if (!response.isSuccessful) error("Não foi possível cancelar (${response.code()}).")
-        }
+    ): Result<ConsultaResponseDto> =
+        safeApiCall { api.atualizarStatusPeloPaciente(idPaciente, idEvento, status) }
 
-    suspend fun getMedico(idMedico: Long): Result<MedicoResponseDto> =
-        runCatching {
-            val response = api.getMedicoById(idMedico)
-
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
+    suspend fun getMedico(
+        idMedico: Long
+    ): Result<MedicoResponseDto> =
+        safeApiCall { api.getMedicoById(idMedico) }
 }

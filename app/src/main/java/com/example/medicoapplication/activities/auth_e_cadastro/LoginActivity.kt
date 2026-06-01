@@ -12,15 +12,18 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.activities.paciente.HomePacienteActivity
-import com.example.medicoapplication.activities.auth_e_cadastro.viewmodel.LoginViewModel
-import com.example.medicoapplication.data.remote.DTO.login.Role
+import com.example.medicoapplication.viewmodel.auth.LoginViewModel
+import com.example.medicoapplication.data.local.SessionManager
+import com.example.medicoapplication.data.remote.DTO.auth.Role
+import com.example.medicoapplication.data.remote.NetworkError
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
-
+    private val sessionManager by lazy { SessionManager(this) }
     private var tipoUsuario = "Paciente"
     private lateinit var tabLayout: TabLayout
     private lateinit var inputEmail: EditText
@@ -33,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        verificarSessao()
         bindViews()
         setupTabListener()
         setupClickListeners()
@@ -94,8 +98,21 @@ class LoginActivity : AppCompatActivity() {
                     is LoginViewModel.UiState.Loading -> setLoading(true)
                     is LoginViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_LONG).show()
-                        viewModel.resetState()
+                        val mensagem = when (state.error) {
+                            is NetworkError.NaoAutorizado ->
+                                "Email ou senha incorretos. Verifique seus dados."
+                            is NetworkError.SemConexao ->
+                                "Sem conexão com a internet. Verifique sua rede."
+                            is NetworkError.Timeout ->
+                                "O servidor demorou para responder. Tente novamente."
+                            is NetworkError.ErrroServidor ->
+                                "Problema no servidor. Tente mais tarde."
+                            is NetworkError.Desconhecido ->
+                                "Erro inesperado: ${state.error.mensagem}"
+                            else ->
+                                "Algo deu errado. Tente novamente."
+                        }
+                        Toast.makeText(this@LoginActivity, mensagem, Toast.LENGTH_LONG).show()
                     }
                     is LoginViewModel.UiState.Success -> {
                         val usuario = state.usuario
@@ -123,5 +140,21 @@ class LoginActivity : AppCompatActivity() {
     private fun setLoading(carregando: Boolean) {
         botaoLogin.isEnabled = !carregando
         botaoLogin.text = if (carregando) "Entrando..." else "Login"
+    }
+
+    fun verificarSessao() {
+        lifecycleScope.launch {
+            // pega só o primeiro valor emitido — não precisa ficar escutando
+            val sessao = sessionManager.sessaoAtual.firstOrNull()
+
+            if (sessao != null) {
+                val destino = when (sessao.role) {
+                    "PACIENTE" -> HomePacienteActivity::class.java
+                    "MEDICO" -> HomeMedicoActivity::class.java
+                    else -> LoginActivity::class.java
+                }
+            }
+            finish() // nunca deixa o usuário voltar para a Splash
+        }
     }
 }

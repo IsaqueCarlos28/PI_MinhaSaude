@@ -6,42 +6,24 @@ class BloqueioAgendaRepository {
     suspend fun getBloqueios(
         idMedico: Long
     ): Result<List<BloqueioAgendaResponseDto>> =
-        runCatching {
-            val response = api.getBloqueiosAgenda(idMedico)
-            response.body() ?: emptyList()
-        }
+        safeApiCall { api.getBloqueiosAgenda(idMedico) }
+
     suspend fun createBloqueio(
         idMedico: Long,
         dto: BloqueioAgendaCreateRequestDto
     ): Result<BloqueioAgendaResponseDto> =
-        runCatching {
-            val response = api.createBloqueioAgenda(idMedico, dto)
+        safeApiCall { api.createBloqueioAgenda(idMedico, dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
     suspend fun updateBloqueio(
         idMedico: Long,
         idBloqueio: Long,
         dto: BloqueioAgendaUpdateRequestDto
     ): Result<BloqueioAgendaResponseDto> =
+    safeApiCall { api.updateBloqueioAgenda(idMedico, idBloqueio, dto) }
 
-    runCatching {
-        val response = api.updateBloqueioAgenda(idMedico, idBloqueio,
-            dto)
-        response.body() ?: error("Erro ao atualizar bloqueio.")
-    }
     suspend fun deleteBloqueio(
         idMedico: Long,
         idBloqueio: Long
     ): Result<Unit> =
-        runCatching {
-            val response = api.deleteBloqueioAgenda(idMedico, idBloqueio)
-            if (!response.isSuccessful) {
-                error("Erro ao deletar bloqueio (${response.code()})")
-            }
-        }
+        safeApiCall { api.deleteBloqueioAgenda(idMedico, idBloqueio) }
 }

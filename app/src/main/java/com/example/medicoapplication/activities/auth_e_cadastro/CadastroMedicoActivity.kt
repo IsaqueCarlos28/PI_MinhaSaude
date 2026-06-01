@@ -11,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.auth_e_cadastro.viewmodel.CadastroViewModel
+import com.example.medicoapplication.viewmodel.auth.CadastroViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto

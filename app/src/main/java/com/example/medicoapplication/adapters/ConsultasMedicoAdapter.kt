@@ -1,5 +1,3 @@
-package com.example.medicoapplication.adapters
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +8,13 @@ import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDt
 
 class ConsultasMedicoAdapter(
     private var consultas: List<ConsultaResponseDto>,
-    private val onItemClick: (ConsultaResponseDto) -> Unit = {}
+    private val onItemClick: (ConsultaResponseDto) -> Unit  // (1)
 ) : RecyclerView.Adapter<ConsultasMedicoAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvNomePaciente: TextView = itemView.findViewById(R.id.tvNomePacienteItem)
-        val tvTipoConsulta: TextView = itemView.findViewById(R.id.tvTipoConsultaItem)
-        val tvCpfPaciente: TextView  = itemView.findViewById(R.id.tvCpfPacienteItem)
-        val tvEndereco: TextView     = itemView.findViewById(R.id.tvEnderecoItem)
-        val tvValor: TextView        = itemView.findViewById(R.id.tvValorItem)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvNomePaciente: TextView = view.findViewById(R.id.tv_nome_paciente)
+        val tvData: TextView         = view.findViewById(R.id.tv_data_consulta)
+        val tvStatus: TextView       = view.findViewById(R.id.tv_status_consulta)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,30 +23,21 @@ class ConsultasMedicoAdapter(
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = consultas.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val consulta = consultas[position]
-        holder.tvNomePaciente.text = consulta.nomePaciente ?: "Paciente"
-        // Data e hora formatados: dd/MM/yyyy às HH:mm
-        holder.tvTipoConsulta.text = formatarDataHora(consulta.data, consulta.horaInicio)
-        holder.tvCpfPaciente.text  = "Status: ${consulta.status?.name ?: "—"}"
-        holder.tvEndereco.text     = consulta.nomeConvenio ?: "Particular"
-        holder.tvValor.text        = ""  // Valor não disponível no ConsultaResponseDto
-        holder.itemView.setOnClickListener { onItemClick(consulta) }
-    }
+        holder.tvNomePaciente.text = consulta.nomePaciente   // (2)
+        holder.tvData.text         = consulta.data
+        holder.tvStatus.text       = consulta.status.toString()
 
-    fun atualizarLista(novaLista: List<ConsultaResponseDto>) {
-        consultas = novaLista
-        notifyDataSetChanged()
-    }
-
-    private fun formatarDataHora(data: String, hora: String): String {
-        return try {
-            val partes = data.split("-")
-            "${partes[2]}/${partes[1]}/${partes[0]} às ${hora.substring(0, 5)}"
-        } catch (e: Exception) {
-            "$data às $hora"
+        holder.itemView.setOnClickListener {
+            onItemClick(consulta)  // (3)
         }
+    }
+
+    override fun getItemCount() = consultas.size
+
+    fun atualizarLista(novaLista: List<ConsultaResponseDto>) {  // (4)
+        consultas = novaLista
+        notifyDataSetChanged()  // substituir por DiffUtil depois
     }
 }

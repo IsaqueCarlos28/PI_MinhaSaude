@@ -13,56 +13,26 @@ class EspecialidadeRepository {
         size: Int = 20,
         sort: String = "nome,asc"
     ): Result<EspecialidadePageResponseDto> =
-        runCatching {
-            val response = api.getEspecialidades(page, size, sort)
+        safeApiCall { api.getEspecialidades(page, size, sort) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
-    suspend fun getEspecialidade(id: Long): Result<EspecialidadeResponseDto>
-            =
-        runCatching {
-            val response = api.getEspecialidadeById(id)
+    suspend fun getEspecialidade(
+        id: Long
+    ): Result<EspecialidadeResponseDto> =
+        safeApiCall { api.getEspecialidadeById(id) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
     suspend fun createEspecialidade(
         dto: EspecialidadeCreateRequestDto
     ): Result<EspecialidadeResponseDto> =
-        runCatching {
-            val response = api.createEspecialidade(dto)
+        safeApiCall { api.createEspecialidade(dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
     suspend fun updateEspecialidade(
         id: Long,
         dto: EspecialidadeUpdateRequestDto
     ): Result<EspecialidadeResponseDto> =
-        runCatching {
-            val response = api.updateEspecialidade(id, dto)
+        safeApiCall { api.updateEspecialidade(id, dto) }
 
-            if (response.isSuccessful) {
-                response.body() ?: error("Resposta vazia do servidor")
-            } else {
-                error("Erro ${response.code()}: ${response.message()}")
-            }
-        }
-    suspend fun deleteEspecialidade(id: Long): Result<Unit> =
-        runCatching {
-            val response = api.deleteEspecialidade(id)
-            if (!response.isSuccessful) {
-                error("Erro ao deletar especialidade (${response.code()})")
-            }
-        }
+    suspend fun deleteEspecialidade(
+        id: Long
+    ): Result<Unit> =
+        safeApiCall { api.deleteEspecialidade(id) }
 }

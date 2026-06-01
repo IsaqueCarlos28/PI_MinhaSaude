@@ -5,7 +5,7 @@ package com.example.medicoapplication.data.remote.DTO.auth
 // Keep this file only if other code already imports from DTO.auth.
 // Otherwise prefer DTO.login.LoginRequestDto and DTO.login.LoginResponseDto.
 
-import com.example.medicoapplication.data.remote.DTO.login.Role
+import com.example.medicoapplication.data.remote.DTO.auth.Role
 
 /** Corpo da requisição de login. */
 data class LoginRequestDto(

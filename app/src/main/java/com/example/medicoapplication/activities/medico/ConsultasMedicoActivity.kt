@@ -1,5 +1,6 @@
 package com.example.medicoapplication.activities.medico
 
+import ConsultasMedicoAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -11,14 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
-import com.example.medicoapplication.activities.medico.viewmodel.ConsultasMedicoViewModel
+import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import com.example.medicoapplication.adapters.ConsultasMedicoAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class ConsultasMedicoActivity : AppCompatActivity() {
 
-    private val viewModel: ConsultasMedicoViewModel by viewModels()
+    private lateinit var viewModel: ConsultasMedicoViewModel
     private lateinit var adapter: ConsultasMedicoAdapter
 
     private var idMedico: Long = -1L

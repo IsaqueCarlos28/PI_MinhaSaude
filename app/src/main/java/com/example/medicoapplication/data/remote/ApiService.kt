@@ -5,6 +5,8 @@ import com.example.medicoapplication.data.remote.DTO.agenda.AgendaResponseDto
 import com.example.medicoapplication.data.remote.DTO.agenda.DisponibilidadeSemanaDTO
 import com.example.medicoapplication.data.remote.DTO.auth.AlterarSenhaRequestDto
 import com.example.medicoapplication.data.remote.DTO.auth.EsqueceuSenhaRequestDto
+import com.example.medicoapplication.data.remote.DTO.auth.LoginRequestDto
+import com.example.medicoapplication.data.remote.DTO.auth.LoginResponseDto
 import com.example.medicoapplication.data.remote.DTO.auth.TokenDeRecuperacaoDto
 import com.example.medicoapplication.data.remote.DTO.auth.ValidarTokenRequestDto
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.BloqueioAgendaCreateRequestDto
@@ -29,8 +31,6 @@ import com.example.medicoapplication.data.remote.DTO.local.LocalCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalUpdateRequestDto
-import com.example.medicoapplication.data.remote.DTO.login.LoginRequestDto
-import com.example.medicoapplication.data.remote.DTO.login.LoginResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoEditRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoPageResponseDto

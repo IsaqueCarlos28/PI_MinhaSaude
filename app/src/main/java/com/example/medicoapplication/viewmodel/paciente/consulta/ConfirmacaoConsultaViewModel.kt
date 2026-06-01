@@ -1,4 +1,4 @@
-package com.example.medicoapplication.activities.paciente.viewmodel
+package com.example.medicoapplication.viewmodel.paciente.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,9 +33,9 @@ class ConfirmacaoConsultaViewModel(
             _uiState.value = UiState.Loading
             val dto = ConsultaCreateRequestDto(
                 idConsultaOfertada = idConsultaOfertada,
-                idConvenio         = idConvenio,
-                data               = data,
-                horaInicio         = horaInicio
+                idConvenio = idConvenio,
+                data = data,
+                horaInicio = horaInicio
             )
             repository.agendarConsulta(idPaciente, dto)
                 .onSuccess { _uiState.value = UiState.Sucesso }
