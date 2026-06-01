@@ -1,4 +1,4 @@
-package com.example.medicoapplication.viewmodel
+package com.example.medicoapplication.viewmodel.medico.consulta
 
 import androidx.lifecycle.ViewModel
 import com.example.medicoapplication.data.repository.AgendaRepository

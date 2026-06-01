@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaStatusRequestDto
 import com.example.medicoapplication.data.remote.DTO.consulta.StatusConsulta
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.repository.ConsultaRepository
+import com.example.medicoapplication.data.repository.NetworkException
+import com.example.medicoapplication.data.repository.toNetworkError
+import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +23,7 @@ class DetalheConsultaViewModel(
         object Idle    : UiState()
         object Loading : UiState()
         data class Success(val consulta: ConsultaResponseDto) : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -29,18 +33,16 @@ class DetalheConsultaViewModel(
     fun carregarConsulta(idPaciente: Long, idEvento: Long) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            runCatching {
-                val response = RetrofitClient.api.getConsultaByIdPaciente(idPaciente, idEvento)
-                if (response.isSuccessful) {
-                    response.body() ?: error("Resposta vazia do servidor")
-                } else {
-                    error("Erro ${response.code()}: ${response.message()}")
-                }
-            }
+            consultaRepository.getConsultaByIdPaciente(idPaciente, idEvento)
                 .onSuccess { _uiState.value = UiState.Success(it) }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar consulta") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+                }
+
         }
+
     }
+
 
     fun cancelarConsulta(idPaciente: Long, idEvento: Long, onSucesso: () -> Unit) {
         viewModelScope.launch {
@@ -50,7 +52,12 @@ class DetalheConsultaViewModel(
                 ConsultaStatusRequestDto(StatusConsulta.CANCELADA)
             )
                 .onSuccess { onSucesso() }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Não foi possível cancelar") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+                }
+
         }
+
     }
+
 }

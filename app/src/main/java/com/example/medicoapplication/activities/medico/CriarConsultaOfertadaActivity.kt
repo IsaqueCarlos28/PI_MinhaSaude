@@ -11,7 +11,7 @@ import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsul
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
-import com.example.medicoapplication.viewmodel.ConsultaOfertadaViewModel
+import com.example.medicoapplication.viewmodel.medico.consulta.ConsultaOfertadaViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.switchmaterial.SwitchMaterial

@@ -6,8 +6,10 @@ import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDt
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.MedicoRepository
 import com.example.medicoapplication.data.repository.NetworkException
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ConsultasMedicoViewModel(
@@ -22,7 +24,7 @@ class ConsultasMedicoViewModel(
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
-    val uiState: StateFlow<UiState> = _uiState
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun carregarConsultas(idMedico: Long, filtroStatus: String? = null) {
         viewModelScope.launch {
@@ -32,9 +34,7 @@ class ConsultasMedicoViewModel(
                 _uiState.value = UiState.Success(it)
             }
             .onFailure { throwable ->
-                val erro = (throwable as? NetworkException)?.error
-                    ?: NetworkError.Desconhecido(throwable.message ?: "")
-                _uiState.value = UiState.Error(erro)
+                _uiState.value = UiState.Error(throwable.toNetworkError())
             }
         }
     }

@@ -9,6 +9,12 @@ class ConsultaRepository {
     ): Result<ConsultaResponseDto> =
         safeApiCall { api.agendarConsulta(idPaciente, dto) }
 
+    suspend fun getConsultaByIdPaciente(
+        idPaciente: Long,
+        idEvento : Long
+    ) : Result<ConsultaResponseDto> =
+        safeApiCall { api.getConsultaByIdPaciente(idPaciente, idEvento) }
+
     suspend fun reagendarConsulta(
         idPaciente: Long,
         idEvento: Long,

@@ -41,3 +41,11 @@ suspend fun <T> safeApiCall(
 
 // (4) — wrapper para carregar o NetworkError dentro de uma Exception
 class NetworkException(val error: NetworkError) : Exception()
+
+fun Throwable.toNetworkError(
+    customMessage: String? = null
+): NetworkError =
+    (this as? NetworkException)?.error
+        ?: NetworkError.Desconhecido(
+            customMessage ?: message ?: "Erro desconhecido"
+        )

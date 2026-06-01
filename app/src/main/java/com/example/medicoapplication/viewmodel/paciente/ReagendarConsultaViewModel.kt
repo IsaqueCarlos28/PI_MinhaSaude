@@ -3,7 +3,9 @@ package com.example.medicoapplication.activities.paciente.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.ConsultaRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +18,7 @@ class ReagendarConsultaViewModel(
         object Idle    : UiState()
         object Loading : UiState()
         object Sucesso : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -25,22 +27,15 @@ class ReagendarConsultaViewModel(
     fun reagendar(
         idPaciente: Long,
         idEvento: Long,
-        idConsultaOfertada: Long,
-        data: String,
-        horaInicio: String,
-        idConvenio: Long? = null
+        dto: ConsultaUpdateRequestDto
     ) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            val dto = ConsultaUpdateRequestDto(
-                idConsultaOfertada = idConsultaOfertada,
-                idConvenio         = idConvenio,
-                data               = data,
-                horaInicio         = horaInicio
-            )
             repository.reagendarConsulta(idPaciente, idEvento, dto)
                 .onSuccess { _uiState.value = UiState.Sucesso }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao reagendar consulta") }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+                }
         }
     }
 }

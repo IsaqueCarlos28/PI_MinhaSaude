@@ -3,9 +3,14 @@ package com.example.medicoapplication.viewmodel.paciente.consulta
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaCreateRequestDto
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.ConsultaRepository
+import com.example.medicoapplication.data.repository.toNetworkError
+import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ConfirmacaoConsultaViewModel(
@@ -15,12 +20,12 @@ class ConfirmacaoConsultaViewModel(
     sealed class UiState {
         object Idle    : UiState()
         object Loading : UiState()
-        object Sucesso : UiState()
-        data class Error(val message: String) : UiState()
+        data class Success (val consulta: ConsultaResponseDto): UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
-    val uiState: StateFlow<UiState> = _uiState
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun confirmarConsulta(
         idPaciente: Long,
@@ -38,8 +43,10 @@ class ConfirmacaoConsultaViewModel(
                 horaInicio = horaInicio
             )
             repository.agendarConsulta(idPaciente, dto)
-                .onSuccess { _uiState.value = UiState.Sucesso }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao agendar consulta") }
+                .onSuccess { _uiState.value = UiState.Success(it) }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+                }
         }
     }
 }
