@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.adapters.MedicoAdapter
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.BuscaMedicosViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -77,7 +78,7 @@ class PesquisaMedicosActivity : AppCompatActivity() {
         })
 
         observeViewModel()
-        viewModel.carregarMedicos()
+        viewModel.carregarMedicos(1,20)
         configurarBottomNav(R.id.nav_medicos)
     }
 
@@ -96,7 +97,21 @@ class PesquisaMedicosActivity : AppCompatActivity() {
                     }
                     is BuscaMedicosViewModel.UiState.Error -> {
                         progressBar.visibility = View.GONE
-                        Toast.makeText(this@PesquisaMedicosActivity, state.message, Toast.LENGTH_SHORT).show()
+                        val mensagem = when (state.error) {
+                            is NetworkError.NaoAutorizado ->
+                                "Email ou senha incorretos. Verifique seus dados."
+                            is NetworkError.SemConexao ->
+                                "Sem conexão com a internet. Verifique sua rede."
+                            is NetworkError.Timeout ->
+                                "O servidor demorou para responder. Tente novamente."
+                            is NetworkError.ErrroServidor ->
+                                "Problema no servidor. Tente mais tarde."
+                            is NetworkError.Desconhecido ->
+                                "Erro inesperado: ${state.error.mensagem}"
+                            else ->
+                                "Algo deu errado. Tente novamente."
+                        }
+                        Toast.makeText(this@PesquisaMedicosActivity, mensagem, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

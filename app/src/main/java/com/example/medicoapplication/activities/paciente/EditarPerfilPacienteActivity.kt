@@ -95,7 +95,7 @@ class EditarPerfilPacienteActivity : AppCompatActivity() {
                     is EditarPerfilPacienteViewModel.UiState.Loading -> setLoading(true)
                     is EditarPerfilPacienteViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@EditarPerfilPacienteActivity, state.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@EditarPerfilPacienteActivity, state.error, Toast.LENGTH_LONG).show()
                     }
                     is EditarPerfilPacienteViewModel.UiState.Carregado -> {
                         setLoading(false)

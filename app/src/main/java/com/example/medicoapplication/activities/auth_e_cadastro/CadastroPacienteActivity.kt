@@ -13,6 +13,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.viewmodel.auth.CadastroViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
+import com.example.medicoapplication.data.remote.NetworkError
 import kotlinx.coroutines.launch
 
 class CadastroPacienteActivity : AppCompatActivity() {
@@ -100,7 +101,21 @@ class CadastroPacienteActivity : AppCompatActivity() {
                     is CadastroViewModel.UiState.Loading -> setLoading(true)
                     is CadastroViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@CadastroPacienteActivity, state.message, Toast.LENGTH_LONG).show()
+                        val mensagem = when (state.error) {
+                            is NetworkError.NaoAutorizado ->
+                                "Email ou senha incorretos. Verifique seus dados."
+                            is NetworkError.SemConexao ->
+                                "Sem conexão com a internet. Verifique sua rede."
+                            is NetworkError.Timeout ->
+                                "O servidor demorou para responder. Tente novamente."
+                            is NetworkError.ErrroServidor ->
+                                "Problema no servidor. Tente mais tarde."
+                            is NetworkError.Desconhecido ->
+                                "Erro inesperado: ${state.error.mensagem}"
+                            else ->
+                                "Algo deu errado. Tente novamente."
+                        }
+                        Toast.makeText(this@CadastroPacienteActivity, mensagem, Toast.LENGTH_LONG).show()
                         viewModel.resetState()
                     }
                     is CadastroViewModel.UiState.Success -> {

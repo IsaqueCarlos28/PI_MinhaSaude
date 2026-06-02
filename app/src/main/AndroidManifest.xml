@@ -56,13 +56,13 @@
         <activity android:name=".activities.paciente.DetalheConsultaActivity"       android:exported="false" />
         <activity android:name=".activities.paciente.ReagendarConsultaActivity"     android:exported="false" />
         <activity android:name=".activities.paciente.EditarPerfilPacienteActivity"  android:exported="false" />
-        <activity android:name=".activities.paciente.ConfiguracoesPacienteActivity" android:exported="false" />
+        <activity android:name=".activities.paciente.configuracao.ConfiguracoesPacienteActivity" android:exported="false" />
         <activity android:name=".activities.paciente.AlterarSenhaPacienteActivity"  android:exported="false" />
-        <activity android:name=".activities.paciente.ConfigNotificacoesActivity"    android:exported="false" />
-        <activity android:name=".activities.paciente.ConfigIdiomaActivity"          android:exported="false" />
-        <activity android:name=".activities.paciente.ConfigFaqActivity"             android:exported="false" />
-        <activity android:name=".activities.paciente.ConfigTermosActivity"          android:exported="false" />
-        <activity android:name=".activities.paciente.ConfigSobreActivity"           android:exported="false" />
+        <activity android:name=".activities.paciente.configuracao.ConfigNotificacoesActivity"    android:exported="false" />
+        <activity android:name=".activities.paciente.configuracao.ConfigIdiomaActivity"          android:exported="false" />
+        <activity android:name=".activities.paciente.configuracao.ConfigFaqActivity"             android:exported="false" />
+        <activity android:name=".activities.paciente.configuracao.ConfigTermosActivity"          android:exported="false" />
+        <activity android:name=".activities.paciente.configuracao.ConfigSobreActivity"           android:exported="false" />
     </application>
 
 </manifest>

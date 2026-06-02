@@ -1,4 +1,4 @@
-package com.example.medicoapplication.activities.paciente
+package com.example.medicoapplication.activities.paciente.configuracao
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,11 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
 import com.example.medicoapplication.activities.auth_e_cadastro.LoginActivity
+import com.example.medicoapplication.activities.paciente.AlterarSenhaPacienteActivity
+import com.example.medicoapplication.activities.paciente.BuscaMedicosActivity
+import com.example.medicoapplication.activities.paciente.EditarPerfilPacienteActivity
+import com.example.medicoapplication.activities.paciente.HomePacienteActivity
+import com.example.medicoapplication.activities.paciente.MinhasConsultasActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**

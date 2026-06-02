@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.consulta.ConfirmacaoConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -83,9 +84,23 @@ class ConfirmacaoConsultaActivity : AppCompatActivity() {
                     is ConfirmacaoConsultaViewModel.UiState.Loading -> setLoading(true)
                     is ConfirmacaoConsultaViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@ConfirmacaoConsultaActivity, state.message, Toast.LENGTH_LONG).show()
+                        val mensagem = when (state.error) {
+                            is NetworkError.NaoAutorizado ->
+                                "Email ou senha incorretos. Verifique seus dados."
+                            is NetworkError.SemConexao ->
+                                "Sem conexão com a internet. Verifique sua rede."
+                            is NetworkError.Timeout ->
+                                "O servidor demorou para responder. Tente novamente."
+                            is NetworkError.ErrroServidor ->
+                                "Problema no servidor. Tente mais tarde."
+                            is NetworkError.Desconhecido ->
+                                "Erro inesperado: ${state.error.mensagem}"
+                            else ->
+                                "Algo deu errado. Tente novamente."
+                        }
+                        Toast.makeText(this@ConfirmacaoConsultaActivity, mensagem, Toast.LENGTH_LONG).show()
                     }
-                    is ConfirmacaoConsultaViewModel.UiState.Sucesso -> {
+                    is ConfirmacaoConsultaViewModel.UiState.Success -> {
                         setLoading(false)
                         Toast.makeText(this@ConfirmacaoConsultaActivity, "Consulta agendada com sucesso!", Toast.LENGTH_LONG).show()
                         startActivity(

@@ -18,7 +18,7 @@ class PerfilPacienteViewModel(
         object Idle : UiState()
         object Loading : UiState()
         data class Success(val paciente: PacienteResponseDto) : UiState()
-        data class Error(val Error: NetworkError) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)

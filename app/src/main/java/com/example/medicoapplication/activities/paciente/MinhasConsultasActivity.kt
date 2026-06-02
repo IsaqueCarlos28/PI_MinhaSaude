@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.adapters.ConsultasPacienteAdapter
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.consulta.MinhasConsultasViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -83,7 +84,23 @@ class MinhasConsultasActivity : AppCompatActivity() {
                     is MinhasConsultasViewModel.UiState.Idle    -> Unit
                     is MinhasConsultasViewModel.UiState.Loading -> Unit
                     is MinhasConsultasViewModel.UiState.Success -> adapter.atualizarLista(state.consultas)
-                    is MinhasConsultasViewModel.UiState.Error   -> Toast.makeText(this@MinhasConsultasActivity, state.message, Toast.LENGTH_SHORT).show()
+                    is MinhasConsultasViewModel.UiState.Error   -> {
+                        val mensagem = when (state.error) {
+                            is NetworkError.NaoAutorizado ->
+                                "Email ou senha incorretos. Verifique seus dados."
+                            is NetworkError.SemConexao ->
+                                "Sem conexão com a internet. Verifique sua rede."
+                            is NetworkError.Timeout ->
+                                "O servidor demorou para responder. Tente novamente."
+                            is NetworkError.ErrroServidor ->
+                                "Problema no servidor. Tente mais tarde."
+                            is NetworkError.Desconhecido ->
+                                "Erro inesperado: ${state.error.mensagem}"
+                            else ->
+                                "Algo deu errado. Tente novamente."
+                        }
+                        Toast.makeText(this@MinhasConsultasActivity, mensagem, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

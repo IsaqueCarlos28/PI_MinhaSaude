@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -104,12 +106,15 @@ class ReagendarConsultaActivity : AppCompatActivity() {
             Toast.makeText(this, "Selecione um horário", Toast.LENGTH_SHORT).show()
             return
         }
+
         viewModel.reagendar(
-            idPaciente    = idPaciente,
-            idEvento      = idEvento,
-            idConsultaOfertada = idMedico, // ajuste se necessário conforme a sua API
-            data          = formatoDataApi.format(calendar.time),
-            horaInicio    = horarioSelecionado!!
+            idPaciente,
+            idEvento,
+            dto = ConsultaUpdateRequestDto(
+                idMedico,
+                null,
+                formatoDataApi.format(calendar.time),
+                horarioSelecionado!!)
         )
     }
 
@@ -121,7 +126,21 @@ class ReagendarConsultaActivity : AppCompatActivity() {
                     is ReagendarConsultaViewModel.UiState.Loading -> setLoading(true)
                     is ReagendarConsultaViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@ReagendarConsultaActivity, state.message, Toast.LENGTH_LONG).show()
+                        val mensagem = when (state.error) {
+                            is NetworkError.NaoAutorizado ->
+                                "Email ou senha incorretos. Verifique seus dados."
+                            is NetworkError.SemConexao ->
+                                "Sem conexão com a internet. Verifique sua rede."
+                            is NetworkError.Timeout ->
+                                "O servidor demorou para responder. Tente novamente."
+                            is NetworkError.ErrroServidor ->
+                                "Problema no servidor. Tente mais tarde."
+                            is NetworkError.Desconhecido ->
+                                "Erro inesperado: ${state.error.mensagem}"
+                            else ->
+                                "Algo deu errado. Tente novamente."
+                        }
+                        Toast.makeText(this@ReagendarConsultaActivity, mensagem, Toast.LENGTH_LONG).show()
                     }
                     is ReagendarConsultaViewModel.UiState.Sucesso -> {
                         setLoading(false)
