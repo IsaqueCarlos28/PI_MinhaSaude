@@ -13,7 +13,7 @@ import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
-import com.example.medicoapplication.UI.common.ErrorMapper
+import com.example.medicoapplication.UI.common.mappers.ErrorMapper
 import com.example.medicoapplication.viewmodel.auth.LoginViewModel
 import com.example.medicoapplication.data.local.SessionManager
 import com.example.medicoapplication.data.remote.DTO.auth.Role

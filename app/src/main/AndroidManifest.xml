@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,55 +14,112 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicoApplication"
         tools:targetApi="31">
-
+        <activity
+            android:name=".UI.activities.medico.VisualisarConsultaMedico"
+            android:exported="false" />
         <!-- ENTRY POINT -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- AUTH -->
-        <activity android:name=".UI.activities.auth_e_cadastro.LoginActivity"                       android:exported="false" />
-        <activity android:name=".UI.activities.auth_e_cadastro.CadastroMedicoActivity"              android:exported="false" />
-        <activity android:name=".UI.activities.auth_e_cadastro.CadastroPacienteActivity"            android:exported="false" />
-        <activity android:name=".UI.activities.auth_e_cadastro.ForgotPasswordActivity"              android:exported="false" />
-        <activity android:name=".UI.activities.auth_e_cadastro.ValidarCodigoResetPasswordActivity"  android:exported="false" />
-        <activity android:name=".UI.activities.auth_e_cadastro.ResetPasswordActivity"               android:exported="false" />
-
-        <!-- PACIENTE -->
-        <activity android:name=".UI.activities.paciente.HomePacienteActivity"      android:exported="false" />
-        <activity android:name=".UI.activities.paciente.MinhasConsultasActivity"   android:exported="false" />
-        <activity android:name=".UI.activities.paciente.BuscaMedicosActivity"      android:exported="false" />
-        <activity android:name=".UI.activities.paciente.PesquisaMedicosActivity"   android:exported="false" />
-        <activity android:name=".UI.activities.paciente.AgendarConsultaActivity"   android:exported="false" />
-        <activity android:name=".UI.activities.paciente.PerfilPacienteActivity"      android:exported="false" />
-        <activity android:name=".UI.activities.paciente.PerfilMedicoPublicoActivity" android:exported="false" />
-
-        <!-- MÉDICO -->
-        <activity android:name=".UI.activities.medico.HomeMedicoActivity"          android:exported="false" />
-        <activity android:name=".UI.activities.medico.AgendaMedicoActivity"        android:exported="false" />
-        <activity android:name=".UI.activities.medico.ConsultasMedicoActivity"     android:exported="false" />
-        <activity android:name=".UI.activities.medico.PerfilMedicoActivity"        android:exported="false" />
-        <activity android:name=".UI.activities.medico.ConfiguracoesMedicoActivity" android:exported="false" />
-        <activity android:name=".UI.activities.medico.ConsultasOfertadasActivity"     android:exported="false" />
-        <activity android:name=".UI.activities.medico.CriarConsultaOfertadaActivity"  android:exported="false" />
-
-
-        <activity android:name=".UI.activities.paciente.ConfirmacaoConsultaActivity"  android:exported="false" />
-        <activity android:name=".UI.activities.paciente.DetalheConsultaActivity"       android:exported="false" />
-        <activity android:name=".UI.activities.paciente.ReagendarConsultaActivity"     android:exported="false" />
-        <activity android:name=".UI.activities.paciente.EditarPerfilPacienteActivity"  android:exported="false" />
-        <activity android:name=".UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity" android:exported="false" />
-        <activity android:name=".UI.activities.paciente.AlterarSenhaPacienteActivity"  android:exported="false" />
-        <activity android:name=".UI.activities.paciente.configuracao.ConfigNotificacoesActivity"    android:exported="false" />
-        <activity android:name=".UI.activities.paciente.configuracao.ConfigIdiomaActivity"          android:exported="false" />
-        <activity android:name=".UI.activities.paciente.configuracao.ConfigFaqActivity"             android:exported="false" />
-        <activity android:name=".UI.activities.paciente.configuracao.ConfigTermosActivity"          android:exported="false" />
-        <activity android:name=".UI.activities.paciente.configuracao.ConfigSobreActivity"           android:exported="false" />
+        </activity> <!-- AUTH -->
+        <activity
+            android:name=".UI.activities.auth_e_cadastro.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.auth_e_cadastro.CadastroMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.auth_e_cadastro.CadastroPacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.auth_e_cadastro.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.auth_e_cadastro.ValidarCodigoResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.auth_e_cadastro.ResetPasswordActivity"
+            android:exported="false" /> <!-- PACIENTE -->
+        <activity
+            android:name=".UI.activities.paciente.HomePacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.MinhasConsultasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.BuscaMedicosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.PesquisaMedicosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.AgendarConsultaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.PerfilPacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.PerfilMedicoPublicoActivity"
+            android:exported="false" /> <!-- MÉDICO -->
+        <activity
+            android:name=".UI.activities.medico.HomeMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.AgendaMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.ConsultasMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.PerfilMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.ConfiguracoesMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.ConsultasOfertadasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.CriarConsultaOfertadaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.ConfirmacaoConsultaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.DetalheConsultaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.ReagendarConsultaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.EditarPerfilPacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.AlterarSenhaPacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.configuracao.ConfigNotificacoesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.configuracao.ConfigIdiomaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.configuracao.ConfigFaqActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.configuracao.ConfigTermosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.paciente.configuracao.ConfigSobreActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.UI.common.ErrorMapper
+import com.example.medicoapplication.UI.common.mappers.ErrorMapper
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.auth.AuthViewModel
 import kotlinx.coroutines.launch

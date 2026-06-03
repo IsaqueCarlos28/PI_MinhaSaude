@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.common
+package com.example.medicoapplication.UI.common.mappers
 
 import com.example.medicoapplication.data.remote.NetworkError
 

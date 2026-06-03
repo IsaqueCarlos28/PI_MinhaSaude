@@ -41,10 +41,6 @@ class ConsultasPacienteAdapter(
 
         // Clique no item abre o detalhe
         holder.itemView.setOnClickListener { onItemClick(consulta) }
-
-        val podeAcionar = consulta.status == StatusConsulta.AGENDADA
-        holder.btnVerConsulta.visibility = if (podeAcionar) View.VISIBLE else View.GONE
-        holder.btnVerConsulta.setOnClickListener { onReagendar(consulta) }
     }
 
     fun atualizarLista(novaLista: List<ConsultaResponseDto>) {

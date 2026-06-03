@@ -14,6 +14,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.EditarPerfilPacienteViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
+import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -83,7 +84,7 @@ class EditarPerfilPacienteActivity : BaseActivity() {
                 Genero.valueOf(spinnerGenero.selectedItem.toString())
             } catch (e: Exception) { Genero.OUTRO }
 
-            viewModel.salvarPerfil(idPaciente, nome, cpf, email, telefone, genero, nascimento)
+            viewModel.salvarPerfil(idPaciente, dto = PacienteEditRequestDto(nome, cpf, email, telefone, genero, nascimento))
         }
     }
 

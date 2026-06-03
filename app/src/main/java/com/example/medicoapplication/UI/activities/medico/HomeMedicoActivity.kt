@@ -61,10 +61,11 @@ class HomeMedicoActivity : BaseActivity() {
             }
         )
 
-        findViewById<RecyclerView>(R.id.rv_consultas_medico).apply {
-            layoutManager = LinearLayoutManager(this@HomeMedicoActivity)
-            adapter       = this@HomeMedicoActivity.adapter  // (6)
-        }
+        //Tem que arrumar
+//        findViewById<RecyclerView>(R.id.rv_consultas_medico).apply {
+//            layoutManager = LinearLayoutManager(this@HomeMedicoActivity)
+//            adapter       = this@HomeMedicoActivity.adapter  // (6)
+//        }
     }
 
     private fun observeViewModel() {
@@ -89,10 +90,10 @@ class HomeMedicoActivity : BaseActivity() {
     }
 
     private fun setLoading(isLoading: Boolean) {
-        findViewById<ProgressBar>(R.id.progress_bar).visibility =
-            if (isLoading) View.VISIBLE else View.GONE
-        findViewById<RecyclerView>(R.id.rv_consultas_medico).visibility =
-            if (isLoading) View.GONE else View.VISIBLE
+//        findViewById<ProgressBar>(R.id.progress_bar).visibility =
+//            if (isLoading) View.VISIBLE else View.GONE
+//        findViewById<RecyclerView>(R.id.rv_consultas_medico).visibility =
+//            if (isLoading) View.GONE else View.VISIBLE
     }
 
     private fun configurarBottomNav(itemSelecionado: Int) {

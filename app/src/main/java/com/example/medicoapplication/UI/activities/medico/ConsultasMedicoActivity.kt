@@ -36,7 +36,8 @@ class ConsultasMedicoActivity : BaseActivity() {
         // Configurar RecyclerView
         val rv = findViewById<RecyclerView>(R.id.rvConsultasMedico)
         rv.layoutManager = LinearLayoutManager(this)
-        adapter = ConsultasMedicoAdapter(emptyList())
+        //Mandar para uma pagina separada da consulta
+        adapter = ConsultasMedicoAdapter(emptyList(),{irParaTelaConsulta()})
         rv.adapter = adapter
 
         // Botões de filtro
@@ -96,5 +97,10 @@ class ConsultasMedicoActivity : BaseActivity() {
                 else -> false
             }
         }
+    }
+
+    fun irParaTelaConsulta(){
+        val intent = Intent(this@ConsultasMedicoActivity, VisualisarConsultaMedico::class.java)
+        startActivity(intent)
     }
 }

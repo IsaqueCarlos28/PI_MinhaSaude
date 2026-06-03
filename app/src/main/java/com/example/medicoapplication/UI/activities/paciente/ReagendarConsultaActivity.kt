@@ -13,7 +13,6 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
-import com.example.medicoapplication.data.remote.NetworkError
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat

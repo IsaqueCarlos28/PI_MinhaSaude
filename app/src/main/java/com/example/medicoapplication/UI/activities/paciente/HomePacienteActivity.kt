@@ -59,6 +59,7 @@ class HomePacienteActivity : BaseActivity() {
     private fun configurarRecyclerView() {
         adaptadorConsultas = ConsultasPacienteAdapter(
             consultas   = emptyList(),
+            //Reagendar e cancelar na tela da consulta
             onItemClick = { consulta ->
                 startActivity(
                     Intent(this, DetalheConsultaActivity::class.java).apply {
@@ -66,22 +67,6 @@ class HomePacienteActivity : BaseActivity() {
                         putExtra("ID_EVENTO",   consulta.id)
                     }
                 )
-            },
-            onReagendar = { consulta ->
-                startActivity(
-                    Intent(this, ReagendarConsultaActivity::class.java).apply {
-                        putExtra("ID_PACIENTE", idPaciente)
-                        putExtra("ID_EVENTO",   consulta.id)
-                        putExtra("ID_MEDICO",   consulta.idMedico)
-                        putExtra("NOME_MEDICO", consulta.nomeMedico ?: "")
-                    }
-                )
-            },
-            onCancelar  = { consulta ->
-                viewModel.cancelarConsulta(idPaciente, consulta) {
-                    viewModel.carregarConsultas(idPaciente)
-                    showToast("Consulta cancelada.")
-                }
             }
         )
         rvProximasConsultas.layoutManager = LinearLayoutManager(this)

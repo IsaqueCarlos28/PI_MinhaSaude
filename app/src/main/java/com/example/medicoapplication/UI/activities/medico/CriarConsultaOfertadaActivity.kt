@@ -143,9 +143,9 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
                 idEspecialidade = idEspecialidade,
                 idLocal = idLocal,
                 tipoConsulta = tipo,
-                valorConsulta = valor,
+                valorConsulta = valor!!.toDouble(),
                 aceitaParticular = switchParticular.isChecked,
-                duracaoMinutos = duracao,
+                duracaoMinutos = duracao?:0,
                 conveniosIds = conveniosSelecionados
             )
         }

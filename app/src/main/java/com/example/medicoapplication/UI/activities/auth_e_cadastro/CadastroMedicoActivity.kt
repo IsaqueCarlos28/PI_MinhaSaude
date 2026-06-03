@@ -6,12 +6,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.mappers.CadastroMapper
+import com.example.medicoapplication.UI.common.validations.CadastroValidator
+import com.example.medicoapplication.UI.common.validations.ValidationField
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.viewmodel.auth.CadastroViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
@@ -56,52 +58,48 @@ class CadastroMedicoActivity : BaseActivity() {
     }
 
     private fun tentarCadastro() {
-        val nome      = etNome.text.toString().trim()
-        val email     = etEmail.text.toString().trim()
-        val cpf       = etCpf.text.toString().trim()
-        val telefone  = etTelefone.text.toString().trim()
-        val dataNasc  = etDataNascimento.text.toString().trim()
-        val genero    = spGenero.selectedItem.toString()  // FIX: read from Spinner
-        val senha     = etSenha.text.toString().trim()
+
+        val nome = etNome.text.toString().trim()
+        val email = etEmail.text.toString().trim()
+        val cpf = etCpf.text.toString().trim()
+        val telefone = etTelefone.text.toString().trim()
+        val dataNasc = etDataNascimento.text.toString().trim()
+        val genero = spGenero.selectedItem.toString()
+        val senha = etSenha.text.toString().trim()
         val crmDigits = etCrmDigitos.text.toString().trim()
-        val uf        = spUf.selectedItem.toString()
+        val uf = spUf.selectedItem.toString()
 
-        if (nome.isEmpty() || email.isEmpty() || cpf.isEmpty() || telefone.isEmpty() ||
-            dataNasc.isEmpty() || senha.isEmpty() || crmDigits.isEmpty()
-        ) { Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show(); return }
 
-        if (crmDigits.length != 6 || !crmDigits.all { it.isDigit() }) {
-            etCrmDigitos.error = "O CRM deve conter exatamente 6 dígitos numéricos"
-            etCrmDigitos.requestFocus(); return
-        }
-
-        val dataFormatada = converterDataParaApi(dataNasc)
-            ?: run { etDataNascimento.error = "Use o formato DD/MM/AAAA"; etDataNascimento.requestFocus(); return }
-
-        val cpfLimpo = cpf.replace(Regex("[^0-9]"), "")
-        if (cpfLimpo.length != 11) { etCpf.error = "CPF deve conter 11 dígitos"; etCpf.requestFocus(); return }
-
-        val generoEnum = when (genero.uppercase()) {
-            "MASCULINO" -> Genero.MASCULINO
-            "FEMININO"  -> Genero.FEMININO
-            else        -> Genero.OUTRO
-        }
-
-        viewModel.cadastrarMedico(
-            MedicoCreateRequestDto(
-                usuarioBase = PacienteCreateRequestDto(
-                    nome           = nome,
-                    cpf            = cpfLimpo,
-                    email          = email,
-                    telefone       = telefone,
-                    genero         = generoEnum,
-                    dataNascimento = dataFormatada,
-                    senha          = senha
-                ),
-                crmUf     = uf,
-                crmDigits = crmDigits
-            )
+        val dto = MedicoCreateRequestDto(
+            usuarioBase = PacienteCreateRequestDto(
+                nome = nome,
+                cpf = cpf,
+                email = email,
+                telefone = telefone,
+                genero = Genero.valueOf(genero),
+                dataNascimento = dataNasc,
+                senha = senha
+            ),
+            crmUf = uf,
+            crmDigits = crmDigits
         )
+        when (
+            val result =
+                CadastroValidator.validarMedico(dto)
+        ) {
+
+            is ValidationResult.Success -> {
+                val dataFormatted = CadastroMapper.CadastroMedicoToApi(result.data)
+                viewModel.cadastrarMedico(
+                    dataFormatted
+                )
+            }
+
+            is ValidationResult.Error -> {
+
+                handleValidationError(result)
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -129,13 +127,56 @@ class CadastroMedicoActivity : BaseActivity() {
         btnCadastrar.text = if (carregando) "Processando..." else "Cadastrar"
     }
 
-    private fun converterDataParaApi(entrada: String): String? {
-        return try {
-            val clean = entrada.trim().replace(".", "/").replace("-", "/")
-            if (clean.length != 10 || !clean.contains("/")) return null
-            val p = clean.split("/")
-            if (p.size == 3) "${p[2]}-${p[1]}-${p[0]}" else null
-        } catch (e: Exception) { null }
+    private fun handleValidationError(
+        error: ValidationResult.Error
+    ) {
+
+        when (error.field) {
+            ValidationField.NOME ->
+                showValidationError(
+                    etNome,
+                    error.message
+                )
+
+            ValidationField.EMAIL ->
+                showValidationError(
+                    etEmail,
+                    error.message
+                )
+
+            ValidationField.CPF ->
+                showValidationError(
+                    etCpf,
+                    error.message
+                )
+
+            ValidationField.TELEFONE ->
+                showValidationError(
+                    etTelefone,
+                    error.message
+                )
+
+            ValidationField.DATA_NASCIMENTO ->
+                showValidationError(
+                    etDataNascimento,
+                    error.message
+                )
+
+            ValidationField.SENHA ->
+                showValidationError(
+                    etSenha,
+                    error.message
+                )
+
+            ValidationField.CRM ->
+                showValidationError(
+                    etCrmDigitos,
+                    error.message
+                )
+
+            else ->
+                showToast(error.message)
+        }
     }
 
 
