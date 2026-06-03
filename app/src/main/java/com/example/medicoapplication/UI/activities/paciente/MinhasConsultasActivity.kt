@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.GridView
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -86,21 +85,7 @@ class MinhasConsultasActivity : BaseActivity() {
                     is MinhasConsultasViewModel.UiState.Loading -> Unit
                     is MinhasConsultasViewModel.UiState.Success -> adapter.atualizarLista(state.consultas)
                     is MinhasConsultasViewModel.UiState.Error   -> {
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@MinhasConsultasActivity, mensagem, Toast.LENGTH_SHORT).show()
+                        handleError(state.error)
                     }
                 }
             }

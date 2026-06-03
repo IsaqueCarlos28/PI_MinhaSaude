@@ -33,7 +33,7 @@ class PerfilMedicoActivity : BaseActivity() {
         findViewById<TextView>(R.id.tvNomeCompletoMedico).text = nomeMedico.uppercase()
 
         findViewById<Button>(R.id.btnEditarPerfilMedico).setOnClickListener {
-            Toast.makeText(this, "Edição de perfil em breve!", Toast.LENGTH_SHORT).show()
+            showToast("Edição de perfil em breve!")
         }
 
         observeViewModel()
@@ -50,21 +50,7 @@ class PerfilMedicoActivity : BaseActivity() {
                     is PerfilMedicoViewModel.UiState.Idle    -> Unit
                     is PerfilMedicoViewModel.UiState.Loading -> Unit
                     is PerfilMedicoViewModel.UiState.Error   -> {
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@PerfilMedicoActivity, mensagem, Toast.LENGTH_SHORT).show()
+                        handleError(state.error)
                     }
                     is PerfilMedicoViewModel.UiState.Success -> {
                         val medico = state.medico

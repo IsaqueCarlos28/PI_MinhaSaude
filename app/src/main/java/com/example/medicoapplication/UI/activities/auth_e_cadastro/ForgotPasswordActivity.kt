@@ -54,33 +54,17 @@ class ForgotPasswordActivity : BaseActivity() {
                     is AuthViewModel.UiState.Loading -> setLoading(true)
                     is AuthViewModel.UiState.Error   -> {
                         setLoading(false)
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@ForgotPasswordActivity, mensagem, Toast.LENGTH_LONG).show()
+                        handleError(state.error)
                         viewModel.resetState()
                     }
                     is AuthViewModel.UiState.Success -> {
-                        Toast.makeText(
-                            this@ForgotPasswordActivity,
-                            "Se o e-mail estiver cadastrado, você receberá o código em breve.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showToast("Se o e-mail estiver cadastrado, você receberá o código em breve.")
                         val email = etEmail.text.toString().trim()
                         startActivity(
-                            Intent(this@ForgotPasswordActivity, ValidarCodigoResetPasswordActivity::class.java)
-                                .putExtra("Email", email)
+                            Intent(
+                                this@ForgotPasswordActivity,
+                                ValidarCodigoResetPasswordActivity::class.java
+                            ).putExtra("Email", email)
                         )
                         finish()
                     }
@@ -92,13 +76,5 @@ class ForgotPasswordActivity : BaseActivity() {
     private fun setLoading(carregando: Boolean) {
         btnEnviarLink.isEnabled = !carregando
         btnEnviarLink.text = if (carregando) "Enviando..." else "Enviar link"
-    }
-
-    fun AppCompatActivity.handleError(error: NetworkError) {
-        Toast.makeText(
-            this,
-            ErrorMapper.getMessage(error),
-            Toast.LENGTH_LONG
-        ).show()
     }
 }

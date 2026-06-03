@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -50,7 +49,7 @@ class HomePacienteActivity : BaseActivity() {
             viewModel.carregarConsultas(idPaciente)
         } else {
             tvSaudacao.text = "Olá, ${emailPaciente.substringBefore("@")}"
-            Toast.makeText(this, "Sessão inválida. Faça login novamente.", Toast.LENGTH_LONG).show()
+            showToast("Sessão inválida. Faça login novamente.")
             startActivity(Intent(this, LoginActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
@@ -81,7 +80,7 @@ class HomePacienteActivity : BaseActivity() {
             onCancelar  = { consulta ->
                 viewModel.cancelarConsulta(idPaciente, consulta) {
                     viewModel.carregarConsultas(idPaciente)
-                    Toast.makeText(this, "Consulta cancelada.", Toast.LENGTH_SHORT).show()
+                    showToast("Consulta cancelada.")
                 }
             }
         )
@@ -115,7 +114,7 @@ class HomePacienteActivity : BaseActivity() {
                     is HomePacienteViewModel.ConsultasState.Idle    -> Unit
                     is HomePacienteViewModel.ConsultasState.Loading -> Unit
                     is HomePacienteViewModel.ConsultasState.Success -> adaptadorConsultas.atualizarLista(state.consultas)
-                    is HomePacienteViewModel.ConsultasState.Error   -> Toast.makeText(this@HomePacienteActivity, state.message, Toast.LENGTH_SHORT).show()
+                    is HomePacienteViewModel.ConsultasState.Error   -> showToast(state.message)
                 }
             }
         }

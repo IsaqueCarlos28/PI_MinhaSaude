@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
@@ -44,11 +43,7 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
                 consultasResult.onSuccess { lista ->
                     // ✅ bloqueia se médico não tem consultas ofertadas
                     if (lista.isEmpty()) {
-                        Toast.makeText(
-                            this@PerfilMedicoPublicoActivity,
-                            "Este médico não possui consultas disponíveis no momento.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showToast( "Este médico não possui consultas disponíveis no momento.",)
                         return@onSuccess
                     }
                     val idConsultaOfertada = lista.first().id
@@ -60,11 +55,7 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
                     }
                     startActivity(intent)
                 }.onFailure {
-                    Toast.makeText(
-                        this@PerfilMedicoPublicoActivity,
-                        "Erro ao buscar consultas do médico",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("Erro ao buscar consultas do médico")
                 }
             }
         }
@@ -105,11 +96,7 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
                         medico.usuario?.telefone ?: "—"
                 }
                 .onFailure {
-                    Toast.makeText(
-                        this@PerfilMedicoPublicoActivity,
-                        "Erro ao carregar dados do médico",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("Erro ao carregar dados do médico")
                 }
         }
     }

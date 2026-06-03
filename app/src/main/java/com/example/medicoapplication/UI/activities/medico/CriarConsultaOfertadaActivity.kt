@@ -90,15 +90,13 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
                     }
                     is ConsultaOfertadaViewModel.UiState.Success -> {
                         progressBar.visibility = View.GONE
-                        Toast.makeText(this@CriarConsultaOfertadaActivity,
-                            "Consulta criada com sucesso!", Toast.LENGTH_SHORT).show()
+                        showToast("Consulta criada com sucesso!")
                         finish()
                     }
                     is ConsultaOfertadaViewModel.UiState.Error -> {
                         progressBar.visibility = View.GONE
                         btnSalvar.isEnabled = true
-                        Toast.makeText(this@CriarConsultaOfertadaActivity,
-                            state.message, Toast.LENGTH_LONG).show()
+                        showToast(state.message)
                     }
                     else -> {
                         progressBar.visibility = View.GONE
@@ -111,8 +109,7 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
         btnSalvar.setOnClickListener {
             val espIdx = spinnerEspecialidade.selectedItemPosition
             if (espIdx == 0) {
-                Toast.makeText(this, "Selecione uma especialidade", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                showToast("Selecione uma especialidade")
             }
             val idEspecialidade = especialidades[espIdx - 1].id
 
@@ -127,14 +124,12 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
             val valorStr = etValor.text.toString().replace(",", ".")
             val valor = valorStr.toDoubleOrNull()
             if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Informe um valor válido", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                showToast("Informe um valor válido")
             }
 
             val duracao = etDuracao.text.toString().toIntOrNull()
             if (duracao == null || duracao <= 0) {
-                Toast.makeText(this, "Informe a duração em minutos", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                showToast("Informe a duração em minutos")
             }
 
             val conveniosSelecionados = mutableSetOf<Long>()

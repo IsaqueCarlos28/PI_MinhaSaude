@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -61,21 +60,7 @@ class PerfilPacienteActivity : BaseActivity() {
                     is PerfilPacienteViewModel.UiState.Idle    -> Unit
                     is PerfilPacienteViewModel.UiState.Loading -> Unit
                     is PerfilPacienteViewModel.UiState.Error   -> {
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@PerfilPacienteActivity, mensagem, Toast.LENGTH_SHORT).show()
+                        handleError(state.error)
                     }
                     is PerfilPacienteViewModel.UiState.Success -> {
                         val p = state.paciente

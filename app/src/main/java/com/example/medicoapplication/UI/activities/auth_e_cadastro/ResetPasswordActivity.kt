@@ -58,25 +58,11 @@ class ResetPasswordActivity : BaseActivity() {
                     is AuthViewModel.UiState.Loading -> setLoading(true)
                     is AuthViewModel.UiState.Error   -> {
                         setLoading(false)
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@ResetPasswordActivity, mensagem, Toast.LENGTH_LONG).show()
+                        handleError(state.error)
                         viewModel.resetState()
                     }
                     is AuthViewModel.UiState.Success -> {
-                        Toast.makeText(this@ResetPasswordActivity, "Senha alterada com sucesso!", Toast.LENGTH_LONG).show()
+                        showToast("Senha alterada com sucesso!")
                         startActivity(
                             Intent(this@ResetPasswordActivity, LoginActivity::class.java)
                                 .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }

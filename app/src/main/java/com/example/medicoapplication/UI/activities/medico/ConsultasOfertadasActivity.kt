@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,7 +60,7 @@ class ConsultasOfertadasActivity : BaseActivity() {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is ConsultaOfertadaViewModel.UiState.Error ->
-                        Toast.makeText(this@ConsultasOfertadasActivity, state.message, Toast.LENGTH_LONG).show()
+                        showToast(state.message)
                     else -> {}
                 }
             }

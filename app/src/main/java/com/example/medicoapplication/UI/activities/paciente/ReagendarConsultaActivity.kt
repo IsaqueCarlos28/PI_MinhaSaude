@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
@@ -105,7 +103,7 @@ class ReagendarConsultaActivity : BaseActivity() {
 
     private fun confirmarReagendamento() {
         if (horarioSelecionado == null) {
-            Toast.makeText(this, "Selecione um horário", Toast.LENGTH_SHORT).show()
+            showToast( "Selecione um horário")
             return
         }
 
@@ -128,25 +126,11 @@ class ReagendarConsultaActivity : BaseActivity() {
                     is ReagendarConsultaViewModel.UiState.Loading -> setLoading(true)
                     is ReagendarConsultaViewModel.UiState.Error   -> {
                         setLoading(false)
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@ReagendarConsultaActivity, mensagem, Toast.LENGTH_LONG).show()
+                        handleError(state.error)
                     }
                     is ReagendarConsultaViewModel.UiState.Sucesso -> {
                         setLoading(false)
-                        Toast.makeText(this@ReagendarConsultaActivity, "Consulta reagendada com sucesso!", Toast.LENGTH_LONG).show()
+                        showToast("Consulta reagendada com sucesso!")
                         startActivity(
                             Intent(this@ReagendarConsultaActivity, MinhasConsultasActivity::class.java).apply {
                                 putExtra("ID_PACIENTE", idPaciente)

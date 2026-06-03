@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -59,11 +57,7 @@ class HomeMedicoActivity : BaseActivity() {
             consultas   = emptyList(),
             onItemClick = { consulta ->                      // (5)
                 // por enquanto só loga — implementar detalhes depois
-                Toast.makeText(
-                    this,
-                    "Consulta: ${consulta.nomePaciente}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("Informe a duração em minutos")
             }
         )
 
@@ -86,13 +80,7 @@ class HomeMedicoActivity : BaseActivity() {
                         }
                         is ConsultasMedicoViewModel.UiState.Error   -> {
                             setLoading(false)
-                            val mensagem = when (state.error) {
-                                is NetworkError.SemConexao  -> "Sem internet"
-                                is NetworkError.Timeout     -> "Tempo esgotado"
-                                is NetworkError.ErrroServidor -> "Erro no servidor"
-                                else -> "Erro ao carregar consultas"
-                            }
-                            Toast.makeText(this@HomeMedicoActivity, mensagem, Toast.LENGTH_LONG).show()
+                            handleError(state.error)
                         }
                     }
                 }

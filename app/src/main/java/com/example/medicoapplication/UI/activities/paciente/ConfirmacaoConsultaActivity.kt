@@ -68,8 +68,7 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
 
         findViewById<Button>(R.id.btnConfirmarAgendamento).setOnClickListener {
             if (idPaciente == -1L || idConsultaOfertada == -1L || dataConsulta.isEmpty() || horaConsulta.isEmpty()) {
-                Toast.makeText(this, "Dados incompletos. Volte e tente novamente.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                showToast("Dados incompletos. Volte e tente novamente.")
             }
             viewModel.confirmarConsulta(idPaciente, idConsultaOfertada, dataConsulta, horaConsulta)
         }
@@ -85,25 +84,11 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
                     is ConfirmacaoConsultaViewModel.UiState.Loading -> setLoading(true)
                     is ConfirmacaoConsultaViewModel.UiState.Error   -> {
                         setLoading(false)
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@ConfirmacaoConsultaActivity, mensagem, Toast.LENGTH_LONG).show()
+                        handleError(state.error)
                     }
                     is ConfirmacaoConsultaViewModel.UiState.Success -> {
                         setLoading(false)
-                        Toast.makeText(this@ConfirmacaoConsultaActivity, "Consulta agendada com sucesso!", Toast.LENGTH_LONG).show()
+                        showToast("Consulta agendada com sucesso!")
                         startActivity(
                             Intent(this@ConfirmacaoConsultaActivity, MinhasConsultasActivity::class.java).apply {
                                 putExtra("ID_PACIENTE", idPaciente)

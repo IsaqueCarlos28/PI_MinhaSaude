@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.MedicoAdapter
-import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.BuscaMedicosViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -68,21 +65,7 @@ class BuscaMedicosActivity : BaseActivity() {
                     is BuscaMedicosViewModel.UiState.Loading -> Unit
                     is BuscaMedicosViewModel.UiState.Success -> adapter.atualizarLista(state.medicos)
                     is BuscaMedicosViewModel.UiState.Error   -> {
-                        val mensagem = when (state.error) {
-                        is NetworkError.NaoAutorizado ->
-                            "Email ou senha incorretos. Verifique seus dados."
-                        is NetworkError.SemConexao ->
-                            "Sem conexão com a internet. Verifique sua rede."
-                        is NetworkError.Timeout ->
-                            "O servidor demorou para responder. Tente novamente."
-                        is NetworkError.ErrroServidor ->
-                            "Problema no servidor. Tente mais tarde."
-                        is NetworkError.Desconhecido ->
-                            "Erro inesperado: ${state.error.mensagem}"
-                        else ->
-                            "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@BuscaMedicosActivity, mensagem, Toast.LENGTH_SHORT).show()}
+                        handleError(state.error)}
                 }
             }
         }

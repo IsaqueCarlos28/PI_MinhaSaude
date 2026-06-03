@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.paciente.AlterarSenhaPacienteActivity
 import com.example.medicoapplication.UI.activities.paciente.BuscaMedicosActivity
@@ -18,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  * Tela de configurações do paciente.
  * Recebe via Intent: ID_PACIENTE (Long)
  */
-class ConfiguracoesPacienteActivity : AppCompatActivity() {
+class ConfiguracoesPacienteActivity : BaseActivity() {
 
     private var idPaciente: Long = -1L
 

@@ -11,9 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -94,26 +92,12 @@ class PesquisaMedicosActivity : BaseActivity() {
                         progressBar.visibility = View.GONE
                         adapter.atualizarLista(state.medicos)
                         if (state.medicos.isEmpty()) {
-                            Toast.makeText(this@PesquisaMedicosActivity, "Nenhum médico encontrado", Toast.LENGTH_SHORT).show()
+                            showToast("Nenhum médico encontrado")
                         }
                     }
                     is BuscaMedicosViewModel.UiState.Error -> {
                         progressBar.visibility = View.GONE
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@PesquisaMedicosActivity, mensagem, Toast.LENGTH_SHORT).show()
+                        handleError(state.error)
                     }
                 }
             }

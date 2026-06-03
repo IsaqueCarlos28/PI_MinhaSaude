@@ -115,7 +115,7 @@ class CadastroMedicoActivity : BaseActivity() {
                         viewModel.resetState()
                     }
                     is CadastroViewModel.UiState.Success -> {
-                        Toast.makeText(this@CadastroMedicoActivity, "Médico cadastrado com sucesso!", Toast.LENGTH_LONG).show()
+                        showToast("Médico cadastrado com sucesso!")
                         startActivity(Intent(this@CadastroMedicoActivity, LoginActivity::class.java))
                         finish()
                     }

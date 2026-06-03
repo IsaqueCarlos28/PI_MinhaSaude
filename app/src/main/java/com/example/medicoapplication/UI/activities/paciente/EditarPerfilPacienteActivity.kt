@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -96,7 +95,7 @@ class EditarPerfilPacienteActivity : BaseActivity() {
                     is EditarPerfilPacienteViewModel.UiState.Loading -> setLoading(true)
                     is EditarPerfilPacienteViewModel.UiState.Error   -> {
                         setLoading(false)
-                        Toast.makeText(this@EditarPerfilPacienteActivity, state.error, Toast.LENGTH_LONG).show()
+                        handleError(state.error)
                     }
                     is EditarPerfilPacienteViewModel.UiState.Carregado -> {
                         setLoading(false)
@@ -118,7 +117,7 @@ class EditarPerfilPacienteActivity : BaseActivity() {
                     }
                     is EditarPerfilPacienteViewModel.UiState.Salvo -> {
                         setLoading(false)
-                        Toast.makeText(this@EditarPerfilPacienteActivity, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+                        showToast("Perfil atualizado com sucesso!")
                         finish()
                     }
                 }

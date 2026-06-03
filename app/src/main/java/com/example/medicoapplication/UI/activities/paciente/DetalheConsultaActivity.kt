@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -45,7 +44,7 @@ class DetalheConsultaActivity : BaseActivity() {
         if (idPaciente != -1L && idEvento != -1L) {
             viewModel.carregarConsulta(idPaciente, idEvento)
         } else {
-            Toast.makeText(this, "Consulta não encontrada.", Toast.LENGTH_SHORT).show()
+            showToast("Consulta não encontrada.")
             finish()
         }
 
@@ -59,21 +58,7 @@ class DetalheConsultaActivity : BaseActivity() {
                     is DetalheConsultaViewModel.UiState.Idle    -> Unit
                     is DetalheConsultaViewModel.UiState.Loading -> Unit
                     is DetalheConsultaViewModel.UiState.Error   -> {
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@DetalheConsultaActivity, mensagem, Toast.LENGTH_SHORT).show()}
+                        handleError(state.error)}
                     is DetalheConsultaViewModel.UiState.Success -> {
                         val c = state.consulta
                         findViewById<TextView>(R.id.tvDetalheMedico).text   = c.nomeMedico ?: "—"
@@ -101,7 +86,7 @@ class DetalheConsultaActivity : BaseActivity() {
 
                         findViewById<Button>(R.id.btnCancelarDetalhe).setOnClickListener {
                             viewModel.cancelarConsulta(idPaciente, idEvento) {
-                                Toast.makeText(this@DetalheConsultaActivity, "Consulta cancelada.", Toast.LENGTH_SHORT).show()
+                                showToast("Consulta cancelada.")
                                 finish()
                             }
                         }

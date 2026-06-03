@@ -68,18 +68,10 @@ class AlterarSenhaPacienteActivity : BaseActivity() {
                 authRepository.alterarSenha(null, nova).fold(
                     onSuccess = {
                         dialog.dismiss()
-                        Toast.makeText(
-                            this@AlterarSenhaPacienteActivity,
-                            "Senha alterada com sucesso!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Senha alterada com sucesso!")
                     },
                     onFailure = { e ->
-                        Toast.makeText(
-                            this@AlterarSenhaPacienteActivity,
-                            "Erro: ${e.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showToast("Erro: ${e.message}")
                     }
                 )
             }

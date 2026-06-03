@@ -102,25 +102,11 @@ class CadastroPacienteActivity : BaseActivity() {
                     is CadastroViewModel.UiState.Loading -> setLoading(true)
                     is CadastroViewModel.UiState.Error   -> {
                         setLoading(false)
-                        val mensagem = when (state.error) {
-                            is NetworkError.NaoAutorizado ->
-                                "Email ou senha incorretos. Verifique seus dados."
-                            is NetworkError.SemConexao ->
-                                "Sem conexão com a internet. Verifique sua rede."
-                            is NetworkError.Timeout ->
-                                "O servidor demorou para responder. Tente novamente."
-                            is NetworkError.ErrroServidor ->
-                                "Problema no servidor. Tente mais tarde."
-                            is NetworkError.Desconhecido ->
-                                "Erro inesperado: ${state.error.mensagem}"
-                            else ->
-                                "Algo deu errado. Tente novamente."
-                        }
-                        Toast.makeText(this@CadastroPacienteActivity, mensagem, Toast.LENGTH_LONG).show()
+                        handleError(state.error)
                         viewModel.resetState()
                     }
                     is CadastroViewModel.UiState.Success -> {
-                        Toast.makeText(this@CadastroPacienteActivity, "Cadastro realizado com sucesso!", Toast.LENGTH_LONG).show()
+                        showToast("Cadastro realizado com sucesso!")
                         startActivity(Intent(this@CadastroPacienteActivity, LoginActivity::class.java))
                         finish()
                     }

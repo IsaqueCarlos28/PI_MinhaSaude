@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -88,7 +87,7 @@ class AgendarConsultaActivity : BaseActivity() {
 
         findViewById<Button>(R.id.btnConfirmarConsulta).setOnClickListener { confirmarConsulta() }
         findViewById<TextView>(R.id.tvVerMaisHorarios).setOnClickListener {
-            Toast.makeText(this, "Mais horários em breve", Toast.LENGTH_SHORT).show()
+            showToast("Mais horários em breve")
         }
 
         observeViewModel()
@@ -166,7 +165,7 @@ class AgendarConsultaActivity : BaseActivity() {
 
     private fun confirmarConsulta() {
         if (horarioSelecionado == null) {
-            Toast.makeText(this, "Selecione um horário", Toast.LENGTH_SHORT).show()
+            showToast("Selecione um horário!")
             return
         }
         startActivity(
