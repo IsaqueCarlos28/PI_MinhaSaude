@@ -14,13 +14,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class HomeMedicoActivity : AppCompatActivity() {
+class HomeMedicoActivity : BaseActivity() {
 
     // (1) dados recebidos do login
     private var idMedico: Long = -1L

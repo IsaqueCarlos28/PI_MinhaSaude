@@ -12,13 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.HomePacienteViewModel
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class HomePacienteActivity : AppCompatActivity() {
+class HomePacienteActivity : BaseActivity() {
 
     private val viewModel: HomePacienteViewModel by viewModels()
 

@@ -10,13 +10,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.viewmodel.auth.CadastroViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.NetworkError
 import kotlinx.coroutines.launch
 
-class CadastroPacienteActivity : AppCompatActivity() {
+class CadastroPacienteActivity : BaseActivity() {
 
     private val viewModel: CadastroViewModel by viewModels()
 

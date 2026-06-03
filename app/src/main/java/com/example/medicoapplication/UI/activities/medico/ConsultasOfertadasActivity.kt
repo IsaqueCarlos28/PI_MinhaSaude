@@ -12,13 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.ConsultaOfertadaAdapter
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultaOfertadaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
-class ConsultasOfertadasActivity : AppCompatActivity() {
+class ConsultasOfertadasActivity : BaseActivity() {
 
     private val viewModel: ConsultaOfertadaViewModel by viewModels()
     private var idMedico = -1L

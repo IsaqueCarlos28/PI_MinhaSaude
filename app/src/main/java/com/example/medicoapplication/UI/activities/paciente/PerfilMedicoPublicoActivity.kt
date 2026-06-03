@@ -9,11 +9,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.data.repository.MedicoRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class PerfilMedicoPublicoActivity : AppCompatActivity() {
+class PerfilMedicoPublicoActivity : BaseActivity() {
 
     private var medicoId: Long = -1L
     private var nomeMedico: String = "Médico"

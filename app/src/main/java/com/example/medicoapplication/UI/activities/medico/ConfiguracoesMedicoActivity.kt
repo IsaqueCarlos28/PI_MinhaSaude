@@ -7,11 +7,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.ResetPasswordActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ConfiguracoesMedicoActivity : AppCompatActivity() {
+class ConfiguracoesMedicoActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

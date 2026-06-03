@@ -12,10 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Calendar
 
-class AgendaMedicoActivity : AppCompatActivity() {
+class AgendaMedicoActivity : BaseActivity() {
 
     private var calAtual = Calendar.getInstance()
     private var diaSelecionado = calAtual.get(Calendar.DAY_OF_MONTH)

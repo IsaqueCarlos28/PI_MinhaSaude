@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeResponseDto
@@ -18,7 +19,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
-class CriarConsultaOfertadaActivity : AppCompatActivity() {
+class CriarConsultaOfertadaActivity : BaseActivity() {
 
     private val viewModel: ConsultaOfertadaViewModel by viewModels()
     private var idMedico = -1L

@@ -18,13 +18,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.MedicoAdapter
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.BuscaMedicosViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class PesquisaMedicosActivity : AppCompatActivity() {
+class PesquisaMedicosActivity : BaseActivity() {
 
     private val viewModel: BuscaMedicosViewModel by viewModels()
 

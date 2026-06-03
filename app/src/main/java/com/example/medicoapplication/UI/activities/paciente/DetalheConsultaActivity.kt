@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
 import com.example.medicoapplication.data.remote.NetworkError
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
  *   - ID_PACIENTE (Long)
  *   - ID_EVENTO   (Long)
  */
-class DetalheConsultaActivity : AppCompatActivity() {
+class DetalheConsultaActivity : BaseActivity() {
 
     private val viewModel: DetalheConsultaViewModel by viewModels()
 

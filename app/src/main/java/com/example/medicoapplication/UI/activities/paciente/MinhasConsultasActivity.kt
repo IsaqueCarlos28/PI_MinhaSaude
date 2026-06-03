@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.consulta.MinhasConsultasViewModel
@@ -21,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class MinhasConsultasActivity : AppCompatActivity() {
+class MinhasConsultasActivity : BaseActivity() {
 
     private val viewModel: MinhasConsultasViewModel by viewModels()
 

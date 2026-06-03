@@ -11,12 +11,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.common.ErrorMapper
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.auth.AuthViewModel
 import kotlinx.coroutines.launch
 
-class ForgotPasswordActivity : AppCompatActivity() {
+class ForgotPasswordActivity : BaseActivity() {
 
     private val viewModel: AuthViewModel by viewModels()
 

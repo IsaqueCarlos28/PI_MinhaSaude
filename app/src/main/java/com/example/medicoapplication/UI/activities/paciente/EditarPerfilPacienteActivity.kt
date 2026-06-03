@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.EditarPerfilPacienteViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
  * Recebe via Intent:
  *   - ID_PACIENTE (Long)
  */
-class EditarPerfilPacienteActivity : AppCompatActivity() {
+class EditarPerfilPacienteActivity : BaseActivity() {
 
     private val viewModel: EditarPerfilPacienteViewModel by viewModels()
 

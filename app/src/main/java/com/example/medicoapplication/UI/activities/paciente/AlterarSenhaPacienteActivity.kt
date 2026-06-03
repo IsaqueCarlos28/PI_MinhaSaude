@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
  * Tela de alteração de senha do paciente via segurança nas configurações.
  * Usa o endpoint PUT auth/alterar_senha (tokenRecuperacao = null = troca direta).
  */
-class AlterarSenhaPacienteActivity : AppCompatActivity() {
+class AlterarSenhaPacienteActivity : BaseActivity() {
 
     private val authRepository = AuthRepository()
     private var idPaciente: Long = -1L

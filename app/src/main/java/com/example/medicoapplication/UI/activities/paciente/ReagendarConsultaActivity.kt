@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
 import com.example.medicoapplication.data.remote.NetworkError
@@ -28,7 +29,7 @@ import java.util.Locale
  *   - ID_MEDICO   (Long)
  *   - NOME_MEDICO (String)
  */
-class ReagendarConsultaActivity : AppCompatActivity() {
+class ReagendarConsultaActivity : BaseActivity() {
 
     private val viewModel: ReagendarConsultaViewModel by viewModels()
 

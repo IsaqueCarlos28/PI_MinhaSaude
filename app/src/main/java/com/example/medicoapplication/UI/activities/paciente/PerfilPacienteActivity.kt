@@ -10,13 +10,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.PerfilPacienteViewModel
 import com.example.medicoapplication.data.remote.NetworkError
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class PerfilPacienteActivity : AppCompatActivity() {
+class PerfilPacienteActivity : BaseActivity() {
 
     private val viewModel: PerfilPacienteViewModel by viewModels()
 

@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.consulta.ConfirmacaoConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
  *   - HORA_CONSULTA   (String  — formato "HH:mm")
  *   - ID_CONSULTA_OFERTADA (Long)
  */
-class ConfirmacaoConsultaActivity : AppCompatActivity() {
+class ConfirmacaoConsultaActivity : BaseActivity() {
 
     private val viewModel: ConfirmacaoConsultaViewModel by viewModels()
 

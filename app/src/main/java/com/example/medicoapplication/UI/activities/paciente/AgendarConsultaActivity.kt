@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.AgendarConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AgendarConsultaActivity : AppCompatActivity() {
+class AgendarConsultaActivity : BaseActivity() {
 
     private val viewModel: AgendarConsultaViewModel by viewModels()
 

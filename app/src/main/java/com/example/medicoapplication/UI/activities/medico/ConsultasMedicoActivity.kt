@@ -12,12 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import com.example.medicoapplication.data.remote.NetworkError
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class ConsultasMedicoActivity : AppCompatActivity() {
+class ConsultasMedicoActivity : BaseActivity() {
 
     private lateinit var viewModel: ConsultasMedicoViewModel
     private lateinit var adapter: ConsultasMedicoAdapter
