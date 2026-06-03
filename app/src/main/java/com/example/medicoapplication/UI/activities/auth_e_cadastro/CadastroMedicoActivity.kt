@@ -87,16 +87,13 @@ class CadastroMedicoActivity : BaseActivity() {
             val result =
                 CadastroValidator.validarMedico(dto)
         ) {
-
             is ValidationResult.Success -> {
-                val dataFormatted = CadastroMapper.CadastroMedicoToApi(result.data)
                 viewModel.cadastrarMedico(
-                    dataFormatted
+                    dto
                 )
             }
 
             is ValidationResult.Error -> {
-
                 handleValidationError(result)
             }
         }
@@ -130,7 +127,6 @@ class CadastroMedicoActivity : BaseActivity() {
     private fun handleValidationError(
         error: ValidationResult.Error
     ) {
-
         when (error.field) {
             ValidationField.NOME ->
                 showValidationError(

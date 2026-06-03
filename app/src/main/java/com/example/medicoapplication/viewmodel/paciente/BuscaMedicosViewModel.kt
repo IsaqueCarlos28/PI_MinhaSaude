@@ -1,7 +1,7 @@
 package com.example.medicoapplication.viewmodel.paciente
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medicoapplication.activities.paciente.viewmodel.EditarPerfilPacienteViewModel
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.MedicoRepository

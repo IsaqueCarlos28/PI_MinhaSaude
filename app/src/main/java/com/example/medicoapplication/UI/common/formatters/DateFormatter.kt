@@ -13,18 +13,18 @@ object DateFormatter {
     private val API_FORMAT =
         DateTimeFormatter.ISO_LOCAL_DATE
 
-    fun apiToUiDate(uiDate: String): String {
+    fun apiToUiDate(apiDate: String): String {
         return try {
-            LocalDate.parse(uiDate, API_FORMAT)
+            LocalDate.parse(apiDate, API_FORMAT)
                 .format(UI_FORMAT)
         } catch (e: Exception) {
-            uiDate
+            apiDate
         }
     }
 
-    fun uiToApiDate(ApiDate: String): String? {
+    fun uiToApiDate(uiDate: String): String? {
         return try {
-            LocalDate.parse(ApiDate, UI_FORMAT)
+            LocalDate.parse(uiDate, UI_FORMAT)
                 .format(DateTimeFormatter.ISO_LOCAL_DATE)
         } catch (e: Exception) {
             null

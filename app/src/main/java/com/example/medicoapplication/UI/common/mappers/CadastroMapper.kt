@@ -7,7 +7,8 @@ import com.example.medicoapplication.UI.common.formatters.PhoneFormatter
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 
 object CadastroMapper {
-    fun CadastroMedicoToApi(
+
+    fun cadastroMedicoToApi(
         dto: MedicoCreateRequestDto
     ): MedicoCreateRequestDto {
 

@@ -2,6 +2,7 @@ package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.UI.common.mappers.CadastroMapper
 import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
@@ -37,9 +38,10 @@ class CadastroViewModel(
     }
 
     fun cadastrarMedico(dto: MedicoCreateRequestDto) {
+        val formatedDto = CadastroMapper.cadastroMedicoToApi(dto)
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            repository.cadastrarMedico(dto)
+            repository.cadastrarMedico(formatedDto)
                 .onSuccess { _uiState.value = UiState.Success }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError())  }

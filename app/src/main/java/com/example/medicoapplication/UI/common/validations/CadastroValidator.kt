@@ -9,13 +9,12 @@ import com.example.medicoapplication.UI.common.validations.campos.NameValidator
 import com.example.medicoapplication.UI.common.validations.campos.PasswordValidator
 import com.example.medicoapplication.UI.common.validations.campos.PhoneValidator
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
-import java.time.LocalDate
 
 object CadastroValidator {
 
     fun validarMedico(
         dto: MedicoCreateRequestDto
-    ): ValidationResult<MedicoCreateRequestDto> {
+    ): ValidationResult<Unit> {
 
         val usuario = dto.usuarioBase
 
@@ -80,6 +79,6 @@ object CadastroValidator {
             )
         }
 
-        return ValidationResult.Success(dto)
+        return ValidationResult.Success(Unit)
     }
 }
