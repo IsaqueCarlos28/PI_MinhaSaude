@@ -12,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.mappers.GeneroMapper
+import com.example.medicoapplication.UI.common.mappers.PerfilMapper
+import com.example.medicoapplication.UI.common.validations.PerfilValidator
+import com.example.medicoapplication.UI.common.validations.ValidationField
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.activities.paciente.viewmodel.EditarPerfilPacienteViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
@@ -52,17 +57,16 @@ class EditarPerfilPacienteActivity : BaseActivity() {
     }
 
     private fun bindViews() {
-        etNome       = findViewById(R.id.etEditNome)
-        etEmail      = findViewById(R.id.etEditEmail)
-        etCpf        = findViewById(R.id.etEditCpf)
-        etTelefone   = findViewById(R.id.etEditTelefone)
-        etNascimento = findViewById(R.id.etEditNascimento)
+        etNome        = findViewById(R.id.etEditNome)
+        etEmail       = findViewById(R.id.etEditEmail)
+        etCpf         = findViewById(R.id.etEditCpf)
+        etTelefone    = findViewById(R.id.etEditTelefone)
+        etNascimento  = findViewById(R.id.etEditNascimento)
         spinnerGenero = findViewById(R.id.spinnerEditGenero)
     }
 
     private fun configurarSpinnerGenero() {
-        val opcoes = listOf("MASCULINO", "FEMININO", "OUTRO")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opcoes)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, GeneroMapper.spinnerOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerGenero.adapter = adapter
     }
@@ -71,20 +75,19 @@ class EditarPerfilPacienteActivity : BaseActivity() {
         findViewById<ImageButton>(R.id.btnVoltarEditarPerfil).setOnClickListener { finish() }
 
         findViewById<Button>(R.id.btnSalvarPerfil).setOnClickListener {
-            val nome       = etNome.text.toString().trim()
-            val email      = etEmail.text.toString().trim()
-            val cpf        = etCpf.text.toString().trim()
-            val telefone   = etTelefone.text.toString().trim()
-            val nascimento = etNascimento.text.toString().trim()
+            val dto = PerfilMapper.uiToApi(
+                nome           = etNome.text.toString(),
+                email          = etEmail.text.toString(),
+                cpf            = etCpf.text.toString(),
+                telefone       = etTelefone.text.toString(),
+                dataNascimento = etNascimento.text.toString(),
+                genero         = spinnerGenero.selectedItem.toString()
+            )
 
-            if (nome.isEmpty())  { etNome.error = "Informe o nome"; return@setOnClickListener }
-            if (email.isEmpty()) { etEmail.error = "Informe o e-mail"; return@setOnClickListener }
-
-            val genero = try {
-                Genero.valueOf(spinnerGenero.selectedItem.toString())
-            } catch (e: Exception) { Genero.OUTRO }
-
-            viewModel.salvarPerfil(idPaciente, dto = PacienteEditRequestDto(nome, cpf, email, telefone, genero, nascimento))
+            when (val result = PerfilValidator.validarEdicaoPaciente(dto)) {
+                is ValidationResult.Success -> viewModel.salvarPerfil(idPaciente, dto)
+                is ValidationResult.Error   -> handleValidationError(result)
+            }
         }
     }
 
@@ -100,17 +103,18 @@ class EditarPerfilPacienteActivity : BaseActivity() {
                     }
                     is EditarPerfilPacienteViewModel.UiState.Carregado -> {
                         setLoading(false)
-                        val p = state.paciente
-                        etNome.setText(p.nome ?: "")
-                        etEmail.setText(p.email ?: "")
-                        etCpf.setText(p.cpf ?: "")
-                        etTelefone.setText(p.telefone ?: "")
-                        etNascimento.setText(p.dataNascimento ?: "")
+                        // Pre-fill the form using the mapper instead of inline logic
+                        val prefill = PerfilMapper.apiToFormPrefill(state.paciente)
+                        etNome.setText(prefill.nome)
+                        etEmail.setText(prefill.email)
+                        etCpf.setText(prefill.cpf)
+                        etTelefone.setText(prefill.telefone)
+                        etNascimento.setText(prefill.dataNascimento)
 
-                        val generoStr = p.genero?.name ?: "OUTRO"
+                        val generoDisplay = GeneroMapper.toDisplayString(prefill.genero)
                         val adapter = spinnerGenero.adapter
                         for (i in 0 until adapter.count) {
-                            if (adapter.getItem(i) == generoStr) {
+                            if (adapter.getItem(i) == generoDisplay) {
                                 spinnerGenero.setSelection(i)
                                 break
                             }
@@ -130,6 +134,17 @@ class EditarPerfilPacienteActivity : BaseActivity() {
         val btn = findViewById<Button>(R.id.btnSalvarPerfil)
         btn.isEnabled = !carregando
         btn.text = if (carregando) "Salvando..." else "Salvar Alterações"
+    }
+
+    private fun handleValidationError(error: ValidationResult.Error) {
+        when (error.field) {
+            ValidationField.NOME            -> showValidationError(etNome, error.message)
+            ValidationField.EMAIL           -> showValidationError(etEmail, error.message)
+            ValidationField.CPF             -> showValidationError(etCpf, error.message)
+            ValidationField.TELEFONE        -> showValidationError(etTelefone, error.message)
+            ValidationField.DATA_NASCIMENTO -> showValidationError(etNascimento, error.message)
+            else                            -> showToast(error.message)
+        }
     }
 
     private fun configurarBottomNav(itemSelecionado: Int) {

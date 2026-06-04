@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.formatters.DateFormatter
+import com.example.medicoapplication.UI.common.validations.ConsultaValidator
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.consulta.ConfirmacaoConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,14 +44,14 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirmacao_consulta)
 
-        idPaciente          = intent.getLongExtra("ID_PACIENTE", -1L)
-        idMedico            = intent.getLongExtra("ID_MEDICO", -1L)
-        idConsultaOfertada  = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)
-        dataConsulta        = intent.getStringExtra("DATA_CONSULTA") ?: ""
-        horaConsulta        = intent.getStringExtra("HORA_CONSULTA") ?: ""
+        idPaciente         = intent.getLongExtra("ID_PACIENTE", -1L)
+        idMedico           = intent.getLongExtra("ID_MEDICO", -1L)
+        idConsultaOfertada = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)
+        dataConsulta       = intent.getStringExtra("DATA_CONSULTA") ?: ""
+        horaConsulta       = intent.getStringExtra("HORA_CONSULTA") ?: ""
 
-        val nomeMedico   = intent.getStringExtra("NOME_MEDICO")    ?: "Médico"
-        val especialidade = intent.getStringExtra("ESPECIALIDADE") ?: ""
+        val nomeMedico    = intent.getStringExtra("NOME_MEDICO")    ?: "Médico"
+        val especialidade = intent.getStringExtra("ESPECIALIDADE")  ?: ""
 
         preencherResumo(nomeMedico, especialidade)
         configurarBotoes()
@@ -57,20 +60,25 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
     }
 
     private fun preencherResumo(nomeMedico: String, especialidade: String) {
-        findViewById<TextView>(R.id.tvConfNomeMedico).text       = nomeMedico
-        findViewById<TextView>(R.id.tvConfEspecialidade).text    = especialidade
-        findViewById<TextView>(R.id.tvConfData).text             = formatarData(dataConsulta)
-        findViewById<TextView>(R.id.tvConfHora).text             = horaConsulta
+        // DateFormatter used instead of inline split logic
+        findViewById<TextView>(R.id.tvConfNomeMedico).text    = nomeMedico
+        findViewById<TextView>(R.id.tvConfEspecialidade).text = especialidade
+        findViewById<TextView>(R.id.tvConfData).text          = DateFormatter.apiToUiDate(dataConsulta)
+        findViewById<TextView>(R.id.tvConfHora).text          = horaConsulta
     }
 
     private fun configurarBotoes() {
         findViewById<ImageButton>(R.id.btnVoltarConfirmacao).setOnClickListener { finish() }
 
         findViewById<Button>(R.id.btnConfirmarAgendamento).setOnClickListener {
-            if (idPaciente == -1L || idConsultaOfertada == -1L || dataConsulta.isEmpty() || horaConsulta.isEmpty()) {
-                showToast("Dados incompletos. Volte e tente novamente.")
+            when (val result = ConsultaValidator.validarConfirmacao(
+                idPaciente, idConsultaOfertada, dataConsulta, horaConsulta
+            )) {
+                is ValidationResult.Success ->
+                    viewModel.confirmarConsulta(idPaciente, idConsultaOfertada, dataConsulta, horaConsulta)
+                is ValidationResult.Error   ->
+                    showToast(result.message)
             }
-            viewModel.confirmarConsulta(idPaciente, idConsultaOfertada, dataConsulta, horaConsulta)
         }
 
         findViewById<Button>(R.id.btnVoltarEscolha).setOnClickListener { finish() }
@@ -106,14 +114,6 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
         val btn = findViewById<Button>(R.id.btnConfirmarAgendamento)
         btn.isEnabled = !carregando
         btn.text = if (carregando) "Agendando..." else "Confirmar Agendamento"
-    }
-
-    /** "2025-06-15" → "15/06/2025" */
-    private fun formatarData(data: String): String {
-        return try {
-            val partes = data.split("-")
-            "${partes[2]}/${partes[1]}/${partes[0]}"
-        } catch (e: Exception) { data }
     }
 
     private fun configurarBottomNav(itemSelecionado: Int) {

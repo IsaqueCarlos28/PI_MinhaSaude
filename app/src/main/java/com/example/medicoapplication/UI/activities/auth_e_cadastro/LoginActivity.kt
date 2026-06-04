@@ -14,6 +14,9 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
 import com.example.medicoapplication.UI.common.mappers.ErrorMapper
+import com.example.medicoapplication.UI.common.validations.LoginValidator
+import com.example.medicoapplication.UI.common.validations.ValidationField
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.viewmodel.auth.LoginViewModel
 import com.example.medicoapplication.data.local.SessionManager
 import com.example.medicoapplication.data.remote.DTO.auth.Role
@@ -86,10 +89,14 @@ class LoginActivity : BaseActivity() {
         val email = inputEmail.text.toString().trim()
         val senha = inputSenha.text.toString().trim()
 
-        if (email.isEmpty()) { inputEmail.error = "Informe o e-mail"; inputEmail.requestFocus(); return }
-        if (senha.isEmpty()) { inputSenha.error = "Informe a senha"; inputSenha.requestFocus(); return }
-
-        viewModel.login(email, senha)
+        when (val result = LoginValidator.validar(email, senha)) {
+            is ValidationResult.Success -> viewModel.login(email, senha)
+            is ValidationResult.Error   -> when (result.field) {
+                ValidationField.EMAIL -> showValidationError(inputEmail, result.message)
+                ValidationField.SENHA -> showValidationError(inputSenha, result.message)
+                else                  -> showToast(result.message)
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -132,25 +139,22 @@ class LoginActivity : BaseActivity() {
 
     fun verificarSessao() {
         lifecycleScope.launch {
-            // pega só o primeiro valor emitido — não precisa ficar escutando
             val sessao = sessionManager.sessaoAtual.firstOrNull()
-
             if (sessao != null) {
                 val destino = when (sessao.role) {
                     "PACIENTE" -> HomePacienteActivity::class.java
-                    "MEDICO" -> HomeMedicoActivity::class.java
-                    else -> LoginActivity::class.java
+                    "MEDICO"   -> HomeMedicoActivity::class.java
+                    else       -> LoginActivity::class.java
                 }
             }
-            finish() // nunca deixa o usuário voltar para a Splash
+            finish()
         }
     }
 
-    //Override função para personalisar a mensagem
-    override fun handleError(error: NetworkError){
-        val mensagem = when (error){
-            NetworkError.NaoAutorizado -> "Email ou senha invalidos.Tente novamente"
-            else -> ErrorMapper.getMessage(error)
+    override fun handleError(error: NetworkError) {
+        val mensagem = when (error) {
+            NetworkError.NaoAutorizado -> "E-mail ou senha inválidos. Tente novamente."
+            else                       -> ErrorMapper.getMessage(error)
         }
         showToast(mensagem)
     }

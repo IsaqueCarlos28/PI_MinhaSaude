@@ -107,6 +107,7 @@ class CadastroMedicoActivity : BaseActivity() {
                     is CadastroViewModel.UiState.Loading -> setLoading(true)
                     is CadastroViewModel.UiState.Error   -> {
                         setLoading(false)
+                        handleError(state.error)
                         viewModel.resetState()
                     }
                     is CadastroViewModel.UiState.Success -> {
@@ -128,50 +129,14 @@ class CadastroMedicoActivity : BaseActivity() {
         error: ValidationResult.Error
     ) {
         when (error.field) {
-            ValidationField.NOME ->
-                showValidationError(
-                    etNome,
-                    error.message
-                )
-
-            ValidationField.EMAIL ->
-                showValidationError(
-                    etEmail,
-                    error.message
-                )
-
-            ValidationField.CPF ->
-                showValidationError(
-                    etCpf,
-                    error.message
-                )
-
-            ValidationField.TELEFONE ->
-                showValidationError(
-                    etTelefone,
-                    error.message
-                )
-
-            ValidationField.DATA_NASCIMENTO ->
-                showValidationError(
-                    etDataNascimento,
-                    error.message
-                )
-
-            ValidationField.SENHA ->
-                showValidationError(
-                    etSenha,
-                    error.message
-                )
-
-            ValidationField.CRM ->
-                showValidationError(
-                    etCrmDigitos,
-                    error.message
-                )
-
-            else ->
-                showToast(error.message)
+            ValidationField.NOME -> showValidationError(etNome, error.message)
+            ValidationField.EMAIL -> showValidationError(etEmail, error.message)
+            ValidationField.CPF -> showValidationError(etCpf, error.message)
+            ValidationField.TELEFONE -> showValidationError(etTelefone, error.message)
+            ValidationField.DATA_NASCIMENTO -> showValidationError(etDataNascimento, error.message)
+            ValidationField.SENHA -> showValidationError(etSenha, error.message)
+            ValidationField.CRM -> showValidationError(etCrmDigitos, error.message)
+            else -> showToast(error.message)
         }
     }
 

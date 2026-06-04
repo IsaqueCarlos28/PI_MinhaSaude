@@ -11,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.mappers.CadastroMapper
+import com.example.medicoapplication.UI.common.mappers.GeneroMapper
+import com.example.medicoapplication.UI.common.validations.CadastroValidator
+import com.example.medicoapplication.UI.common.validations.ValidationField
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.viewmodel.auth.CadastroViewModel
 import com.example.medicoapplication.data.remote.DTO.Genero
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
@@ -53,45 +58,25 @@ class CadastroPacienteActivity : BaseActivity() {
     }
 
     private fun tentarCadastro() {
-        val nome     = etNome.text.toString().trim()
-        val email    = etEmail.text.toString().trim()
-        val cpf      = etCpf.text.toString().trim()
-        val telefone = etTelefone.text.toString().trim()
-        val dataNasc = etDataNascimento.text.toString().trim()
-        val genero   = etGenero.text.toString().trim()
-        val senha    = etSenha.text.toString().trim()
-        val confirm  = etConfirmarSenha.text.toString().trim()
-
-        if (nome.isEmpty() || email.isEmpty() || cpf.isEmpty() || telefone.isEmpty() ||
-            dataNasc.isEmpty() || genero.isEmpty() || senha.isEmpty() || confirm.isEmpty()
-        ) { Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show(); return }
-
-        if (senha != confirm) { etConfirmarSenha.error = "As senhas não coincidem"; etConfirmarSenha.requestFocus(); return }
-        if (senha.length < 8) { etSenha.error = "A senha deve ter pelo menos 8 caracteres"; etSenha.requestFocus(); return }
-
-        val dataFormatada = converterDataParaApi(dataNasc)
-            ?: run { etDataNascimento.error = "Use o formato DD/MM/AAAA"; etDataNascimento.requestFocus(); return }
-
-        val cpfLimpo = cpf.replace(Regex("[^0-9]"), "")
-        if (cpfLimpo.length != 11) { etCpf.error = "CPF deve conter 11 dígitos"; etCpf.requestFocus(); return }
-
-        val generoEnum = when (genero.lowercase()) {
-            "masculino", "m" -> Genero.MASCULINO
-            "feminino", "f"  -> Genero.FEMININO
-            else             -> Genero.OUTRO
-        }
-
-        viewModel.cadastrarPaciente(
-            PacienteCreateRequestDto(
-                nome           = nome,
-                cpf            = cpfLimpo,
-                email          = email,
-                telefone       = telefone,
-                genero         = generoEnum,
-                dataNascimento = dataFormatada,
-                senha          = senha
-            )
+        // Build a raw DTO from form values — mapper will clean/format it before sending
+        val rawDto = PacienteCreateRequestDto(
+            nome           = etNome.text.toString().trim(),
+            email          = etEmail.text.toString().trim(),
+            cpf            = etCpf.text.toString().trim(),
+            telefone       = etTelefone.text.toString().trim(),
+            genero         = GeneroMapper.fromString(etGenero.text.toString().trim()),
+            dataNascimento = etDataNascimento.text.toString().trim(),
+            senha          = etSenha.text.toString().trim()
         )
+        val confirmacaoSenha = etConfirmarSenha.text.toString().trim()
+
+        when (val result = CadastroValidator.validarPaciente(rawDto, confirmacaoSenha)) {
+            is ValidationResult.Success -> {
+                val apiDto = CadastroMapper.cadastroPacienteToApi(rawDto)
+                viewModel.cadastrarPaciente(apiDto)
+            }
+            is ValidationResult.Error -> handleValidationError(result)
+        }
     }
 
     private fun observeViewModel() {
@@ -120,12 +105,16 @@ class CadastroPacienteActivity : BaseActivity() {
         btnCadastrar.text = if (carregando) "Processando..." else "Cadastrar"
     }
 
-    private fun converterDataParaApi(entrada: String): String? {
-        return try {
-            val clean = entrada.trim().replace(".", "/").replace("-", "/")
-            if (clean.length != 10 || !clean.contains("/")) return null
-            val p = clean.split("/")
-            if (p.size == 3) "${p[2]}-${p[1]}-${p[0]}" else null
-        } catch (e: Exception) { null }
+    private fun handleValidationError(error: ValidationResult.Error) {
+        when (error.field) {
+            ValidationField.NOME             -> showValidationError(etNome, error.message)
+            ValidationField.EMAIL            -> showValidationError(etEmail, error.message)
+            ValidationField.CPF              -> showValidationError(etCpf, error.message)
+            ValidationField.TELEFONE         -> showValidationError(etTelefone, error.message)
+            ValidationField.DATA_NASCIMENTO  -> showValidationError(etDataNascimento, error.message)
+            ValidationField.SENHA            -> showValidationError(etSenha, error.message)
+            ValidationField.SENHA_CONFIRMACAO -> showValidationError(etConfirmarSenha, error.message)
+            else                             -> showToast(error.message)
+        }
     }
 }

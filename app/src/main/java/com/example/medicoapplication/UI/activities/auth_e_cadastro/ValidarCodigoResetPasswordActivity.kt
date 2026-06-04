@@ -41,7 +41,11 @@ class ValidarCodigoResetPasswordActivity : BaseActivity() {
         val email  = this.intent.getStringExtra("Email")
         val codigo = etCodigo.text.toString().trim()
 
-        if (codigo.isEmpty()) { etCodigo.error = "Informe o código enviado para o e-mail"; etCodigo.requestFocus(); return }
+        if (codigo.isEmpty()) {
+            etCodigo.error = "Informe o código enviado para o e-mail";
+            etCodigo.requestFocus();
+            return
+        }
 
         viewModel.validarCodigo(email, codigo)
     }

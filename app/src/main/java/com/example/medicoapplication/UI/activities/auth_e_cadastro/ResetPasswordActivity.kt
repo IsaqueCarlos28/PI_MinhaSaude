@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.validations.ResetPasswordValidator
+import com.example.medicoapplication.UI.common.validations.ValidationField
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.auth.AuthViewModel
 
@@ -31,23 +34,27 @@ class ResetPasswordActivity : BaseActivity() {
         etConfirmPass = findViewById(R.id.etConfirmNewPassword)
         btnReset      = findViewById(R.id.btnResetPassword)
 
-        // Receive the token that ValidarCodigoResetPasswordActivity put in the Intent
-        val token = this.intent.getStringExtra("Token")
+        val token = intent.getStringExtra("Token")
 
         btnReset.setOnClickListener { tentarRedefinir(token) }
         observeViewModel()
     }
 
     private fun tentarRedefinir(token: String?) {
-        val pass    = etNewPass.text.toString()
-        val confirm = etConfirmPass.text.toString()
+        val nova      = etNewPass.text.toString()
+        val confirmacao = etConfirmPass.text.toString()
 
-        if (pass != confirm) { Toast.makeText(this, "As senhas não coincidem!", Toast.LENGTH_SHORT).show(); return }
-        if (pass.length < 8) { etNewPass.error = "A senha deve ter pelo menos 8 caracteres"; etNewPass.requestFocus(); return }
-
-        // Inject the token into the ViewModel so alterarSenha() can use it
-        viewModel.setToken(token)
-        viewModel.alterarSenha(pass)
+        when (val result = ResetPasswordValidator.validar(nova, confirmacao)) {
+            is ValidationResult.Success -> {
+                viewModel.setToken(token)
+                viewModel.alterarSenha(nova)
+            }
+            is ValidationResult.Error -> when (result.field) {
+                ValidationField.SENHA             -> showValidationError(etNewPass, result.message)
+                ValidationField.SENHA_CONFIRMACAO -> showValidationError(etConfirmPass, result.message)
+                else                              -> showToast(result.message)
+            }
+        }
     }
 
     private fun observeViewModel() {

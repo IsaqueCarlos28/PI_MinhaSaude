@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.mappers.ConsultaMapper
 import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
 import com.example.medicoapplication.data.remote.NetworkError
@@ -57,34 +58,36 @@ class DetalheConsultaActivity : BaseActivity() {
                 when (state) {
                     is DetalheConsultaViewModel.UiState.Idle    -> Unit
                     is DetalheConsultaViewModel.UiState.Loading -> Unit
-                    is DetalheConsultaViewModel.UiState.Error   -> {
-                        handleError(state.error)}
+                    is DetalheConsultaViewModel.UiState.Error   -> handleError(state.error)
                     is DetalheConsultaViewModel.UiState.Success -> {
-                        val c = state.consulta
-                        findViewById<TextView>(R.id.tvDetalheMedico).text   = c.nomeMedico ?: "—"
-                        findViewById<TextView>(R.id.tvDetalheData).text     = formatarData(c.data)
-                        findViewById<TextView>(R.id.tvDetalheHora).text     = c.horaInicio.take(5)
-                        findViewById<TextView>(R.id.tvDetalheConvenio).text = c.nomeConvenio ?: "Particular"
-                        findViewById<TextView>(R.id.tvDetalheStatus).text   = traduzirStatus(c.status)
+                        // All display formatting is done by the mapper
+                        val display = ConsultaMapper.toDisplay(state.consulta)
 
-                        val podeAcionar = c.status == StatusConsulta.AGENDADA
-                        findViewById<Button>(R.id.btnReagendarDetalhe).visibility =
-                            if (podeAcionar) View.VISIBLE else View.GONE
-                        findViewById<Button>(R.id.btnCancelarDetalhe).visibility =
-                            if (podeAcionar) View.VISIBLE else View.GONE
+                        findViewById<TextView>(R.id.tvDetalheMedico).text   = display.nomeMedico
+                        findViewById<TextView>(R.id.tvDetalheData).text     = display.data
+                        findViewById<TextView>(R.id.tvDetalheHora).text     = display.horaInicio
+                        findViewById<TextView>(R.id.tvDetalheConvenio).text = display.convenio
+                        findViewById<TextView>(R.id.tvDetalheStatus).text   = display.status
 
-                        findViewById<Button>(R.id.btnReagendarDetalhe).setOnClickListener {
+                        val podeAcionar = display.statusEnum == StatusConsulta.AGENDADA
+                        val btnReagendar = findViewById<Button>(R.id.btnReagendarDetalhe)
+                        val btnCancelar  = findViewById<Button>(R.id.btnCancelarDetalhe)
+
+                        btnReagendar.visibility = if (podeAcionar) View.VISIBLE else View.GONE
+                        btnCancelar.visibility  = if (podeAcionar) View.VISIBLE else View.GONE
+
+                        btnReagendar.setOnClickListener {
                             startActivity(
                                 Intent(this@DetalheConsultaActivity, ReagendarConsultaActivity::class.java).apply {
                                     putExtra("ID_PACIENTE", idPaciente)
                                     putExtra("ID_EVENTO",   idEvento)
-                                    putExtra("ID_MEDICO",   c.idMedico)
-                                    putExtra("NOME_MEDICO", c.nomeMedico ?: "")
+                                    putExtra("ID_MEDICO",   state.consulta.idMedico)
+                                    putExtra("NOME_MEDICO", state.consulta.nomeMedico ?: "")
                                 }
                             )
                         }
 
-                        findViewById<Button>(R.id.btnCancelarDetalhe).setOnClickListener {
+                        btnCancelar.setOnClickListener {
                             viewModel.cancelarConsulta(idPaciente, idEvento) {
                                 showToast("Consulta cancelada.")
                                 finish()
@@ -94,18 +97,6 @@ class DetalheConsultaActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    private fun formatarData(data: String): String {
-        return try {
-            val p = data.split("-"); "${p[2]}/${p[1]}/${p[0]}"
-        } catch (e: Exception) { data }
-    }
-
-    private fun traduzirStatus(status: StatusConsulta): String = when (status) {
-        StatusConsulta.AGENDADA  -> "Agendada"
-        StatusConsulta.CANCELADA -> "Cancelada"
-        StatusConsulta.REALIZADA -> "Realizada"
     }
 
     private fun configurarBottomNav(itemSelecionado: Int) {

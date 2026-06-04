@@ -5,18 +5,25 @@ import com.example.medicoapplication.UI.common.formatters.DateFormatter
 import com.example.medicoapplication.UI.common.formatters.NameFormatter
 import com.example.medicoapplication.UI.common.formatters.PhoneFormatter
 import com.example.medicoapplication.data.remote.DTO.Genero
+import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
 
 
 object UiMapper {
 
+    fun medicoApiToUi(
+        medico: MedicoResponseDto
+    ): MedicoResponseDto {
+        return medico.copy(
+            usuario= usuarioApiToUi(medico.usuario!!)
+        )
+    }
+
     fun usuarioApiToUi(
         usuario: PacienteResponseDto
     ): PacienteResponseDto {
 
-        return PacienteResponseDto(
-            id = usuario.id,
-
+        return usuario.copy(
             nome = NameFormatter.normalize(
                 usuario.nome!!
             ),
@@ -33,10 +40,6 @@ object UiMapper {
                 DateFormatter.apiToUiDate(
                     usuario.dataNascimento!!
                 ),
-
-            genero = usuario.genero,
-
-            email = usuario.email
 
         )
     }

@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.mappers.MedicoMapper
+import com.example.medicoapplication.UI.common.validations.ConsultaValidator
+import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.activities.paciente.viewmodel.AgendarConsultaViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -25,21 +28,20 @@ class AgendarConsultaActivity : BaseActivity() {
     private val viewModel: AgendarConsultaViewModel by viewModels()
 
     private val calendar = Calendar.getInstance()
-    private val formatoExibicao = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-    private val formatoApi      = SimpleDateFormat("yyyy-MM-dd", Locale("pt", "BR"))
+    private val formatoApi       = SimpleDateFormat("yyyy-MM-dd", Locale("pt", "BR"))
+    private val formatoExibicao  = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
     private val formatoDiaSemana = SimpleDateFormat("EEE", Locale("pt", "BR"))
 
     private var horarioSelecionado: String? = null
     private var medicoId: Long = -1L
     private var idPaciente: Long = -1L
-    private var idConsultaOfertada: Long = -1L  // ✅ variável declarada
+    private var idConsultaOfertada: Long = -1L
 
-    // IDs dos 7 blocos de dia no HorizontalScrollView
     private val idsBlocoDia = listOf(
         R.id.diaBloco0, R.id.diaBloco1, R.id.diaBloco2,
         R.id.diaBloco3, R.id.diaBloco4, R.id.diaBloco5, R.id.diaBloco6
     )
-    private var diaOffset = 0   // quantos dias a partir de hoje está o primeiro bloco visível
+    private var diaOffset = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,7 @@ class AgendarConsultaActivity : BaseActivity() {
 
         idPaciente         = intent.getLongExtra("ID_PACIENTE", -1L)
         medicoId           = intent.getLongExtra("ID_MEDICO", intent.getLongExtra("MEDICO_ID", -1L))
-        idConsultaOfertada = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)  // ✅ leitura do Intent
+        idConsultaOfertada = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)
 
         val nomeExtra = intent.getStringExtra("NOME_MEDICO")
         if (!nomeExtra.isNullOrBlank()) {
@@ -57,27 +59,18 @@ class AgendarConsultaActivity : BaseActivity() {
         renderizarDias()
 
         findViewById<ImageButton>(R.id.btnDataAnterior).setOnClickListener {
-            if (diaOffset > 0) {
-                diaOffset--
-                calendar.add(Calendar.DAY_OF_MONTH, -1)
-                renderizarDias()
-            }
+            if (diaOffset > 0) { diaOffset--; calendar.add(Calendar.DAY_OF_MONTH, -1); renderizarDias() }
         }
         findViewById<ImageButton>(R.id.btnProximaData).setOnClickListener {
-            diaOffset++
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-            renderizarDias()
+            diaOffset++; calendar.add(Calendar.DAY_OF_MONTH, 1); renderizarDias()
         }
 
+        //Mudar para os horarios da API
         val botoesHorario = listOf(
-            Pair(R.id.btnHorario0900, "09:00"),
-            Pair(R.id.btnHorario0930, "09:30"),
-            Pair(R.id.btnHorario1000, "10:00"),  // ✅ corrigido
-            Pair(R.id.btnHorario1030, "10:30"),  // ✅ corrigido
-            Pair(R.id.btnHorario1100, "11:00"),  // ✅ corrigido
-            Pair(R.id.btnHorario1130, "11:30"),  // ✅ corrigido
-            Pair(R.id.btnHorario1200, "12:00"),
-            Pair(R.id.btnHorario1230, "12:30")
+            Pair(R.id.btnHorario0900, "09:00"), Pair(R.id.btnHorario0930, "09:30"),
+            Pair(R.id.btnHorario1000, "10:00"), Pair(R.id.btnHorario1030, "10:30"),
+            Pair(R.id.btnHorario1100, "11:00"), Pair(R.id.btnHorario1130, "11:30"),
+            Pair(R.id.btnHorario1200, "12:00"), Pair(R.id.btnHorario1230, "12:30")
         )
         botoesHorario.forEach { (idBotao, horario) ->
             findViewById<Button>(idBotao).setOnClickListener {
@@ -86,42 +79,28 @@ class AgendarConsultaActivity : BaseActivity() {
         }
 
         findViewById<Button>(R.id.btnConfirmarConsulta).setOnClickListener { confirmarConsulta() }
-        findViewById<TextView>(R.id.tvVerMaisHorarios).setOnClickListener {
-            showToast("Mais horários em breve")
-        }
+        findViewById<TextView>(R.id.tvVerMaisHorarios).setOnClickListener { showToast("Mais horários em breve") }
 
         observeViewModel()
         if (medicoId != -1L) viewModel.carregarMedico(medicoId)
         configurarBottomNav(R.id.nav_consultas)
     }
 
-    /**
-     * Renderiza os 7 blocos de dia a partir do dia atual do calendar.
-     * O bloco do meio (índice 3) representa o dia selecionado — fica azul.
-     */
     private fun renderizarDias() {
-        val base = Calendar.getInstance().apply {
-            // primeiro bloco = hoje - 3 dias (para centralizar o selecionado)
-            add(Calendar.DAY_OF_MONTH, diaOffset - 3)
-        }
+        val base = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, diaOffset - 3) }
         idsBlocoDia.forEachIndexed { index, idBloco ->
             val bloco = try { findViewById<LinearLayout>(idBloco) } catch (e: Exception) { null }
                 ?: return@forEachIndexed
-
             val cal = base.clone() as Calendar
             cal.add(Calendar.DAY_OF_MONTH, index)
-
             val tvSemana = bloco.getChildAt(0) as? TextView
             val tvDia    = bloco.getChildAt(1) as? TextView
-
             tvSemana?.text = formatoDiaSemana.format(cal.time).uppercase()
             tvDia?.text    = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH))
-
             val isSelecionado = index == 3
             if (isSelecionado) {
                 bloco.setBackgroundColor(Color.parseColor("#3B82F6"))
-                tvSemana?.setTextColor(Color.WHITE)
-                tvDia?.setTextColor(Color.WHITE)
+                tvSemana?.setTextColor(Color.WHITE); tvDia?.setTextColor(Color.WHITE)
             } else {
                 bloco.setBackgroundColor(Color.TRANSPARENT)
                 tvSemana?.setTextColor(Color.parseColor("#64748B"))
@@ -138,13 +117,11 @@ class AgendarConsultaActivity : BaseActivity() {
                     is AgendarConsultaViewModel.UiState.Loading -> Unit
                     is AgendarConsultaViewModel.UiState.Error   -> Unit
                     is AgendarConsultaViewModel.UiState.MedicoCarregado -> {
-                        val medico = state.medico
-                        findViewById<TextView>(R.id.tvNomeMedicoAgendar).text =
-                            medico.usuario?.nome ?: "Médico"
-                        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text =
-                            medico.especialidades.firstOrNull()?.especialidade?.nome ?: ""
-                        findViewById<TextView>(R.id.tvCrmAgendar).text =
-                            "CRM: ${medico.crmDigitos ?: ""}/${medico.crmUf ?: ""}"
+                        // Mapping responsibility moved to MedicoMapper
+                        val info = MedicoMapper.toAgendamentoInfo(state.medico)
+                        findViewById<TextView>(R.id.tvNomeMedicoAgendar).text      = info.nome
+                        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text   = info.especialidade
+                        findViewById<TextView>(R.id.tvCrmAgendar).text             = info.crm
                     }
                 }
             }
@@ -154,31 +131,32 @@ class AgendarConsultaActivity : BaseActivity() {
     private fun selecionarHorario(idSelecionado: Int, horario: String, idsHorarios: List<Int>) {
         horarioSelecionado = horario
         idsHorarios.forEach { id ->
-            val btn = findViewById<Button>(id)
-            btn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E2E8F0"))
-            btn.setTextColor(Color.parseColor("#1E293B"))
+            findViewById<Button>(id).backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E2E8F0"))
+            findViewById<Button>(id).setTextColor(Color.parseColor("#1E293B"))
         }
-        val btnSel = findViewById<Button>(idSelecionado)
-        btnSel.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#3B82F6"))
-        btnSel.setTextColor(Color.WHITE)
+        findViewById<Button>(idSelecionado).backgroundTintList = ColorStateList.valueOf(Color.parseColor("#3B82F6"))
+        findViewById<Button>(idSelecionado).setTextColor(Color.WHITE)
     }
 
     private fun confirmarConsulta() {
-        if (horarioSelecionado == null) {
-            showToast("Selecione um horário!")
-            return
-        }
-        startActivity(
-            Intent(this, ConfirmacaoConsultaActivity::class.java).apply {
-                putExtra("ID_PACIENTE",          idPaciente)
-                putExtra("ID_MEDICO",            medicoId)
-                putExtra("NOME_MEDICO",          findViewById<TextView>(R.id.tvNomeMedicoAgendar).text.toString())
-                putExtra("ESPECIALIDADE",        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text.toString())
-                putExtra("DATA_CONSULTA",        formatoApi.format(calendar.time))
-                putExtra("HORA_CONSULTA",        horarioSelecionado!!)
-                putExtra("ID_CONSULTA_OFERTADA", idConsultaOfertada)  // ✅ agora funciona
+        val dataApi = formatoApi.format(calendar.time)
+
+        when (val result = ConsultaValidator.validarAgendamento(dataApi, horarioSelecionado)) {
+            is ValidationResult.Success -> {
+                startActivity(
+                    Intent(this, ConfirmacaoConsultaActivity::class.java).apply {
+                        putExtra("ID_PACIENTE",          idPaciente)
+                        putExtra("ID_MEDICO",            medicoId)
+                        putExtra("NOME_MEDICO",          findViewById<TextView>(R.id.tvNomeMedicoAgendar).text.toString())
+                        putExtra("ESPECIALIDADE",        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text.toString())
+                        putExtra("DATA_CONSULTA",        dataApi)
+                        putExtra("HORA_CONSULTA",        horarioSelecionado!!)
+                        putExtra("ID_CONSULTA_OFERTADA", idConsultaOfertada)
+                    }
+                )
             }
-        )
+            is ValidationResult.Error -> showToast(result.message)
+        }
     }
 
     private fun configurarBottomNav(itemSelecionado: Int) {
