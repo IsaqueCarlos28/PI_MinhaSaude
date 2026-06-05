@@ -1,4 +1,4 @@
-package com.example.medicoapplication.activities.paciente.viewmodel
+package com.example.medicoapplication.viewmodel.paciente.perfil
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,10 +24,10 @@ class PerfilPacienteViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState
 
-    fun carregarPerfil(idPaciente: Long) {
+    fun carregarPerfil() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            repository.getPaciente(idPaciente)
+            repository.getPaciente()
                 .onSuccess { _uiState.value = UiState.Success(it) }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError()) }

@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.DetalheConsultaActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
+import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.HomePacienteViewModel
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -93,6 +96,7 @@ class HomePacienteActivity : BaseActivity() {
                 }
             }
         }
+
         lifecycleScope.launch {
             viewModel.consultasState.collect { state ->
                 when (state) {

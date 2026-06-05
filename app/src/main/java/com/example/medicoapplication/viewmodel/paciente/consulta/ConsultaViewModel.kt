@@ -26,13 +26,13 @@ class ConsultaViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     var uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun cancelarConsulta(idPaciente: Long,
+    fun cancelarConsulta(
                          idEvento: Long,
                          dto: ConsultaStatusRequestDto
     ){
         _uiState.value = UiState.Loanding
         viewModelScope.launch {
-            repository.atualizarStatusPaciente(idPaciente,idEvento,dto)
+            repository.atualizarStatusPaciente(idEvento,dto)
                 .onSuccess { _uiState.value = UiState.Success(it) }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError())}

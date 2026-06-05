@@ -1,4 +1,4 @@
-package com.example.medicoapplication.viewmodel.paciente
+package com.example.medicoapplication.viewmodel.paciente.medicos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

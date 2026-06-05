@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.consultas
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,15 +7,13 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.ReagendarConsultaActivity
 import com.example.medicoapplication.UI.common.mappers.ConsultaMapper
-import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
-import com.example.medicoapplication.data.remote.NetworkError
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsultaViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -43,7 +41,7 @@ class DetalheConsultaActivity : BaseActivity() {
         observeViewModel()
 
         if (idPaciente != -1L && idEvento != -1L) {
-            viewModel.carregarConsulta(idPaciente, idEvento)
+            viewModel.carregarConsulta(idPaciente)
         } else {
             showToast("Consulta não encontrada.")
             finish()
@@ -78,7 +76,10 @@ class DetalheConsultaActivity : BaseActivity() {
 
                         btnReagendar.setOnClickListener {
                             startActivity(
-                                Intent(this@DetalheConsultaActivity, ReagendarConsultaActivity::class.java).apply {
+                                Intent(
+                                    this@DetalheConsultaActivity,
+                                    ReagendarConsultaActivity::class.java
+                                ).apply {
                                     putExtra("ID_PACIENTE", idPaciente)
                                     putExtra("ID_EVENTO",   idEvento)
                                     putExtra("ID_MEDICO",   state.consulta.idMedico)
@@ -88,7 +89,7 @@ class DetalheConsultaActivity : BaseActivity() {
                         }
 
                         btnCancelar.setOnClickListener {
-                            viewModel.cancelarConsulta(idPaciente, idEvento) {
+                            viewModel.cancelarConsulta(idEvento) {
                                 showToast("Consulta cancelada.")
                                 finish()
                             }

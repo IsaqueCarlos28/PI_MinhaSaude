@@ -34,7 +34,7 @@ class HomePacienteViewModel(
 
     fun carregarNome(idPaciente: Long, emailFallback: String) {
         viewModelScope.launch {
-            repository.getPaciente(idPaciente)
+            repository.getPaciente()
                 .onSuccess { paciente ->
                     val nome = paciente.nome?.split(" ")?.firstOrNull()
                         ?: emailFallback.substringBefore("@")
@@ -49,7 +49,7 @@ class HomePacienteViewModel(
     fun carregarConsultas(idPaciente: Long) {
         viewModelScope.launch {
             _consultasState.value = ConsultasState.Loading
-            repository.getConsultas(idPaciente)
+            repository.getConsultas()
                 .onSuccess { todas ->
                     val proximas = todas
                         .filter { it.status == StatusConsulta.AGENDADA }
@@ -60,15 +60,4 @@ class HomePacienteViewModel(
         }
     }
 
-    fun cancelarConsulta(idPaciente: Long, consulta: ConsultaResponseDto, onDone: () -> Unit) {
-        viewModelScope.launch {
-            repository.cancelarConsulta(
-                idPaciente = idPaciente,
-                idEvento   = consulta.id,
-                status     = ConsultaStatusRequestDto(status = StatusConsulta.CANCELADA)
-            )
-                .onSuccess { onDone() }
-                .onFailure { _consultasState.value = ConsultasState.Error(it.message ?: "Erro ao cancelar") }
-        }
-    }
 }

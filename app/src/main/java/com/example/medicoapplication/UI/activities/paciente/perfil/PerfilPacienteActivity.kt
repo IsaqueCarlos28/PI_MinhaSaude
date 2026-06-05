@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.perfil
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,14 +6,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity
-import com.example.medicoapplication.activities.paciente.viewmodel.PerfilPacienteViewModel
-import com.example.medicoapplication.data.remote.NetworkError
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.paciente.perfil.PerfilPacienteViewModel
 import kotlinx.coroutines.launch
 
 class PerfilPacienteActivity : BaseActivity() {
@@ -30,7 +27,7 @@ class PerfilPacienteActivity : BaseActivity() {
 
         observeViewModel()
 
-        if (idPaciente != -1L) viewModel.carregarPerfil(idPaciente)
+        if (idPaciente != -1L) viewModel.carregarPerfil()
 
         // ✅ Ícone de configurações no header
         findViewById<ImageButton>(R.id.btnConfiguracoes).setOnClickListener {

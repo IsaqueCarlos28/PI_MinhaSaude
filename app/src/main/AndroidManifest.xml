@@ -50,22 +50,22 @@
             android:name=".UI.activities.paciente.HomePacienteActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.MinhasConsultasActivity"
+            android:name=".UI.activities.paciente.consultas.MinhasConsultasActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.BuscaMedicosActivity"
+            android:name=".UI.activities.paciente.medicos.BuscaMedicosActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.PesquisaMedicosActivity"
+            android:name=".UI.activities.paciente.medicos.PesquisaMedicosActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.AgendarConsultaActivity"
+            android:name=".UI.activities.paciente.medicos.marcar_consulta.AgendarConsultaActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.PerfilPacienteActivity"
+            android:name=".UI.activities.paciente.perfil.PerfilPacienteActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.PerfilMedicoPublicoActivity"
+            android:name=".UI.activities.paciente.medicos.PerfilMedicoPublicoActivity"
             android:exported="false" /> <!-- MÉDICO -->
         <activity
             android:name=".UI.activities.medico.HomeMedicoActivity"
@@ -89,16 +89,16 @@
             android:name=".UI.activities.medico.consulta_ofertada.CriarConsultaOfertadaActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.ConfirmacaoConsultaActivity"
+            android:name=".UI.activities.paciente.medicos.marcar_consulta.ConfirmacaoConsultaActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.DetalheConsultaActivity"
+            android:name=".UI.activities.paciente.consultas.DetalheConsultaActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.ReagendarConsultaActivity"
+            android:name=".UI.activities.paciente.consultas.ReagendarConsultaActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.EditarPerfilPacienteActivity"
+            android:name=".UI.activities.paciente.perfil.EditarPerfilPacienteActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity"

@@ -28,20 +28,19 @@ class MinhasConsultasViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState
 
-    fun carregarConsultas(idPaciente: Long) {
+    fun carregarConsultas() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            pacienteRepository.getConsultas(idPaciente)
+            pacienteRepository.getConsultas()
                 .onSuccess { _uiState.value = UiState.Success(it) }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError())}
         }
     }
 
-    fun cancelarConsulta(idPaciente: Long, consulta: ConsultaResponseDto, onSucesso: () -> Unit) {
+    fun cancelarConsulta(consulta: ConsultaResponseDto, onSucesso: () -> Unit) {
         viewModelScope.launch {
             consultaRepository.atualizarStatusPaciente(
-                idPaciente,
                 consulta.id,
                 ConsultaStatusRequestDto(StatusConsulta.CANCELADA)
             )

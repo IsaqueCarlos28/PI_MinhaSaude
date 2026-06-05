@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -9,15 +9,14 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta.ConfirmacaoConsultaActivity
 import com.example.medicoapplication.UI.common.mappers.MedicoMapper
 import com.example.medicoapplication.UI.common.validations.ConsultaValidator
 import com.example.medicoapplication.UI.common.validations.ValidationResult
-import com.example.medicoapplication.activities.paciente.viewmodel.AgendarConsultaViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.paciente.medicos.marcar_consulta.AgendarConsultaViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -87,6 +86,7 @@ class AgendarConsultaActivity : BaseActivity() {
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
+    //Verificar
     private fun renderizarDias() {
         val base = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, diaOffset - 3) }
         idsBlocoDia.forEachIndexed { index, idBloco ->

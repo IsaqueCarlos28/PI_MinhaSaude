@@ -1,16 +1,15 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.medicos
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta.AgendarConsultaActivity
 import com.example.medicoapplication.data.repository.MedicoRepository
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class PerfilMedicoPublicoActivity : BaseActivity() {
@@ -37,9 +36,10 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
         if (medicoId != -1L) carregarMedico()
 
         // ✅ Botão Agendar — completo e dentro do onCreate
+        // Passar para o repositorio
         findViewById<Button>(R.id.btnAgendarComEsteMedico).setOnClickListener {
             lifecycleScope.launch {
-                val consultasResult = repository.getConsultasOfertadas(medicoId)
+                val consultasResult = repository.getConsultasOfertadas()
                 consultasResult.onSuccess { lista ->
                     // ✅ bloqueia se médico não tem consultas ofertadas
                     if (lista.isEmpty()) {
@@ -47,7 +47,10 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
                         return@onSuccess
                     }
                     val idConsultaOfertada = lista.first().id
-                    val intent = Intent(this@PerfilMedicoPublicoActivity, AgendarConsultaActivity::class.java).apply {
+                    val intent = Intent(
+                        this@PerfilMedicoPublicoActivity,
+                        AgendarConsultaActivity::class.java
+                    ).apply {
                         putExtra("ID_MEDICO",            medicoId)
                         putExtra("NOME_MEDICO",          nomeMedico)
                         putExtra("ESPECIALIDADE",        especialidadeMedico)  // ✅ passa especialidade
@@ -63,9 +66,10 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
+    //Passar para viewModel
     private fun carregarMedico() {
         lifecycleScope.launch {
-            repository.getMedico(medicoId)
+            repository.getMedico()
                 .onSuccess { medico ->
                     val nome = medico.usuario?.nome ?: nomeMedico
                     nomeMedico = nome

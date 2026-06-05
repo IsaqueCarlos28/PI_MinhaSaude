@@ -4,15 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.paciente.AlterarSenhaPacienteActivity
-import com.example.medicoapplication.UI.activities.paciente.BuscaMedicosActivity
-import com.example.medicoapplication.UI.activities.paciente.EditarPerfilPacienteActivity
+import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
+import com.example.medicoapplication.UI.activities.paciente.perfil.EditarPerfilPacienteActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
-import com.example.medicoapplication.UI.activities.paciente.MinhasConsultasActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**

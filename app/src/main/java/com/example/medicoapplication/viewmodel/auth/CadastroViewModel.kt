@@ -3,7 +3,7 @@ package com.example.medicoapplication.viewmodel.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.UI.common.mappers.CadastroMapper
-import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
+import com.example.medicoapplication.viewmodel.paciente.consulta.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.NetworkError

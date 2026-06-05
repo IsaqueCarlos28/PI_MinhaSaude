@@ -1,22 +1,19 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
 import com.example.medicoapplication.UI.common.formatters.DateFormatter
 import com.example.medicoapplication.UI.common.validations.ConsultaValidator
 import com.example.medicoapplication.UI.common.validations.ValidationResult
-import com.example.medicoapplication.data.remote.NetworkError
-import com.example.medicoapplication.viewmodel.paciente.consulta.ConfirmacaoConsultaViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.paciente.medicos.marcar_consulta.ConfirmacaoConsultaViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -75,7 +72,7 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
                 idPaciente, idConsultaOfertada, dataConsulta, horaConsulta
             )) {
                 is ValidationResult.Success ->
-                    viewModel.confirmarConsulta(idPaciente, idConsultaOfertada, dataConsulta, horaConsulta)
+                    viewModel.confirmarConsulta(idConsultaOfertada, dataConsulta, horaConsulta)
                 is ValidationResult.Error   ->
                     showToast(result.message)
             }
@@ -98,7 +95,10 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
                         setLoading(false)
                         showToast("Consulta agendada com sucesso!")
                         startActivity(
-                            Intent(this@ConfirmacaoConsultaActivity, MinhasConsultasActivity::class.java).apply {
+                            Intent(
+                                this@ConfirmacaoConsultaActivity,
+                                MinhasConsultasActivity::class.java
+                            ).apply {
                                 putExtra("ID_PACIENTE", idPaciente)
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                             }

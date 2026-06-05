@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.consultas
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -11,9 +11,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
+import com.example.medicoapplication.viewmodel.paciente.consulta.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -107,13 +106,13 @@ class ReagendarConsultaActivity : BaseActivity() {
         }
 
         viewModel.reagendar(
-            idPaciente,
             idEvento,
             dto = ConsultaUpdateRequestDto(
                 idMedico,
                 null,
                 formatoDataApi.format(calendar.time),
-                horarioSelecionado!!)
+                horarioSelecionado!!
+            )
         )
     }
 
@@ -131,7 +130,10 @@ class ReagendarConsultaActivity : BaseActivity() {
                         setLoading(false)
                         showToast("Consulta reagendada com sucesso!")
                         startActivity(
-                            Intent(this@ReagendarConsultaActivity, MinhasConsultasActivity::class.java).apply {
+                            Intent(
+                                this@ReagendarConsultaActivity,
+                                MinhasConsultasActivity::class.java
+                            ).apply {
                                 putExtra("ID_PACIENTE", idPaciente)
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                             }

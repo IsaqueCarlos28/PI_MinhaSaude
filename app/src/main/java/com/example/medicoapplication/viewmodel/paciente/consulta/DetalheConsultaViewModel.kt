@@ -30,10 +30,10 @@ class DetalheConsultaViewModel(
     val uiState: StateFlow<UiState> = _uiState
 
     // Usa o endpoint direto GET pacientes/{id}/consultas/{idEvento}
-    fun carregarConsulta(idPaciente: Long, idEvento: Long) {
+    fun carregarConsulta(idEvento: Long) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            consultaRepository.getConsultaByIdPaciente(idPaciente, idEvento)
+            consultaRepository.getConsultaByIdPaciente(idEvento)
                 .onSuccess { _uiState.value = UiState.Success(it) }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError())
@@ -44,10 +44,9 @@ class DetalheConsultaViewModel(
     }
 
 
-    fun cancelarConsulta(idPaciente: Long, idEvento: Long, onSucesso: () -> Unit) {
+    fun cancelarConsulta( idEvento: Long, onSucesso: () -> Unit) {
         viewModelScope.launch {
             consultaRepository.atualizarStatusPaciente(
-                idPaciente,
                 idEvento,
                 ConsultaStatusRequestDto(StatusConsulta.CANCELADA)
             )

@@ -1,6 +1,5 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.perfil
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -8,7 +7,6 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
@@ -17,10 +15,7 @@ import com.example.medicoapplication.UI.common.mappers.PerfilMapper
 import com.example.medicoapplication.UI.common.validations.PerfilValidator
 import com.example.medicoapplication.UI.common.validations.ValidationField
 import com.example.medicoapplication.UI.common.validations.ValidationResult
-import com.example.medicoapplication.activities.paciente.viewmodel.EditarPerfilPacienteViewModel
-import com.example.medicoapplication.data.remote.DTO.Genero
-import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.paciente.perfil.EditarPerfilPacienteViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -52,7 +47,7 @@ class EditarPerfilPacienteActivity : BaseActivity() {
         configurarBotoes()
         observeViewModel()
 
-        if (idPaciente != -1L) viewModel.carregarPerfil(idPaciente)
+        if (idPaciente != -1L) viewModel.carregarPerfil()
         setupBottomNavigation(R.id.nav_perfil_paciente)
     }
 
@@ -85,7 +80,7 @@ class EditarPerfilPacienteActivity : BaseActivity() {
             )
 
             when (val result = PerfilValidator.validarEdicaoPaciente(dto)) {
-                is ValidationResult.Success -> viewModel.salvarPerfil(idPaciente, dto)
+                is ValidationResult.Success -> viewModel.salvarPerfil(dto)
                 is ValidationResult.Error   -> handleValidationError(result)
             }
         }

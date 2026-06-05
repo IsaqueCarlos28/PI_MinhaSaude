@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.consultas
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,16 +6,14 @@ import android.widget.GridView
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.DetalheConsultaActivity
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
-import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.viewmodel.paciente.consulta.MinhasConsultasViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -47,12 +45,12 @@ class MinhasConsultasActivity : BaseActivity() {
 
         // Adapter com clique → abre DetalheConsultaActivity
         adapter = ConsultasPacienteAdapter(
-            consultas   = emptyList(),
+            consultas = emptyList(),
             onItemClick = { consulta ->
                 startActivity(
                     Intent(this, DetalheConsultaActivity::class.java).apply {
                         putExtra("ID_PACIENTE", idPaciente)
-                        putExtra("ID_EVENTO",   consulta.id)
+                        putExtra("ID_EVENTO", consulta.id)
                     }
                 )
             }
@@ -72,7 +70,7 @@ class MinhasConsultasActivity : BaseActivity() {
         }
 
         observeViewModel()
-        if (idPaciente != -1L) viewModel.carregarConsultas(idPaciente)
+        if (idPaciente != -1L) viewModel.carregarConsultas()
 
         setupBottomNavigation(R.id.nav_consultas_paciente)
     }

@@ -10,10 +10,10 @@ import com.example.medicoapplication.UI.activities.medico.ConfiguracoesMedicoAct
 import com.example.medicoapplication.UI.activities.medico.consultas.ConsultasMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.perfil.PerfilMedicoActivity
-import com.example.medicoapplication.UI.activities.paciente.BuscaMedicosActivity
+import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
-import com.example.medicoapplication.UI.activities.paciente.MinhasConsultasActivity
-import com.example.medicoapplication.UI.activities.paciente.PerfilPacienteActivity
+import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
+import com.example.medicoapplication.UI.activities.paciente.perfil.PerfilPacienteActivity
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.mappers.ErrorMapper
 import com.example.medicoapplication.data.remote.NetworkError

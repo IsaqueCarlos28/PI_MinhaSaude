@@ -2,7 +2,7 @@ package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medicoapplication.activities.paciente.viewmodel.ReagendarConsultaViewModel
+import com.example.medicoapplication.viewmodel.paciente.consulta.ReagendarConsultaViewModel
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.AuthRepository
 import com.example.medicoapplication.data.repository.toNetworkError

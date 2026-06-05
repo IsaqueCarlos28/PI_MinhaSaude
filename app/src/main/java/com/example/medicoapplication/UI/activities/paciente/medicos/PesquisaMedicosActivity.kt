@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente
+package com.example.medicoapplication.UI.activities.paciente.medicos
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -18,9 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.MedicoAdapter
-import com.example.medicoapplication.data.remote.NetworkError
-import com.example.medicoapplication.viewmodel.paciente.BuscaMedicosViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.paciente.medicos.BuscaMedicosViewModel
 import kotlinx.coroutines.launch
 
 class PesquisaMedicosActivity : BaseActivity() {
