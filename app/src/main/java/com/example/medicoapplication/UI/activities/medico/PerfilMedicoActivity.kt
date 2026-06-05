@@ -40,7 +40,7 @@ class PerfilMedicoActivity : BaseActivity() {
 
         if (idMedico != -1L) viewModel.carregarPerfil(idMedico)
 
-        configurarBottomNav(R.id.nav_usuario)
+        setupBottomNavigation(R.id.nav_perfil_medico)
     }
 
     private fun observeViewModel() {
@@ -69,21 +69,6 @@ class PerfilMedicoActivity : BaseActivity() {
                             medico.especialidades.firstOrNull()?.especialidade?.nome ?: "—"
                     }
                 }
-            }
-        }
-    }
-
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavPerfilMedico)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_inicio       -> { startActivity(Intent(this, HomeMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
-                R.id.nav_agenda       -> { startActivity(Intent(this, AgendaMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
-                R.id.nav_consultas_med-> { startActivity(Intent(this, ConsultasMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
-                R.id.nav_usuario      -> true
-                R.id.nav_config       -> { startActivity(Intent(this, ConfiguracoesMedicoActivity::class.java).apply { putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico) }); false }
-                else -> false
             }
         }
     }

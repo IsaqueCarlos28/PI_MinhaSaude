@@ -18,5 +18,7 @@ class VisualisarConsultaMedico : BaseActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        setupBottomNavigation(R.id.nav_consultas_medico)
     }
 }

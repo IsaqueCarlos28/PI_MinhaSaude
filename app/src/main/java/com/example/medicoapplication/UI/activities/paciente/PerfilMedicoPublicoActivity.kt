@@ -60,7 +60,7 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
             }
         }
 
-        configurarBottomNav(R.id.nav_medicos)
+        setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
     private fun carregarMedico() {
@@ -101,26 +101,5 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
         }
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavPerfilPublico)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, HomePacienteActivity::class.java))
-                    false
-                }
-                R.id.nav_consultas -> {
-                    startActivity(Intent(this, MinhasConsultasActivity::class.java))
-                    false
-                }
-                R.id.nav_medicos -> true
-                R.id.nav_perfil -> {
-                    startActivity(Intent(this, PerfilPacienteActivity::class.java))
-                    false
-                }
-                else -> false
-            }
-        }
-    }
+
 }

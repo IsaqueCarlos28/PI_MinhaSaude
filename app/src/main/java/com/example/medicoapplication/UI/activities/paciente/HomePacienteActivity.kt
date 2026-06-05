@@ -41,7 +41,7 @@ class HomePacienteActivity : BaseActivity() {
 
         configurarRecyclerView()
         configurarAtalhos()
-        configurarBottomNav(R.id.nav_home)
+        setupBottomNavigation(R.id.nav_inicio_paciente)
         observeViewModel()
 
         if (idPaciente != -1L) {
@@ -105,17 +105,4 @@ class HomePacienteActivity : BaseActivity() {
         }
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavPaciente)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home      -> true
-                R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_perfil    -> { startActivity(Intent(this, PerfilPacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                else -> false
-            }
-        }
-    }
 }

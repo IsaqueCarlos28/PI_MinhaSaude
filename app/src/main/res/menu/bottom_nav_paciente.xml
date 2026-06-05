@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_inicio_paciente"
         android:icon="@drawable/ic_home"
         android:title="Início" />
 
     <item
-        android:id="@+id/nav_consultas"
+        android:id="@+id/nav_consultas_paciente"
         android:icon="@drawable/ic_calendar"
         android:title="Consultas" />
 
     <item
-        android:id="@+id/nav_medicos"
+        android:id="@+id/nav_medicos_paciente"
         android:icon="@drawable/ic_doctor"
         android:title="Médicos" />
 
     <item
-        android:id="@+id/nav_perfil"
+        android:id="@+id/nav_perfil_paciente"
         android:icon="@drawable/ic_user"
         android:title="Perfil" />
 

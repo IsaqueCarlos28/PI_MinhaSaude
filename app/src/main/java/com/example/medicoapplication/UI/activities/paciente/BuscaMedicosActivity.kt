@@ -54,7 +54,7 @@ class BuscaMedicosActivity : BaseActivity() {
 
         observeViewModel()
         viewModel.carregarMedicos(1,20)
-        configurarBottomNav(R.id.nav_medicos)
+        setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
     private fun observeViewModel() {
@@ -71,17 +71,4 @@ class BuscaMedicosActivity : BaseActivity() {
         }
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavMedicos)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home      -> { startActivity(Intent(this, HomePacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_medicos   -> true
-                R.id.nav_perfil    -> { startActivity(Intent(this, PerfilPacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                else -> false
-            }
-        }
-    }
 }

@@ -74,7 +74,7 @@ class MinhasConsultasActivity : BaseActivity() {
         observeViewModel()
         if (idPaciente != -1L) viewModel.carregarConsultas(idPaciente)
 
-        configurarBottomNav(R.id.nav_consultas)
+        setupBottomNavigation(R.id.nav_consultas_paciente)
     }
 
     private fun observeViewModel() {
@@ -108,19 +108,5 @@ class MinhasConsultasActivity : BaseActivity() {
         val dias = mutableListOf<String>()
         repeat(primeiroDiaSemana) { dias.add("") }
         for (d in 1..totalDias) dias.add(d.toString())
-    }
-
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavConsultas)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home      -> { startActivity(Intent(this, HomePacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_consultas -> true
-                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_perfil    -> { startActivity(Intent(this, PerfilPacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                else -> false
-            }
-        }
     }
 }

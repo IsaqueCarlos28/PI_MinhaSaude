@@ -41,6 +41,7 @@ class HomeMedicoActivity : BaseActivity() {
             return
         }
 
+        setupBottomNavigation(R.id.nav_inicio_medico)
         setupViewModel()
         setupRecyclerView()
         observeViewModel()
@@ -94,43 +95,5 @@ class HomeMedicoActivity : BaseActivity() {
 //            if (isLoading) View.VISIBLE else View.GONE
 //        findViewById<RecyclerView>(R.id.rv_consultas_medico).visibility =
 //            if (isLoading) View.GONE else View.VISIBLE
-    }
-
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavMedico)
-        bottomNav.selectedItemId = itemSelecionado
-        val idMedico = intent.getLongExtra("ID_MEDICO", -1L)
-        val nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
-
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_inicio -> true
-                R.id.nav_agenda -> {
-                    startActivity(Intent(this, AgendaMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    })
-                    false
-                }
-                R.id.nav_consultas_med -> {
-                    startActivity(Intent(this, ConsultasMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    })
-                    false
-                }
-                R.id.nav_usuario -> {
-                    startActivity(Intent(this, PerfilMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    })
-                    false
-                }
-                R.id.nav_config -> {
-                    startActivity(Intent(this, ConfiguracoesMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    })
-                    false
-                }
-                else -> false
-            }
-        }
     }
 }

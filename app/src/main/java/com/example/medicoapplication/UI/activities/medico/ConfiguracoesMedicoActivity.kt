@@ -56,38 +56,7 @@ class ConfiguracoesMedicoActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        configurarBottomNav(R.id.nav_config, idMedico, nomeMedico)
+        setupBottomNavigation(R.id.nav_config_medico)
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int, idMedico: Long, nomeMedico: String) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavConfigMedico)
-        bottomNav.selectedItemId = itemSelecionado
-
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_inicio -> {
-                    startActivity(Intent(this, HomeMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_agenda -> {
-                    startActivity(Intent(this, AgendaMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_consultas_med -> {
-                    startActivity(Intent(this, ConsultasMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_usuario -> {
-                    startActivity(Intent(this, PerfilMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_config -> true
-                else -> false
-            }
-        }
-    }
 }

@@ -50,7 +50,7 @@ class PerfilPacienteActivity : BaseActivity() {
             )
         }
 
-        configurarBottomNav(R.id.nav_perfil)
+        setupBottomNavigation(R.id.nav_perfil_paciente)
     }
 
     private fun observeViewModel() {
@@ -71,20 +71,6 @@ class PerfilPacienteActivity : BaseActivity() {
                         findViewById<TextView>(R.id.tvNascimentoPerfil).text = p.dataNascimento ?: "—"
                     }
                 }
-            }
-        }
-    }
-
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavPerfil)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home      -> { startActivity(Intent(this, HomePacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java)); false }
-                R.id.nav_perfil    -> true
-                else -> false
             }
         }
     }

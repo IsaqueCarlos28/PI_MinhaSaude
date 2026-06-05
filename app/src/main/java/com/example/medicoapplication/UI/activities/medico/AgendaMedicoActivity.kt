@@ -46,7 +46,7 @@ class AgendaMedicoActivity : BaseActivity() {
         // TODO: carregar via GET medicos/{idMedico}/consultas-agendadas e filtrar pelo dia selecionado
 
         atualizarCalendario()
-        configurarBottomNav(R.id.nav_agenda, idMedico, nomeMedico)
+        setupBottomNavigation(R.id.nav_agenda_medico)
     }
 
     private fun atualizarCalendario() {

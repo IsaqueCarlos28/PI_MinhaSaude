@@ -79,7 +79,7 @@ class PesquisaMedicosActivity : BaseActivity() {
 
         observeViewModel()
         viewModel.carregarMedicos(1,20)
-        configurarBottomNav(R.id.nav_medicos)
+        setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
     private fun observeViewModel() {
@@ -111,17 +111,4 @@ class PesquisaMedicosActivity : BaseActivity() {
         btnInativo.setTextColor(Color.parseColor("#64748B"))
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavPesquisa)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home     -> { startActivity(Intent(this, HomePacienteActivity::class.java)); false }
-                R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java)); false }
-                R.id.nav_medicos  -> true
-                R.id.nav_perfil   -> { startActivity(Intent(this, PerfilPacienteActivity::class.java)); false }
-                else -> false
-            }
-        }
-    }
 }
