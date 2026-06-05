@@ -2,8 +2,7 @@ package com.example.medicoapplication.data.repository
 import com.example.medicoapplication.data.remote.DTO.local.*
 import com.example.medicoapplication.data.remote.RetrofitClient
 
-class LocalRepository {
-    private val api = RetrofitClient.api
+class LocalRepository : BaseRepository(){
     suspend fun getLocais(
         page: Int = 0,
         size: Int = 20,

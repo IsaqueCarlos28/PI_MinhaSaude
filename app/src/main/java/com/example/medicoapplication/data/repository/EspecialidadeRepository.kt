@@ -6,8 +6,8 @@ import com.example.medicoapplication.data.remote.DTO.especialidades.Especialidad
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeUpdateRequestDto
 import com.example.medicoapplication.data.remote.RetrofitClient
 
-class EspecialidadeRepository {
-    private val api = RetrofitClient.api
+class EspecialidadeRepository : BaseRepository(){
+
     suspend fun getEspecialidades(
         page: Int = 0,
         size: Int = 20,

@@ -13,9 +13,8 @@ import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequ
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
 
 
-class AuthRepository {
+class AuthRepository: BaseRepository() {
 
-    private val api = RetrofitClient.api
 
     suspend fun login(email: String, senha: String): Result<LoginResponseDto> =
         safeApiCall { api.login(LoginRequestDto(email, senha)) }

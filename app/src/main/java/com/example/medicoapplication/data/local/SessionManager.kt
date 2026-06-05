@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 
 class SessionManager(private val context: Context) {
 
@@ -44,6 +45,18 @@ class SessionManager(private val context: Context) {
     // (6) limpa ao fazer logout
     suspend fun limparSessao() {
         context.dataStore.edit { it.clear() }
+    }
+
+    suspend fun getSessaoAtual(): SessaoUsuario? {
+        return sessaoAtual.first()
+    }
+
+    suspend fun getUserId(): Long? {
+        return sessaoAtual.first()?.id
+    }
+
+    suspend fun getUserRole(): String? {
+        return sessaoAtual.first()?.role
     }
 }
 

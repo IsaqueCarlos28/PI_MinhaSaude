@@ -7,31 +7,31 @@ import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
 
-class PacienteRepository {
+class PacienteRepository : BaseRepository() {
 
-    private val api = RetrofitClient.api
-
-    suspend fun getPaciente(
-        idPaciente: Long
-    ): Result<PacienteResponseDto> =
-        safeApiCall { api.getPacienteById(idPaciente) }
+    suspend fun getPaciente(): Result<PacienteResponseDto> {
+        val idPaciente = requireUserId()
+        return safeApiCall { api.getPacienteById(idPaciente) }
+    }
 
     suspend fun updatePaciente(
-        idPaciente: Long,
         dto : PacienteEditRequestDto
-    ) : Result<PacienteResponseDto> =
-    safeApiCall { api.updatePaciente(idPaciente, dto)}
-    suspend fun getConsultas(
-        idPaciente: Long
-    ): Result<List<ConsultaResponseDto>> =
-        safeApiCall { api.getConsultasByPaciente(idPaciente) }
+    ) : Result<PacienteResponseDto> {
+        val idPaciente = requireUserId()
+        return safeApiCall { api.updatePaciente(idPaciente, dto)}
+    }
+    suspend fun getConsultas(): Result<List<ConsultaResponseDto>> {
+        val idPaciente = requireUserId()
+        return safeApiCall { api.getConsultasByPaciente(idPaciente) }
+    }
 
     suspend fun cancelarConsulta(
-        idPaciente: Long,
         idEvento: Long,
         status: ConsultaStatusRequestDto
-    ): Result<ConsultaResponseDto> =
-        safeApiCall { api.atualizarStatusPeloPaciente(idPaciente, idEvento, status) }
+    ): Result<ConsultaResponseDto> {
+        val idPaciente = requireUserId()
+        return safeApiCall { api.atualizarStatusPeloPaciente(idPaciente, idEvento, status) }
+    }
 
     suspend fun getMedico(
         idMedico: Long

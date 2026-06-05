@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".data.local.UsuarioApplication"
         android:theme="@style/Theme.MedicoApplication"
         tools:targetApi="31">
         <activity
@@ -101,9 +102,6 @@
             android:exported="false" />
         <activity
             android:name=".UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UI.activities.paciente.AlterarSenhaPacienteActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.paciente.configuracao.ConfigNotificacoesActivity"

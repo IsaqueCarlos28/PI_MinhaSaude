@@ -72,7 +72,7 @@ abstract class BaseActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
 
             when (item.itemId) {
-                R.id.nav_home -> {
+                R.id.nav_inicio_paciente -> {
                     if (this !is HomePacienteActivity) {
                         startActivity(
                             Intent(this, HomePacienteActivity::class.java)
@@ -80,7 +80,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.nav_consultas -> {
+                R.id.nav_consultas_paciente -> {
                     if (this !is MinhasConsultasActivity) {
                         startActivity(
                             Intent(this, MinhasConsultasActivity::class.java)
@@ -88,7 +88,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.nav_medicos -> {
+                R.id.nav_medicos_paciente -> {
                     if (this !is BuscaMedicosActivity) {
                         startActivity(
                             Intent(this, BuscaMedicosActivity::class.java)
@@ -96,7 +96,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.nav_perfil -> {
+                R.id.nav_perfil_paciente -> {
                     if (this !is PerfilPacienteActivity) {
                         startActivity(
                             Intent(this, PerfilPacienteActivity::class.java)
@@ -117,7 +117,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
             when (item.itemId) {
 
-                R.id.nav_inicio -> {
+                R.id.nav_inicio_medico -> {
                     if (this !is HomeMedicoActivity) {
                         startActivity(
                             Intent(this, HomeMedicoActivity::class.java)
@@ -126,7 +126,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_agenda -> {
+                R.id.nav_agenda_medico -> {
                     if (this !is AgendaMedicoActivity) {
                         startActivity(
                             Intent(this, AgendaMedicoActivity::class.java)
@@ -135,7 +135,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_consultas_med -> {
+                R.id.nav_consultas_medico -> {
                     if (this !is ConsultasMedicoActivity) {
                         startActivity(
                             Intent(this, ConsultasMedicoActivity::class.java)
@@ -144,7 +144,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_usuario -> {
+                R.id.nav_perfil_medico -> {
                     if (this !is PerfilMedicoActivity) {
                         startActivity(
                             Intent(this, PerfilMedicoActivity::class.java)
@@ -152,7 +152,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.nav_config -> {
+                R.id.nav_config_medico -> {
                     if (this !is ConfiguracoesMedicoActivity) {
                         startActivity(
                             Intent(this, ConfiguracoesMedicoActivity::class.java)

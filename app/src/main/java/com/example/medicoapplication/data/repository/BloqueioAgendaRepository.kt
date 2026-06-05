@@ -1,15 +1,15 @@
 package com.example.medicoapplication.data.repository
 import com.example.medicoapplication.data.remote.DTO.bloqueioagenda.*
 import com.example.medicoapplication.data.remote.RetrofitClient
-class BloqueioAgendaRepository {
-    private val api = RetrofitClient.api
+class BloqueioAgendaRepository : BaseRepository(){
+
     suspend fun getBloqueios(
-        idMedico: Long
-    ): Result<List<BloqueioAgendaResponseDto>> =
-        safeApiCall { api.getBloqueiosAgenda(idMedico) }
+    ): Result<List<BloqueioAgendaResponseDto>> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.getBloqueiosAgenda(idMedico) }
+    }
 
     suspend fun createBloqueio(
-        idMedico: Long,
         dto: BloqueioAgendaCreateRequestDto
     ): Result<BloqueioAgendaResponseDto> =
         safeApiCall { api.createBloqueioAgenda(idMedico, dto) }

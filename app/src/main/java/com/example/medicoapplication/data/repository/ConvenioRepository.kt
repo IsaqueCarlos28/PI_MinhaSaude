@@ -1,8 +1,7 @@
 package com.example.medicoapplication.data.repository
 import com.example.medicoapplication.data.remote.DTO.convenio.*
 import com.example.medicoapplication.data.remote.RetrofitClient
-class ConvenioRepository {
-    private val api = RetrofitClient.api
+class ConvenioRepository : BaseRepository(){
     suspend fun getConvenios(
         page: Int = 0,
         size: Int = 20,
