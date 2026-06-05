@@ -50,12 +50,10 @@
             android:textSize="15sp"
             android:visibility="gone"/>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavConsultasOfertadas"
+        <include
+            layout="@layout/view_bottom_nav_medico"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:menu="@menu/bottom_nav_medico"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

@@ -1,0 +1,11 @@
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomNavPaciente"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#FFFFFF"
+    app:menu="@menu/bottom_nav_paciente"
+    app:itemIconTint="@color/selector_bottom_nav"
+    app:itemTextColor="@color/selector_bottom_nav"
+    app:labelVisibilityMode="labeled"/>

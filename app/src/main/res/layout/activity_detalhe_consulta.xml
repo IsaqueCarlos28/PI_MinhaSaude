@@ -187,14 +187,9 @@
     </androidx.core.widget.NestedScrollView>
 
     <!-- BOTTOM NAVIGATION -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavDetalhe"
+    <include
+        layout="@layout/view_bottom_nav_paciente"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#FFFFFF"
-        app:menu="@menu/bottom_nav_paciente"
-        app:itemIconTint="@color/selector_bottom_nav"
-        app:itemTextColor="@color/selector_bottom_nav"
-        app:labelVisibilityMode="labeled" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

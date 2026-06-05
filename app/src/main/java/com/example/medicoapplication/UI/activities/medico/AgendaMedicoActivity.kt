@@ -137,35 +137,5 @@ class AgendaMedicoActivity : BaseActivity() {
         findViewById<TextView>(R.id.tvDataSelecionada).text = "$diaSemana Feira, $dia de ${meses[mes]}"
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int, idMedico: Long, nomeMedico: String) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavAgenda)
-        bottomNav.selectedItemId = itemSelecionado
 
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_inicio -> {
-                    startActivity(Intent(this, HomeMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_agenda -> true
-                R.id.nav_consultas_med -> {
-                    startActivity(Intent(this, ConsultasMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_usuario -> {
-                    startActivity(Intent(this, PerfilMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                R.id.nav_config -> {
-                    startActivity(Intent(this, ConfiguracoesMedicoActivity::class.java).apply {
-                        putExtra("NOME_MEDICO", nomeMedico); putExtra("ID_MEDICO", idMedico)
-                    }); false
-                }
-                else -> false
-            }
-        }
-    }
 }

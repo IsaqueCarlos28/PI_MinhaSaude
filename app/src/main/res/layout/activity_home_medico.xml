@@ -260,15 +260,10 @@
     </androidx.core.widget.NestedScrollView>
 
     <!-- BOTTOM NAVIGATION -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavMedico"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+    <include
         android:layout_gravity="bottom"
-        android:background="#FFFFFF"
-        app:menu="@menu/bottom_nav_medico"
-        app:itemIconTint="@color/selector_bottom_nav"
-        app:itemTextColor="@color/selector_bottom_nav"
-        app:labelVisibilityMode="labeled" />
+        layout="@layout/view_bottom_nav_medico"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
