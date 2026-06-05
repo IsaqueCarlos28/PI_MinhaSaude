@@ -1,18 +1,13 @@
-package com.example.medicoapplication.UI.activities.medico
+package com.example.medicoapplication.UI.activities.medico.perfil
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.activities.medico.viewmodel.PerfilMedicoViewModel
-import com.example.medicoapplication.data.remote.NetworkError
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.viewmodel.medico.perfil.PerfilMedicoViewModel
 import kotlinx.coroutines.launch
 
 class PerfilMedicoActivity : BaseActivity() {
@@ -38,7 +33,7 @@ class PerfilMedicoActivity : BaseActivity() {
 
         observeViewModel()
 
-        if (idMedico != -1L) viewModel.carregarPerfil(idMedico)
+        if (idMedico != -1L) viewModel.carregarPerfil()
 
         setupBottomNavigation(R.id.nav_perfil_medico)
     }

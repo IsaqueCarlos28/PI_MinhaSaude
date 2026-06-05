@@ -3,6 +3,8 @@ import com.example.medicoapplication.data.remote.DTO.consultaofertada.*
 import com.example.medicoapplication.data.remote.RetrofitClient
 
 class ConsultaOfertadaRepository : BaseRepository() {
+
+    //PACIENTE
     suspend fun getConsultasOfertadas(
         idMedico: Long
     ): Result<List<ConsultaOfertadaResponseDto>> =
@@ -14,24 +16,41 @@ class ConsultaOfertadaRepository : BaseRepository() {
     ): Result<ConsultaOfertadaResponseDto> =
         safeApiCall { api.getConsultaOfertadaById(idMedico, id) }
 
+    //MEDICO
+    suspend fun getMinhaConsultasOfertadas(
+    ): Result<List<ConsultaOfertadaResponseDto>> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.getConsultasOfertadas(idMedico) }
+    }
+
+    suspend fun getMinhasConsultaOfertada(
+        id: Long
+    ): Result<ConsultaOfertadaResponseDto> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.getConsultaOfertadaById(idMedico, id) }
+    }
+
     suspend fun createConsultaOfertada(
-        idMedico: Long,
         dto: ConsultaOfertadaCreateRequestDto
-    ): Result<ConsultaOfertadaResponseDto> =
-        safeApiCall { api.createConsultaOfertada(idMedico, dto) }
+    ): Result<ConsultaOfertadaResponseDto> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.createConsultaOfertada(idMedico, dto) }
+    }
 
     suspend fun updateConsultaOfertada(
-        idMedico: Long,
         id: Long,
         dto: ConsultaOfertadaUpdateRequestDto
-    ): Result<ConsultaOfertadaResponseDto> =
-        safeApiCall { api.updateConsultaOfertada(idMedico, id, dto) }
+    ): Result<ConsultaOfertadaResponseDto>{
+        val idMedico = requireUserId()
+        return safeApiCall { api.updateConsultaOfertada(idMedico, id, dto) }
+    }
 
     suspend fun deleteConsultaOfertada(
-        idMedico: Long,
         id: Long
-    ): Result<Unit> =
-        safeApiCall { api.deleteConsultaOfertada(idMedico, id) }
+    ): Result<Unit> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.deleteConsultaOfertada(idMedico, id) }
+    }
 
 }
 

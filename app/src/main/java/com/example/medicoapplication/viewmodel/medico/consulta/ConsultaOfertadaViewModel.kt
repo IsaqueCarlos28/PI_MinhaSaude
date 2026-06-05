@@ -47,16 +47,16 @@ class ConsultaOfertadaViewModel(
     private val _convenios = MutableStateFlow<List<ConvenioResponseDto>>(emptyList())
     val convenios: StateFlow<List<ConvenioResponseDto>> = _convenios.asStateFlow()
 
-    fun carregarConsultas(idMedico: Long) {
+    fun carregarConsultasOfertadas() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            repository.getConsultasOfertadas(idMedico)
+            repository.getMinhaConsultasOfertadas()
                 .onSuccess { _consultas.value = it; _uiState.value = UiState.Idle }
                 .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar consultas") }
         }
     }
 
-    fun carregarDadosFormulario(idMedico: Long) {
+    fun carregarDadosFormulario() {
         viewModelScope.launch {
             especialidadeRepo.getEspecialidades()
                 .onSuccess { page ->
@@ -74,7 +74,6 @@ class ConsultaOfertadaViewModel(
     }
 
     fun criarConsultaOfertada(
-        idMedico: Long,
         idEspecialidade: Long,
         idLocal: Long?,
         tipoConsulta: TipoConsulta,
@@ -94,17 +93,17 @@ class ConsultaOfertadaViewModel(
                 duracaoMinutos = duracaoMinutos,
                 conveniosAceitosIds = conveniosIds
             )
-            repository.createConsultaOfertada(idMedico, dto)
+            repository.createConsultaOfertada(dto)
                 .onSuccess { _uiState.value = UiState.Success }
                 .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao criar consulta") }
         }
     }
 
-    fun deletarConsultaOfertada(idMedico: Long, idConsulta: Long) {
+    fun deletarConsultaOfertada(idConsulta: Long) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            repository.deleteConsultaOfertada(idMedico, idConsulta)
-                .onSuccess { carregarConsultas(idMedico) }
+            repository.deleteConsultaOfertada(idConsulta)
+                .onSuccess { carregarConsultasOfertadas() }
                 .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao deletar") }
         }
     }

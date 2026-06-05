@@ -1,16 +1,15 @@
 package com.example.medicoapplication.UI.activities
 
 import android.content.Intent
-import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
-import com.example.medicoapplication.UI.activities.medico.AgendaMedicoActivity
+import com.example.medicoapplication.UI.activities.medico.agenda.AgendaMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.ConfiguracoesMedicoActivity
-import com.example.medicoapplication.UI.activities.medico.ConsultasMedicoActivity
+import com.example.medicoapplication.UI.activities.medico.consultas.ConsultasMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
-import com.example.medicoapplication.UI.activities.medico.PerfilMedicoActivity
+import com.example.medicoapplication.UI.activities.medico.perfil.PerfilMedicoActivity
 import com.example.medicoapplication.UI.activities.paciente.BuscaMedicosActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
 import com.example.medicoapplication.UI.activities.paciente.MinhasConsultasActivity

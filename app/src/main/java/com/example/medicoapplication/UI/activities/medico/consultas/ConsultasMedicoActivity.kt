@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.medico
+package com.example.medicoapplication.UI.activities.medico.consultas
 
 import ConsultasMedicoAdapter
 import android.content.Intent
@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
-import com.example.medicoapplication.data.remote.NetworkError
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 class ConsultasMedicoActivity : BaseActivity() {
@@ -52,16 +50,17 @@ class ConsultasMedicoActivity : BaseActivity() {
             ativo.backgroundTintList = ColorStateList.valueOf(0xFF3B82F6.toInt())
         }
 
-        btnTodas.setOnClickListener      { destacar(btnTodas);      viewModel.carregarConsultas(idMedico, null) }
-        btnAgendadas.setOnClickListener  { destacar(btnAgendadas);  viewModel.carregarConsultas(idMedico, "AGENDADA") }
-        btnRealizadas.setOnClickListener { destacar(btnRealizadas); viewModel.carregarConsultas(idMedico, "REALIZADA") }
-        btnCanceladas.setOnClickListener { destacar(btnCanceladas); viewModel.carregarConsultas(idMedico, "CANCELADA") }
+        //Arrumar filtro depois
+//        btnTodas.setOnClickListener      { destacar(btnTodas);      viewModel.carregarConsultas( null) }
+//        btnAgendadas.setOnClickListener  { destacar(btnAgendadas);  viewModel.carregarConsultas( "AGENDADA") }
+//        btnRealizadas.setOnClickListener { destacar(btnRealizadas); viewModel.carregarConsultas( "REALIZADA") }
+//        btnCanceladas.setOnClickListener { destacar(btnCanceladas); viewModel.carregarConsultas( "CANCELADA") }
 
         observeViewModel()
 
         if (idMedico != -1L) {
             destacar(btnTodas)
-            viewModel.carregarConsultas(idMedico, null)
+            viewModel.carregarConsultas()
         }
 
         setupBottomNavigation(R.id.nav_consultas_medico)
@@ -86,7 +85,9 @@ class ConsultasMedicoActivity : BaseActivity() {
 
 
     fun irParaTelaConsulta(){
-        val intent = Intent(this@ConsultasMedicoActivity, VisualisarConsultaMedico::class.java)
+        val intent = Intent(
+            this@ConsultasMedicoActivity,
+            VisualisarConsultaMedico::class.java)
         startActivity(intent)
     }
 }

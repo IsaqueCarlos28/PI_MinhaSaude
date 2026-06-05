@@ -1,6 +1,5 @@
-package com.example.medicoapplication.UI.activities.medico
+package com.example.medicoapplication.UI.activities.medico.agenda
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
@@ -8,12 +7,10 @@ import android.view.Gravity
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Calendar
 
 class AgendaMedicoActivity : BaseActivity() {

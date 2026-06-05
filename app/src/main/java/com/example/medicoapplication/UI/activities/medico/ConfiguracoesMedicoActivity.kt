@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.ResetPasswordActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.UI.activities.medico.consulta_ofertada.ConsultasOfertadasActivity
+import com.example.medicoapplication.UI.activities.medico.perfil.PerfilMedicoActivity
 
 class ConfiguracoesMedicoActivity : BaseActivity() {
 

@@ -11,10 +11,10 @@ class AgendaRepository: BaseRepository(){
     }
 
     suspend fun getAgendaById(
+        idMedico: Long,
         idConsulta: Long,
         idAgenda: Long
     ): Result<AgendaResponseDto> {
-        val idMedico = requireUserId()
         return safeApiCall { api.getAgendaById(idMedico, idConsulta, idAgenda) }
     }
 
@@ -44,7 +44,6 @@ class AgendaRepository: BaseRepository(){
     }
 
     suspend fun deleteAgenda(
-        idMedico: Long,
         idConsulta: Long,
         idAgenda: Long
     ): Result<Unit> {

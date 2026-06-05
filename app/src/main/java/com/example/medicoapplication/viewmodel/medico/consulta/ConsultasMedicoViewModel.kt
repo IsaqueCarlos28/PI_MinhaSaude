@@ -26,10 +26,10 @@ class ConsultasMedicoViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun carregarConsultas(idMedico: Long, filtroStatus: String? = null) {
+    fun carregarConsultas() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            repository.getConsultas(idMedico)
+            repository.getConsultas()
             .onSuccess {
                 _uiState.value = UiState.Success(it)
             }

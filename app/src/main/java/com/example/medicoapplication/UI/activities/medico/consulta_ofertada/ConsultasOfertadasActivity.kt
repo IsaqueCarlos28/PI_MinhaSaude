@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.medico
+package com.example.medicoapplication.UI.activities.medico.consulta_ofertada
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,6 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.ConsultaOfertadaAdapter
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultaOfertadaViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
@@ -41,7 +40,7 @@ class ConsultasOfertadasActivity : BaseActivity() {
                 .setTitle("Excluir consulta?")
                 .setMessage("Deseja remover a consulta de ${consulta.especialidade?.nome ?: "especialidade"}?")
                 .setPositiveButton("Excluir") { _, _ ->
-                    viewModel.deletarConsultaOfertada(idMedico, consulta.id)
+                    viewModel.deletarConsultaOfertada(consulta.id)
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
@@ -74,11 +73,11 @@ class ConsultasOfertadasActivity : BaseActivity() {
         }
 
         setupBottomNavigation(R.id.nav_consultas_medico)
-        viewModel.carregarConsultas(idMedico)
+        viewModel.carregarConsultasOfertadas()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.carregarConsultas(idMedico)
+        viewModel.carregarConsultasOfertadas()
     }
 }

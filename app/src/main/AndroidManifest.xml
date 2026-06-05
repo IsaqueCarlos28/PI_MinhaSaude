@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MedicoApplication"
         tools:targetApi="31">
         <activity
-            android:name=".UI.activities.medico.VisualisarConsultaMedico"
+            android:name=".UI.activities.medico.consultas.VisualisarConsultaMedico"
             android:exported="false" />
         <!-- ENTRY POINT -->
         <activity
@@ -71,22 +71,22 @@
             android:name=".UI.activities.medico.HomeMedicoActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.medico.AgendaMedicoActivity"
+            android:name=".UI.activities.medico.agenda.AgendaMedicoActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.medico.ConsultasMedicoActivity"
+            android:name=".UI.activities.medico.consultas.ConsultasMedicoActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.medico.PerfilMedicoActivity"
+            android:name=".UI.activities.medico.perfil.PerfilMedicoActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.medico.ConfiguracoesMedicoActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.medico.ConsultasOfertadasActivity"
+            android:name=".UI.activities.medico.consulta_ofertada.ConsultasOfertadasActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.medico.CriarConsultaOfertadaActivity"
+            android:name=".UI.activities.medico.consulta_ofertada.CriarConsultaOfertadaActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.paciente.ConfirmacaoConsultaActivity"

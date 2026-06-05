@@ -5,6 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.activities.medico.VisualisarConsultaMedico">
+    tools:context=".UI.activities.medico.consultas.VisualisarConsultaMedico">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

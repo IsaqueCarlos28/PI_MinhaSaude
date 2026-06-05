@@ -1,10 +1,14 @@
-package com.example.medicoapplication.UI.activities.medico
+package com.example.medicoapplication.UI.activities.medico.consulta_ofertada
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RadioGroup
+import android.widget.Spinner
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
@@ -137,7 +141,6 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
                     }
 
                     viewModel.criarConsultaOfertada(
-                        idMedico          = idMedico,
                         idEspecialidade   = idEspecialidade,
                         idLocal           = idLocal,
                         tipoConsulta      = tipo,
@@ -150,6 +153,6 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
             }
         }
 
-        viewModel.carregarDadosFormulario(idMedico)
+        viewModel.carregarDadosFormulario()
     }
 }
