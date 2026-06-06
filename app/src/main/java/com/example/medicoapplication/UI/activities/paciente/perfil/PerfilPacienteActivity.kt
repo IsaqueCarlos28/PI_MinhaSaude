@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.configuracao.ConfiguracoesPacienteActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.paciente.perfil.PerfilPacienteViewModel
 import kotlinx.coroutines.launch
 
@@ -17,6 +18,7 @@ class PerfilPacienteActivity : BaseActivity() {
 
     private val viewModel: PerfilPacienteViewModel by viewModels()
 
+    override val menuType = BottomMenuType.PACIENTE
     private var idPaciente: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {

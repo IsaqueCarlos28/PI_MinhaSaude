@@ -17,6 +17,7 @@ import com.example.medicoapplication.UI.common.mappers.ErrorMapper
 import com.example.medicoapplication.UI.common.validations.LoginValidator
 import com.example.medicoapplication.UI.common.validations.ValidationField
 import com.example.medicoapplication.UI.common.validations.ValidationResult
+import com.example.medicoapplication.data.local.AppDependencies
 import com.example.medicoapplication.viewmodel.auth.LoginViewModel
 import com.example.medicoapplication.data.local.SessionManager
 import com.example.medicoapplication.data.remote.DTO.auth.Role
@@ -28,7 +29,7 @@ import kotlinx.coroutines.launch
 class LoginActivity : BaseActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
-    private val sessionManager by lazy { SessionManager(this) }
+
     private var tipoUsuario = "Paciente"
     private lateinit var tabLayout: TabLayout
     private lateinit var inputEmail: EditText
@@ -41,7 +42,6 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        verificarSessao()
         bindViews()
         setupTabListener()
         setupClickListeners()
@@ -114,14 +114,10 @@ class LoginActivity : BaseActivity() {
                         when (usuario.role) {
                             Role.PACIENTE -> startActivity(
                                 Intent(this@LoginActivity, HomePacienteActivity::class.java).apply {
-                                    putExtra("ID_PACIENTE", usuario.id)
-                                    putExtra("EMAIL_PACIENTE", usuario.email)
                                 }
                             )
                             Role.MEDICO -> startActivity(
                                 Intent(this@LoginActivity, HomeMedicoActivity::class.java).apply {
-                                    putExtra("ID_MEDICO", usuario.id)
-                                    putExtra("NOME_MEDICO", usuario.email.substringBefore("@"))
                                 }
                             )
                         }
@@ -137,19 +133,6 @@ class LoginActivity : BaseActivity() {
         botaoLogin.text = if (carregando) "Entrando..." else "Login"
     }
 
-    fun verificarSessao() {
-        lifecycleScope.launch {
-            val sessao = sessionManager.sessaoAtual.firstOrNull()
-            if (sessao != null) {
-                val destino = when (sessao.role) {
-                    "PACIENTE" -> HomePacienteActivity::class.java
-                    "MEDICO"   -> HomeMedicoActivity::class.java
-                    else       -> LoginActivity::class.java
-                }
-            }
-            finish()
-        }
-    }
 
     override fun handleError(error: NetworkError) {
         val mensagem = when (error) {

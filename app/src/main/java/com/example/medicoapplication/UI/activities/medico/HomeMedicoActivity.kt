@@ -46,7 +46,7 @@ class HomeMedicoActivity : BaseActivity() {
         setupRecyclerView()
         observeViewModel()
 
-        viewModel.carregarConsultas(idMedico)                // (4)
+        viewModel.carregarConsultas()                // (4)
     }
 
     private fun setupViewModel() {

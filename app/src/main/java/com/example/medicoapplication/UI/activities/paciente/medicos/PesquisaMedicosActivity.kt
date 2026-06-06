@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.MedicoAdapter
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.paciente.medicos.BuscaMedicosViewModel
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,8 @@ class PesquisaMedicosActivity : BaseActivity() {
     private lateinit var rvResultados: RecyclerView
     private lateinit var adapter: MedicoAdapter
     private lateinit var progressBar: ProgressBar
+
+    override val menuType = BottomMenuType.PACIENTE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

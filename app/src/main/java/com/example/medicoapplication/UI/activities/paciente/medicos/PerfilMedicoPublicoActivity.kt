@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta.AgendarConsultaActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.data.repository.MedicoRepository
 import kotlinx.coroutines.launch
 
@@ -19,6 +20,8 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
     private var especialidadeMedico: String = "Clínico Geral"  // ✅ guarda especialidade
 
     private val repository = MedicoRepository()
+
+    override val menuType = BottomMenuType.PACIENTE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

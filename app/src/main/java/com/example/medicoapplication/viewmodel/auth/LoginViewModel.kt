@@ -2,6 +2,7 @@ package com.example.medicoapplication.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.data.local.AppDependencies.sessionManager
 import com.example.medicoapplication.data.local.SessionManager
 import com.example.medicoapplication.data.remote.DTO.auth.LoginResponseDto
 import com.example.medicoapplication.data.remote.NetworkError
@@ -12,8 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val repository: AuthRepository = AuthRepository(),
-    private val sessionManager: SessionManager
+    private val repository: AuthRepository = AuthRepository()
 ) : ViewModel() {
 
     sealed class UiState {
@@ -23,7 +23,7 @@ class LoginViewModel(
         data class Error(val error: NetworkError) : UiState()
     }
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState
 
     fun login(email: String, senha: String) {
@@ -31,7 +31,6 @@ class LoginViewModel(
             _uiState.value = UiState.Loading
             repository.login(email, senha)
                 .onSuccess {
-                    sessionManager.salvarSessao(it.id,it.email, it.role.toString())
                     _uiState.value = UiState.Success(it)
                 }
                 .onFailure {

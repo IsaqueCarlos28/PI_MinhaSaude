@@ -13,6 +13,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.medicos.PerfilMedicoPublicoActivity
 import com.example.medicoapplication.UI.adapters.MedicoAdapter
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.paciente.medicos.BuscaMedicosViewModel
 import kotlinx.coroutines.launch
 
@@ -21,13 +22,11 @@ class BuscaMedicosActivity : BaseActivity() {
     private val viewModel: BuscaMedicosViewModel by viewModels()
     private lateinit var adapter: MedicoAdapter
 
-    private var idPaciente: Long = -1L
+    override val menuType = BottomMenuType.PACIENTE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_busca_medicos)
-
-        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
 
         val etPesquisar = findViewById<EditText>(R.id.etPesquisarMedico)
         val rvMedicos   = findViewById<RecyclerView>(R.id.rvMedicos)
@@ -37,7 +36,6 @@ class BuscaMedicosActivity : BaseActivity() {
                 Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
                     putExtra("MEDICO_ID", medico.id)
                     putExtra("NOME_MEDICO", medico.usuario?.nome ?: "Médico")
-                    putExtra("ID_PACIENTE", idPaciente)
                 }
             )
         }
@@ -53,7 +51,7 @@ class BuscaMedicosActivity : BaseActivity() {
         })
 
         observeViewModel()
-        viewModel.carregarMedicos(1,20)
+        viewModel.carregarMedicos(0,20)
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 

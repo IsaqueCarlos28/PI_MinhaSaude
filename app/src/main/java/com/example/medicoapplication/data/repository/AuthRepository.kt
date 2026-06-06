@@ -16,8 +16,19 @@ import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDt
 class AuthRepository: BaseRepository() {
 
 
-    suspend fun login(email: String, senha: String): Result<LoginResponseDto> =
-        safeApiCall { api.login(LoginRequestDto(email, senha)) }
+    suspend fun login(
+        email: String,
+        senha: String
+    ): Result<LoginResponseDto> =
+        safeApiCall {
+            api.login(LoginRequestDto(email, senha))
+        }.onSuccess { usuario ->
+            sessionManager.salvarSessao(
+                usuario.id,
+                usuario.email,
+                usuario.role.toString()
+            )
+        }
 
     suspend fun cadastrarPaciente(dto: PacienteCreateRequestDto): Result<PacienteResponseDto> =
        safeApiCall { api.createPaciente(dto)}

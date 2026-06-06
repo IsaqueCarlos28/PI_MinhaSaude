@@ -7,12 +7,8 @@ import android.widget.LinearLayout
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
-import com.example.medicoapplication.UI.activities.paciente.AlterarSenhaPacienteActivity
-import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
 import com.example.medicoapplication.UI.activities.paciente.perfil.EditarPerfilPacienteActivity
-import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
-import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 
 /**
  * Tela de configurações do paciente.
@@ -22,6 +18,8 @@ class ConfiguracoesPacienteActivity : BaseActivity() {
 
     private var idPaciente: Long = -1L
 
+    override val menuType = BottomMenuType.PACIENTE
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracoes)
@@ -30,7 +28,7 @@ class ConfiguracoesPacienteActivity : BaseActivity() {
 
         configurarItens()
         configurarBotaoSair()
-        configurarBottomNav(R.id.nav_perfil)
+        setupBottomNavigation(R.id.nav_config_medico)
     }
 
     private fun configurarItens() {
@@ -44,13 +42,13 @@ class ConfiguracoesPacienteActivity : BaseActivity() {
         }
 
         // Segurança → tela de alterar senha
-        findViewById<LinearLayout>(R.id.itemSeguranca).setOnClickListener {
-            startActivity(
-                Intent(this, AlterarSenhaPacienteActivity::class.java).apply {
-                    putExtra("ID_PACIENTE", idPaciente)
-                }
-            )
-        }
+//        findViewById<LinearLayout>(R.id.itemSeguranca).setOnClickListener {
+//            startActivity(
+//                Intent(this, AlterarSenhaPacienteActivity::class.java).apply {
+//                    putExtra("ID_PACIENTE", idPaciente)
+//                }
+//            )
+//        }
 
         // Notificações
         findViewById<LinearLayout>(R.id.itemNotificacoes).setOnClickListener {
@@ -108,17 +106,4 @@ class ConfiguracoesPacienteActivity : BaseActivity() {
         }
     }
 
-    private fun configurarBottomNav(itemSelecionado: Int) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavConfig)
-        bottomNav.selectedItemId = itemSelecionado
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home      -> { startActivity(Intent(this, HomePacienteActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_consultas -> { startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_medicos   -> { startActivity(Intent(this, BuscaMedicosActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) }); false }
-                R.id.nav_perfil    -> true
-                else -> false
-            }
-        }
-    }
 }

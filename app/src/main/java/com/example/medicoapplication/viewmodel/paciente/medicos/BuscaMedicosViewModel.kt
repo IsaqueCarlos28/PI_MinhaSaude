@@ -33,9 +33,13 @@ class BuscaMedicosViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
-            repository.getMedicos(page,size)
+            repository.getMedicos(page, size)
                 .onSuccess {
-                    _uiState.value = UiState.Success(it._embedded.medicos)
+
+                    val medicos = it._embedded?.medicos ?: emptyList()
+
+                    listaCompleta = medicos
+                    _uiState.value = UiState.Success(medicos)
                 }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError())

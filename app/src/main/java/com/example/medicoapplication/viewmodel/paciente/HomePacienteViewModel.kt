@@ -17,6 +17,7 @@ class HomePacienteViewModel(
     sealed class NomeState {
         object Idle : NomeState()
         data class Success(val primeiroNome: String) : NomeState()
+        object Error : NomeState()
     }
 
     sealed class ConsultasState {
@@ -32,21 +33,19 @@ class HomePacienteViewModel(
     private val _consultasState = MutableStateFlow<ConsultasState>(ConsultasState.Idle)
     val consultasState: StateFlow<ConsultasState> = _consultasState
 
-    fun carregarNome(idPaciente: Long, emailFallback: String) {
+    fun carregarNome() {
         viewModelScope.launch {
             repository.getPaciente()
                 .onSuccess { paciente ->
-                    val nome = paciente.nome?.split(" ")?.firstOrNull()
-                        ?: emailFallback.substringBefore("@")
-                    _nomeState.value = NomeState.Success(nome)
+                    _nomeState.value = NomeState.Success(paciente.nome?.split(" ")?.firstOrNull()?:"")
                 }
                 .onFailure {
-                    _nomeState.value = NomeState.Success(emailFallback.substringBefore("@"))
+                    _nomeState.value = NomeState.Error
                 }
         }
     }
 
-    fun carregarConsultas(idPaciente: Long) {
+    fun carregarConsultas() {
         viewModelScope.launch {
             _consultasState.value = ConsultasState.Loading
             repository.getConsultas()

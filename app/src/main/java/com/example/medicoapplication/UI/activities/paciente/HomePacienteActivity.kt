@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,26 +17,24 @@ import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasCons
 import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
 import com.example.medicoapplication.activities.paciente.viewmodel.HomePacienteViewModel
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import kotlinx.coroutines.launch
 
 class HomePacienteActivity : BaseActivity() {
 
     private val viewModel: HomePacienteViewModel by viewModels()
 
-    private var idPaciente: Long = -1L
-    private var emailPaciente: String = ""
-
     private lateinit var tvSaudacao: TextView
     private lateinit var rvProximasConsultas: RecyclerView
     private lateinit var adaptadorConsultas: ConsultasPacienteAdapter
+
+    override val menuType = BottomMenuType.PACIENTE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_paciente)
 
-        idPaciente    = intent.getLongExtra("ID_PACIENTE", -1L)
-        emailPaciente = intent.getStringExtra("EMAIL_PACIENTE") ?: ""
+
 
         tvSaudacao          = findViewById(R.id.tvSaudacao)
         rvProximasConsultas = findViewById(R.id.rvProximasConsultas)
@@ -45,30 +42,19 @@ class HomePacienteActivity : BaseActivity() {
         configurarRecyclerView()
         configurarAtalhos()
         setupBottomNavigation(R.id.nav_inicio_paciente)
+
         observeViewModel()
 
-        if (idPaciente != -1L) {
-            viewModel.carregarNome(idPaciente, emailPaciente)
-            viewModel.carregarConsultas(idPaciente)
-        } else {
-            tvSaudacao.text = "Olá, ${emailPaciente.substringBefore("@")}"
-            showToast("Sessão inválida. Faça login novamente.")
-            startActivity(Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
-        }
+        viewModel.carregarNome()
+        viewModel.carregarConsultas()
     }
 
     private fun configurarRecyclerView() {
         adaptadorConsultas = ConsultasPacienteAdapter(
             consultas   = emptyList(),
-            //Reagendar e cancelar na tela da consulta
             onItemClick = { consulta ->
                 startActivity(
-                    Intent(this, DetalheConsultaActivity::class.java).apply {
-                        putExtra("ID_PACIENTE", idPaciente)
-                        putExtra("ID_EVENTO",   consulta.id)
-                    }
+                    Intent(this, DetalheConsultaActivity::class.java)
                 )
             }
         )
@@ -78,21 +64,23 @@ class HomePacienteActivity : BaseActivity() {
 
     private fun configurarAtalhos() {
         findViewById<LinearLayout>(R.id.btnAcaoConsultas).setOnClickListener {
-            startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) })
+            startActivity(Intent(this, MinhasConsultasActivity::class.java))
         }
         findViewById<LinearLayout>(R.id.btnAcaoMedicos).setOnClickListener {
-            startActivity(Intent(this, BuscaMedicosActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) })
+            startActivity(Intent(this, BuscaMedicosActivity::class.java))
         }
         findViewById<Button>(R.id.btnVerTodasConsultas).setOnClickListener {
-            startActivity(Intent(this, MinhasConsultasActivity::class.java).apply { putExtra("ID_PACIENTE", idPaciente) })
+            startActivity(Intent(this, MinhasConsultasActivity::class.java))
         }
     }
 
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewModel.nomeState.collect { state ->
-                if (state is HomePacienteViewModel.NomeState.Success) {
-                    tvSaudacao.text = "Olá, ${state.primeiroNome}"
+                when (state) {
+                    is HomePacienteViewModel.NomeState.Idle -> tvSaudacao.text = "Olá,..."
+                    is HomePacienteViewModel.NomeState.Success -> tvSaudacao.text = "Olá, ${state.primeiroNome}"
+                    is HomePacienteViewModel.NomeState.Error -> tvSaudacao.text = "Olá, Usuario Não encontrado"
                 }
             }
         }

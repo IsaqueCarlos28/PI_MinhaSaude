@@ -11,8 +11,10 @@ class BloqueioAgendaRepository : BaseRepository(){
 
     suspend fun createBloqueio(
         dto: BloqueioAgendaCreateRequestDto
-    ): Result<BloqueioAgendaResponseDto> =
-        safeApiCall { api.createBloqueioAgenda(idMedico, dto) }
+    ): Result<BloqueioAgendaResponseDto> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.createBloqueioAgenda(idMedico, dto) }
+    }
 
     suspend fun updateBloqueio(
         idMedico: Long,

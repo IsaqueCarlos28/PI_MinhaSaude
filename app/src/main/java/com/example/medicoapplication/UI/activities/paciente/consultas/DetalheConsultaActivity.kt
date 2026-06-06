@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.ReagendarConsultaActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.mappers.ConsultaMapper
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
 import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsultaViewModel

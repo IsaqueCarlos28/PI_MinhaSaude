@@ -13,6 +13,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.DetalheConsultaActivity
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.paciente.consulta.MinhasConsultasViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -29,6 +30,8 @@ class MinhasConsultasActivity : BaseActivity() {
 
     private var idPaciente: Long = -1L
     private lateinit var adapter: ConsultasPacienteAdapter
+
+    override val menuType = BottomMenuType.PACIENTE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

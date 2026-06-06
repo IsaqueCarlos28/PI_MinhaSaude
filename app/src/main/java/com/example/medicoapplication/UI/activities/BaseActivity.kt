@@ -69,7 +69,6 @@ abstract class BaseActivity : AppCompatActivity() {
         bottomNav: BottomNavigationView
     ) {
         bottomNav.setOnItemSelectedListener { item ->
-
             when (item.itemId) {
                 R.id.nav_inicio_paciente -> {
                     if (this !is HomePacienteActivity) {
