@@ -7,13 +7,22 @@ import android.view.Gravity
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
+import com.example.medicoapplication.viewmodel.medico.agenda.AgendaMedicoViewModel
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class AgendaMedicoActivity : BaseActivity() {
+
+    private val viewModel: AgendaMedicoViewModel by viewModels()
+
+    override val menuType = BottomMenuType.MEDICO
 
     private var calAtual = Calendar.getInstance()
     private var diaSelecionado = calAtual.get(Calendar.DAY_OF_MONTH)
@@ -21,11 +30,6 @@ class AgendaMedicoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agenda_medico)
-
-        val nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
-        val idMedico = intent.getLongExtra("ID_MEDICO", -1L)
-
-        findViewById<TextView>(R.id.tvSaudacaoAgenda).text = "Olá, $nomeMedico"
 
         // Navegação mês
         findViewById<ImageView>(R.id.btnMesAnterior).setOnClickListener {
@@ -40,10 +44,28 @@ class AgendaMedicoActivity : BaseActivity() {
         // RecyclerView consultas do dia
         val rv = findViewById<RecyclerView>(R.id.rvConsultasDia)
         rv.layoutManager = LinearLayoutManager(this)
-        // TODO: carregar via GET medicos/{idMedico}/consultas-agendadas e filtrar pelo dia selecionado
+
+        observeViewModel()
+        viewModel.carregarNome()
 
         atualizarCalendario()
         setupBottomNavigation(R.id.nav_agenda_medico)
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is AgendaMedicoViewModel.UiState.Idle    -> Unit
+                    is AgendaMedicoViewModel.UiState.Loading -> Unit
+                    is AgendaMedicoViewModel.UiState.NomeCarregado -> {
+                        val primeiroNome = state.nome.split(" ").firstOrNull() ?: state.nome
+                        findViewById<TextView>(R.id.tvSaudacaoAgenda).text = "Olá, $primeiroNome"
+                    }
+                    is AgendaMedicoViewModel.UiState.Error -> handleError(state.error)
+                }
+            }
+        }
     }
 
     private fun atualizarCalendario() {
@@ -57,25 +79,17 @@ class AgendaMedicoActivity : BaseActivity() {
         val grid = findViewById<GridLayout>(R.id.gridCalendario)
         grid.removeAllViews()
 
-        // Primeiro dia do mês
-        val primeiroDia = Calendar.getInstance().apply {
-            set(ano, mes, 1)
-        }
-        val diaDaSemanaInicio = primeiroDia.get(Calendar.DAY_OF_WEEK) - 1 // 0=Dom
-
-        // Total de dias no mês
+        val primeiroDia = Calendar.getInstance().apply { set(ano, mes, 1) }
+        val diaDaSemanaInicio = primeiroDia.get(Calendar.DAY_OF_WEEK) - 1
         val totalDias = primeiroDia.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         val hoje = Calendar.getInstance()
         val ehMesAtual = hoje.get(Calendar.MONTH) == mes && hoje.get(Calendar.YEAR) == ano
         val diaHoje = if (ehMesAtual) hoje.get(Calendar.DAY_OF_MONTH) else -1
 
-        // Células vazias antes do início
         for (i in 0 until diaDaSemanaInicio) {
             grid.addView(criarCelula("", false, false, false))
         }
-
-        // Dias do mês
         for (dia in 1..totalDias) {
             val isSelecionado = dia == diaSelecionado
             val isHoje = dia == diaHoje
@@ -133,6 +147,4 @@ class AgendaMedicoActivity : BaseActivity() {
         val diaSemana = diasSemana[cal.get(Calendar.DAY_OF_WEEK) - 1]
         findViewById<TextView>(R.id.tvDataSelecionada).text = "$diaSemana Feira, $dia de ${meses[mes]}"
     }
-
-
 }

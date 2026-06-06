@@ -9,7 +9,14 @@ import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import java.util.Objects
 
 class MedicoRepository : BaseRepository(){
+    //Medico
     suspend fun getMedico(): Result<MedicoResponseDto> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.getMedicoById(idMedico) }
+    }
+
+    //Paciente
+    suspend fun getMedicoById(idMedico: Long): Result<MedicoResponseDto> {
         val idMedico = requireUserId()
         return safeApiCall { api.getMedicoById(idMedico) }
     }

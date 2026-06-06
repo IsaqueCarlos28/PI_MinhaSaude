@@ -1,11 +1,12 @@
-package com.example.medicoapplication.activities.paciente.viewmodel
+package com.example.medicoapplication.viewmodel.paciente
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
-import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaStatusRequestDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.PacienteRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class HomePacienteViewModel(
         object Idle : ConsultasState()
         object Loading : ConsultasState()
         data class Success(val consultas: List<ConsultaResponseDto>) : ConsultasState()
-        data class Error(val message: String) : ConsultasState()
+        data class Error(val error: NetworkError) : ConsultasState()
     }
 
     private val _nomeState = MutableStateFlow<NomeState>(NomeState.Idle)
@@ -37,7 +38,7 @@ class HomePacienteViewModel(
         viewModelScope.launch {
             repository.getPaciente()
                 .onSuccess { paciente ->
-                    _nomeState.value = NomeState.Success(paciente.nome?.split(" ")?.firstOrNull()?:"")
+                    _nomeState.value = NomeState.Success(paciente.nome?.split(" ")?.firstOrNull() ?: "")
                 }
                 .onFailure {
                     _nomeState.value = NomeState.Error
@@ -55,8 +56,9 @@ class HomePacienteViewModel(
                         .sortedWith(compareBy({ it.data }, { it.horaInicio }))
                     _consultasState.value = ConsultasState.Success(proximas)
                 }
-                .onFailure { _consultasState.value = ConsultasState.Error(it.message ?: "Erro de conexão") }
+                .onFailure { throwable ->
+                    _consultasState.value = ConsultasState.Error(throwable.toNetworkError())
+                }
         }
     }
-
 }

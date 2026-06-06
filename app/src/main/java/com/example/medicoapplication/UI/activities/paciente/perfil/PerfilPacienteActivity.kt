@@ -19,34 +19,20 @@ class PerfilPacienteActivity : BaseActivity() {
     private val viewModel: PerfilPacienteViewModel by viewModels()
 
     override val menuType = BottomMenuType.PACIENTE
-    private var idPaciente: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_paciente)
 
-        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
-
         observeViewModel()
+        viewModel.carregarPerfil()
 
-        if (idPaciente != -1L) viewModel.carregarPerfil()
-
-        // ✅ Ícone de configurações no header
         findViewById<ImageButton>(R.id.btnConfiguracoes).setOnClickListener {
-            startActivity(
-                Intent(this, ConfiguracoesPacienteActivity::class.java).apply {
-                    putExtra("ID_PACIENTE", idPaciente)
-                }
-            )
+            startActivity(Intent(this, ConfiguracoesPacienteActivity::class.java))
         }
 
-        // ✅ Botão Editar Perfil
         findViewById<Button>(R.id.btnEditarPerfil).setOnClickListener {
-            startActivity(
-                Intent(this, EditarPerfilPacienteActivity::class.java).apply {
-                    putExtra("ID_PACIENTE", idPaciente)
-                }
-            )
+            startActivity(Intent(this, EditarPerfilPacienteActivity::class.java))
         }
 
         setupBottomNavigation(R.id.nav_perfil_paciente)

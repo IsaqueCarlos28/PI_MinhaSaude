@@ -10,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.UI.activities.paciente.consultas.ReagendarConsultaActivity
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.mappers.ConsultaMapper
 import com.example.medicoapplication.data.remote.DTO.StatusConsulta
@@ -20,29 +19,28 @@ import kotlinx.coroutines.launch
 /**
  * Exibe os detalhes completos de uma consulta do paciente.
  * Recebe via Intent:
- *   - ID_PACIENTE (Long)
- *   - ID_EVENTO   (Long)
+ *   - ID_EVENTO (Long)
  */
 class DetalheConsultaActivity : BaseActivity() {
 
     private val viewModel: DetalheConsultaViewModel by viewModels()
 
-    private var idPaciente: Long = -1L
-    private var idEvento:   Long = -1L
+    override val menuType = BottomMenuType.PACIENTE
+
+    private var idEvento: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalhe_consulta)
 
-        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
-        idEvento   = intent.getLongExtra("ID_EVENTO",   -1L)
+        idEvento = intent.getLongExtra("ID_EVENTO", -1L)
 
         findViewById<ImageButton>(R.id.btnVoltarDetalhe).setOnClickListener { finish() }
 
         observeViewModel()
 
-        if (idPaciente != -1L && idEvento != -1L) {
-            viewModel.carregarConsulta(idPaciente)
+        if (idEvento != -1L) {
+            viewModel.carregarConsulta(idEvento)
         } else {
             showToast("Consulta não encontrada.")
             finish()
@@ -59,7 +57,6 @@ class DetalheConsultaActivity : BaseActivity() {
                     is DetalheConsultaViewModel.UiState.Loading -> Unit
                     is DetalheConsultaViewModel.UiState.Error   -> handleError(state.error)
                     is DetalheConsultaViewModel.UiState.Success -> {
-                        // All display formatting is done by the mapper
                         val display = ConsultaMapper.toDisplay(state.consulta)
 
                         findViewById<TextView>(R.id.tvDetalheMedico).text   = display.nomeMedico
@@ -81,9 +78,7 @@ class DetalheConsultaActivity : BaseActivity() {
                                     this@DetalheConsultaActivity,
                                     ReagendarConsultaActivity::class.java
                                 ).apply {
-                                    putExtra("ID_PACIENTE", idPaciente)
                                     putExtra("ID_EVENTO",   idEvento)
-                                    putExtra("ID_MEDICO",   state.consulta.idMedico)
                                     putExtra("NOME_MEDICO", state.consulta.nomeMedico ?: "")
                                 }
                             )

@@ -11,8 +11,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.paciente.consulta.ReagendarConsultaViewModel
-import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaUpdateRequestDto
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -20,32 +20,34 @@ import java.util.Locale
 
 /**
  * Tela de reagendamento. Recebe via Intent:
- *   - ID_PACIENTE (Long)
  *   - ID_EVENTO   (Long)  — id da consulta a ser reagendada
- *   - ID_MEDICO   (Long)
- *   - NOME_MEDICO (String)
+ *   - NOME_MEDICO (String) — exibição enquanto carrega
  */
 class ReagendarConsultaActivity : BaseActivity() {
 
     private val viewModel: ReagendarConsultaViewModel by viewModels()
 
     private val calendar = Calendar.getInstance()
-    private val formatoData = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+    private val formatoData   = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
     private val formatoDataApi = SimpleDateFormat("yyyy-MM-dd", Locale("pt", "BR"))
 
     private var horarioSelecionado: String? = null
-    private var idPaciente: Long = -1L
-    private var idEvento: Long   = -1L
-    private var idMedico: Long   = -1L
+    private var idEvento: Long = -1L
+
+    override val menuType = BottomMenuType.PACIENTE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reagendar_consulta)
 
-        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
-        idEvento   = intent.getLongExtra("ID_EVENTO",   -1L)
-        idMedico   = intent.getLongExtra("ID_MEDICO",   -1L)
+        idEvento = intent.getLongExtra("ID_EVENTO", -1L)
         val nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
+
+        if (idEvento == -1L) {
+            showToast("Consulta não encontrada.")
+            finish()
+            return
+        }
 
         findViewById<TextView>(R.id.tvNomeMedicoReagendar).text = nomeMedico
         atualizarDataExibida()
@@ -80,6 +82,7 @@ class ReagendarConsultaActivity : BaseActivity() {
         findViewById<Button>(R.id.btnConfirmarReagendamento).setOnClickListener { confirmarReagendamento() }
 
         observeViewModel()
+        viewModel.carregarConsulta(idEvento)
         setupBottomNavigation(R.id.nav_consultas_paciente)
     }
 
@@ -101,18 +104,13 @@ class ReagendarConsultaActivity : BaseActivity() {
 
     private fun confirmarReagendamento() {
         if (horarioSelecionado == null) {
-            showToast( "Selecione um horário")
+            showToast("Selecione um horário")
             return
         }
-
         viewModel.reagendar(
-            idEvento,
-            dto = ConsultaUpdateRequestDto(
-                idMedico,
-                null,
-                formatoDataApi.format(calendar.time),
-                horarioSelecionado!!
-            )
+            idEvento   = idEvento,
+            data       = formatoDataApi.format(calendar.time),
+            horaInicio = horarioSelecionado!!
         )
     }
 
@@ -130,11 +128,7 @@ class ReagendarConsultaActivity : BaseActivity() {
                         setLoading(false)
                         showToast("Consulta reagendada com sucesso!")
                         startActivity(
-                            Intent(
-                                this@ReagendarConsultaActivity,
-                                MinhasConsultasActivity::class.java
-                            ).apply {
-                                putExtra("ID_PACIENTE", idPaciente)
+                            Intent(this@ReagendarConsultaActivity, MinhasConsultasActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                             }
                         )
@@ -150,5 +144,4 @@ class ReagendarConsultaActivity : BaseActivity() {
         btn.isEnabled = !carregando
         btn.text = if (carregando) "Reagendando..." else "Confirmar Reagendamento"
     }
-
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.ConsultaOfertadaAdapter
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultaOfertadaViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
@@ -19,15 +20,12 @@ import kotlinx.coroutines.launch
 class ConsultasOfertadasActivity : BaseActivity() {
 
     private val viewModel: ConsultaOfertadaViewModel by viewModels()
-    private var idMedico = -1L
-    private var nomeMedico = "Médico"
+
+    override val menuType = BottomMenuType.MEDICO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consultas_ofertadas)
-
-        idMedico = intent.getLongExtra("ID_MEDICO", -1L)
-        nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
 
         val rv = findViewById<RecyclerView>(R.id.rvConsultasOfertadas)
         val tvVazio = findViewById<TextView>(R.id.tvConsultasOfertadasVazio)
@@ -58,18 +56,14 @@ class ConsultasOfertadasActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
-                    is ConsultaOfertadaViewModel.UiState.Error ->
-                        showToast(state.message)
+                    is ConsultaOfertadaViewModel.UiState.Error -> handleError(state.error)
                     else -> {}
                 }
             }
         }
 
         fab.setOnClickListener {
-            startActivity(Intent(this, CriarConsultaOfertadaActivity::class.java).apply {
-                putExtra("ID_MEDICO", idMedico)
-                putExtra("NOME_MEDICO", nomeMedico)
-            })
+            startActivity(Intent(this, CriarConsultaOfertadaActivity::class.java))
         }
 
         setupBottomNavigation(R.id.nav_consultas_medico)

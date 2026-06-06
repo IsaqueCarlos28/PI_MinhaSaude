@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.mappers.GeneroMapper
 import com.example.medicoapplication.UI.common.mappers.PerfilMapper
 import com.example.medicoapplication.UI.common.validations.PerfilValidator
@@ -18,16 +19,11 @@ import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.viewmodel.paciente.perfil.EditarPerfilPacienteViewModel
 import kotlinx.coroutines.launch
 
-/**
- * Tela de edição do perfil do paciente.
- * Recebe via Intent:
- *   - ID_PACIENTE (Long)
- */
 class EditarPerfilPacienteActivity : BaseActivity() {
 
     private val viewModel: EditarPerfilPacienteViewModel by viewModels()
 
-    private var idPaciente: Long = -1L
+    override val menuType = BottomMenuType.PACIENTE
 
     private lateinit var etNome: EditText
     private lateinit var etEmail: EditText
@@ -40,14 +36,12 @@ class EditarPerfilPacienteActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_perfil_paciente)
 
-        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
-
         bindViews()
         configurarSpinnerGenero()
         configurarBotoes()
         observeViewModel()
 
-        if (idPaciente != -1L) viewModel.carregarPerfil()
+        viewModel.carregarPerfil()
         setupBottomNavigation(R.id.nav_perfil_paciente)
     }
 
@@ -98,7 +92,6 @@ class EditarPerfilPacienteActivity : BaseActivity() {
                     }
                     is EditarPerfilPacienteViewModel.UiState.Carregado -> {
                         setLoading(false)
-                        // Pre-fill the form using the mapper instead of inline logic
                         val prefill = PerfilMapper.apiToFormPrefill(state.paciente)
                         etNome.setText(prefill.nome)
                         etEmail.setText(prefill.email)
@@ -141,5 +134,4 @@ class EditarPerfilPacienteActivity : BaseActivity() {
             else                            -> showToast(error.message)
         }
     }
-
 }

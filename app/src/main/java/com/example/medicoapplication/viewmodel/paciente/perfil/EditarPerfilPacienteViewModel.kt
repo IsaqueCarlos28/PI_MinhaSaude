@@ -37,15 +37,15 @@ class EditarPerfilPacienteViewModel(
     }
 
     fun salvarPerfil(
-        dto : PacienteEditRequestDto
+        dto: PacienteEditRequestDto
     ) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            repository.updatePaciente( dto)
-            .onSuccess{_uiState.value = UiState.Carregado(it) }
-            .onFailure {throwable ->
-                _uiState.value = UiState.Error(throwable.toNetworkError(""))
-            }
+            repository.updatePaciente(dto)
+                .onSuccess { _uiState.value = UiState.Salvo }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+                }
         }
     }
 }

@@ -23,9 +23,7 @@ object ConsultaValidator {
             )
         }
 
-        // Ensure the selected date is not in the past
         val localDate = DateFormatter.uiToLocalDate(
-            // Convert back for DateValidator — if already API format, parse directly
             runCatching {
                 java.time.LocalDate.parse(dataApi).toString()
             }.getOrElse { dataApi }
@@ -49,18 +47,10 @@ object ConsultaValidator {
     }
 
     fun validarConfirmacao(
-        idPaciente: Long,
         idConsultaOfertada: Long,
         dataApi: String,
         horario: String
     ): ValidationResult<Unit> {
-
-        if (idPaciente == -1L) {
-            return ValidationResult.Error(
-                ValidationField.GENERIC,
-                "Sessão inválida. Faça login novamente."
-            )
-        }
 
         if (idConsultaOfertada == -1L) {
             return ValidationResult.Error(

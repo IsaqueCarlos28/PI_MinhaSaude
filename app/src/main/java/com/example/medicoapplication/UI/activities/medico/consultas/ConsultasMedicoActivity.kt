@@ -6,39 +6,34 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.launch
 
 class ConsultasMedicoActivity : BaseActivity() {
 
-    private lateinit var viewModel: ConsultasMedicoViewModel
+    private val viewModel: ConsultasMedicoViewModel by viewModels()
     private lateinit var adapter: ConsultasMedicoAdapter
 
-    private var idMedico: Long = -1L
-    private var nomeMedico: String = "Médico"
+    override val menuType = BottomMenuType.MEDICO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consultas_medico)
 
-        nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
-        idMedico   = intent.getLongExtra("ID_MEDICO", -1L)
-
-        findViewById<TextView>(R.id.tvSaudacaoConsultas).text = "Olá, $nomeMedico"
-
-        // Configurar RecyclerView
         val rv = findViewById<RecyclerView>(R.id.rvConsultasMedico)
         rv.layoutManager = LinearLayoutManager(this)
-        //Mandar para uma pagina separada da consulta
-        adapter = ConsultasMedicoAdapter(emptyList(),{irParaTelaConsulta()})
+
+        adapter = ConsultasMedicoAdapter(emptyList()) { irParaTelaConsulta() }
         rv.adapter = adapter
 
-        // Botões de filtro
         val btnTodas      = findViewById<Button>(R.id.btnFiltroTodas)
         val btnAgendadas  = findViewById<Button>(R.id.btnFiltroAgendadas)
         val btnRealizadas = findViewById<Button>(R.id.btnFiltroRealizadas)
@@ -50,18 +45,16 @@ class ConsultasMedicoActivity : BaseActivity() {
             ativo.backgroundTintList = ColorStateList.valueOf(0xFF3B82F6.toInt())
         }
 
-        //Arrumar filtro depois
-//        btnTodas.setOnClickListener      { destacar(btnTodas);      viewModel.carregarConsultas( null) }
-//        btnAgendadas.setOnClickListener  { destacar(btnAgendadas);  viewModel.carregarConsultas( "AGENDADA") }
-//        btnRealizadas.setOnClickListener { destacar(btnRealizadas); viewModel.carregarConsultas( "REALIZADA") }
-//        btnCanceladas.setOnClickListener { destacar(btnCanceladas); viewModel.carregarConsultas( "CANCELADA") }
+        // TODO: implementar filtros por status quando a feature estiver pronta
+        //btnTodas.setOnClickListener      { destacar(btnTodas);      viewModel.carregarConsultas(null) }
+        //btnAgendadas.setOnClickListener  { destacar(btnAgendadas);  viewModel.carregarConsultas("AGENDADA") }
+        //btnRealizadas.setOnClickListener { destacar(btnRealizadas); viewModel.carregarConsultas("REALIZADA") }
+        //btnCanceladas.setOnClickListener { destacar(btnCanceladas); viewModel.carregarConsultas("CANCELADA") }
 
         observeViewModel()
 
-        if (idMedico != -1L) {
-            destacar(btnTodas)
-            viewModel.carregarConsultas()
-        }
+        destacar(btnTodas)
+        viewModel.carregarConsultas()
 
         setupBottomNavigation(R.id.nav_consultas_medico)
     }
@@ -70,24 +63,27 @@ class ConsultasMedicoActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
-                    is ConsultasMedicoViewModel.UiState.Idle    -> Unit
-                    is ConsultasMedicoViewModel.UiState.Loading -> Unit
+                    is ConsultasMedicoViewModel.UiState.Idle    -> setLoading(false)
+                    is ConsultasMedicoViewModel.UiState.Loading -> setLoading(true)
                     is ConsultasMedicoViewModel.UiState.Success -> {
+                        setLoading(false)
                         adapter.atualizarLista(state.consultas)
                     }
-                    is ConsultasMedicoViewModel.UiState.Error -> {
-                       handleError(state.error)
+                    is ConsultasMedicoViewModel.UiState.Error   -> {
+                        setLoading(false)
+                        handleError(state.error)
                     }
                 }
             }
         }
     }
 
+    private fun setLoading(isLoading: Boolean) {
+        findViewById<RecyclerView>(R.id.rvConsultasMedico).alpha =
+            if (isLoading) 0.4f else 1f
+    }
 
-    fun irParaTelaConsulta(){
-        val intent = Intent(
-            this@ConsultasMedicoActivity,
-            VisualisarConsultaMedico::class.java)
-        startActivity(intent)
+    private fun irParaTelaConsulta() {
+        startActivity(Intent(this, VisualisarConsultaMedico::class.java))
     }
 }

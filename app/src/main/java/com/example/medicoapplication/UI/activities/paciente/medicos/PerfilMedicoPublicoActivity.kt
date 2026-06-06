@@ -5,21 +5,21 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta.AgendarConsultaActivity
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
-import com.example.medicoapplication.data.repository.MedicoRepository
+import com.example.medicoapplication.UI.common.mappers.MedicoMapper
+import com.example.medicoapplication.viewmodel.paciente.medicos.PerfilMedicoPublicoViewModel
 import kotlinx.coroutines.launch
 
 class PerfilMedicoPublicoActivity : BaseActivity() {
 
-    private var medicoId: Long = -1L
-    private var nomeMedico: String = "Médico"
-    private var especialidadeMedico: String = "Clínico Geral"  // ✅ guarda especialidade
+    private val viewModel: PerfilMedicoPublicoViewModel by viewModels()
 
-    private val repository = MedicoRepository()
+    private var medicoId: Long = -1L
 
     override val menuType = BottomMenuType.PACIENTE
 
@@ -27,86 +27,60 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_medico_publico)
 
-        medicoId   = intent.getLongExtra("MEDICO_ID", -1L)
-        nomeMedico = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
+        medicoId = intent.getLongExtra("MEDICO_ID", -1L)
+        val nomeFallback = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
 
-        findViewById<ImageButton>(R.id.btnVoltarPerfilPublico).setOnClickListener {
-            finish()
-        }
+        // Preenche o nome imediatamente com o que veio via Intent,
+        // enquanto a chamada de rede não retorna
+        findViewById<TextView>(R.id.tvNomeMedicoPublico).text = nomeFallback
 
-        findViewById<TextView>(R.id.tvNomeMedicoPublico).text = nomeMedico
+        findViewById<ImageButton>(R.id.btnVoltarPerfilPublico).setOnClickListener { finish() }
 
-        if (medicoId != -1L) carregarMedico()
+        observeViewModel()
 
-        // ✅ Botão Agendar — completo e dentro do onCreate
-        // Passar para o repositorio
-        findViewById<Button>(R.id.btnAgendarComEsteMedico).setOnClickListener {
-            lifecycleScope.launch {
-                val consultasResult = repository.getConsultasOfertadas()
-                consultasResult.onSuccess { lista ->
-                    // ✅ bloqueia se médico não tem consultas ofertadas
-                    if (lista.isEmpty()) {
-                        showToast( "Este médico não possui consultas disponíveis no momento.",)
-                        return@onSuccess
-                    }
-                    val idConsultaOfertada = lista.first().id
-                    val intent = Intent(
-                        this@PerfilMedicoPublicoActivity,
-                        AgendarConsultaActivity::class.java
-                    ).apply {
-                        putExtra("ID_MEDICO",            medicoId)
-                        putExtra("NOME_MEDICO",          nomeMedico)
-                        putExtra("ESPECIALIDADE",        especialidadeMedico)  // ✅ passa especialidade
-                        putExtra("ID_CONSULTA_OFERTADA", idConsultaOfertada)
-                    }
-                    startActivity(intent)
-                }.onFailure {
-                    showToast("Erro ao buscar consultas do médico")
-                }
-            }
-        }
+        if (medicoId != -1L) viewModel.carregarPerfil(medicoId)
 
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
-    //Passar para viewModel
-    private fun carregarMedico() {
+    private fun observeViewModel() {
         lifecycleScope.launch {
-            repository.getMedico()
-                .onSuccess { medico ->
-                    val nome = medico.usuario?.nome ?: nomeMedico
-                    nomeMedico = nome
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is PerfilMedicoPublicoViewModel.UiState.Idle    -> Unit
+                    is PerfilMedicoPublicoViewModel.UiState.Loading -> Unit
+                    is PerfilMedicoPublicoViewModel.UiState.Error   -> handleError(state.error)
+                    is PerfilMedicoPublicoViewModel.UiState.Success -> {
+                        val medico = state.medico
 
-                    findViewById<TextView>(R.id.tvNomeMedicoPublico).text = nome
+                        // Mapping responsibility moved to MedicoMapper
+                        val info = MedicoMapper.toAgendamentoInfo(medico)
 
-                    val esp = medico.especialidades
-                        .mapNotNull { it.especialidade?.nome }
-                        .joinToString(", ")
-                        .ifBlank { "Clínico Geral" }
+                        findViewById<TextView>(R.id.tvNomeMedicoPublico).text    = info.nome
+                        findViewById<TextView>(R.id.tvEspecialidadePublico).text = info.especialidade
+                        findViewById<TextView>(R.id.tvEspecialidadesPublico).text = info.especialidade
+                        findViewById<TextView>(R.id.tvCrmPublico).text           = "CRM: ${info.crm}"
+                        findViewById<TextView>(R.id.tvEmailPublico).text         = medico.usuario?.email ?: "—"
+                        findViewById<TextView>(R.id.tvTelefonePublico).text      = medico.usuario?.telefone ?: "—"
 
-                    especialidadeMedico = esp  // ✅ salva para usar no Intent
-
-                    findViewById<TextView>(R.id.tvEspecialidadePublico).text = esp
-                    findViewById<TextView>(R.id.tvEspecialidadesPublico).text = esp
-
-                    val crm = buildString {
-                        if (!medico.crmDigitos.isNullOrBlank()) append(medico.crmDigitos)
-                        if (!medico.crmUf.isNullOrBlank()) append("/${medico.crmUf}")
-                        if (isEmpty()) append("—")
+                        val consultasOfertadas = state.consultasOfertadas
+                        findViewById<Button>(R.id.btnAgendarComEsteMedico).setOnClickListener {
+                            if (consultasOfertadas.isEmpty()) {
+                                showToast("Este médico não possui consultas disponíveis no momento.")
+                                return@setOnClickListener
+                            }
+                            startActivity(
+                                Intent(this@PerfilMedicoPublicoActivity, AgendarConsultaActivity::class.java).apply {
+                                    putExtra("ID_MEDICO",            medicoId)
+                                    putExtra("NOME_MEDICO",          info.nome)
+                                    putExtra("ESPECIALIDADE",        info.especialidade)
+                                    putExtra("ID_CONSULTA_OFERTADA", consultasOfertadas.first().id)
+                                }
+                            )
+                        }
                     }
-                    findViewById<TextView>(R.id.tvCrmPublico).text = "CRM: $crm"
-
-                    findViewById<TextView>(R.id.tvEmailPublico).text =
-                        medico.usuario?.email ?: "—"
-
-                    findViewById<TextView>(R.id.tvTelefonePublico).text =
-                        medico.usuario?.telefone ?: "—"
                 }
-                .onFailure {
-                    showToast("Erro ao carregar dados do médico")
-                }
+            }
         }
     }
-
-
 }

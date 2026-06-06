@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.validations.ConsultaOfertadaValidator
 import com.example.medicoapplication.UI.common.validations.ValidationResult
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
@@ -28,7 +29,8 @@ import kotlinx.coroutines.launch
 class CriarConsultaOfertadaActivity : BaseActivity() {
 
     private val viewModel: ConsultaOfertadaViewModel by viewModels()
-    private var idMedico = -1L
+
+    override val menuType = BottomMenuType.MEDICO
 
     private var especialidades = listOf<EspecialidadeResponseDto>()
     private var locais         = listOf<LocalResponseDto>()
@@ -37,8 +39,6 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_criar_consulta_ofertada)
-
-        idMedico = intent.getLongExtra("ID_MEDICO", -1L)
 
         val spinnerEspecialidade = findViewById<Spinner>(R.id.spinnerEspecialidade)
         val spinnerLocal         = findViewById<Spinner>(R.id.spinnerLocal)
@@ -104,7 +104,7 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
                     is ConsultaOfertadaViewModel.UiState.Error -> {
                         progressBar.visibility = View.GONE
                         btnSalvar.isEnabled = true
-                        showToast(state.message)
+                        handleError(state.error)
                     }
                     else -> {
                         progressBar.visibility = View.GONE
@@ -115,12 +115,11 @@ class CriarConsultaOfertadaActivity : BaseActivity() {
         }
 
         btnSalvar.setOnClickListener {
-            val espIdx = spinnerEspecialidade.selectedItemPosition
+            val espIdx   = spinnerEspecialidade.selectedItemPosition
             val valorStr = etValor.text.toString().replace(",", ".")
             val valor    = valorStr.toDoubleOrNull()
             val duracao  = etDuracao.text.toString().toIntOrNull()
 
-            // All validation delegated to ConsultaOfertadaValidator
             when (val result = ConsultaOfertadaValidator.validar(espIdx, valor, duracao)) {
                 is ValidationResult.Error   -> showToast(result.message)
                 is ValidationResult.Success -> {

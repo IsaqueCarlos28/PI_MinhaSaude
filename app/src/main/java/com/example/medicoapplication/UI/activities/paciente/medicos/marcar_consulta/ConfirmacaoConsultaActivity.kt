@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.formatters.DateFormatter
 import com.example.medicoapplication.UI.common.validations.ConsultaValidator
 import com.example.medicoapplication.UI.common.validations.ValidationResult
@@ -19,20 +20,18 @@ import kotlinx.coroutines.launch
 /**
  * Tela de confirmação antes de efetivar o agendamento.
  * Recebe via Intent:
- *   - ID_PACIENTE     (Long)
- *   - ID_MEDICO       (Long)
- *   - NOME_MEDICO     (String)
- *   - ESPECIALIDADE   (String)
- *   - DATA_CONSULTA   (String  — formato "yyyy-MM-dd")
- *   - HORA_CONSULTA   (String  — formato "HH:mm")
+ *   - NOME_MEDICO          (String)
+ *   - ESPECIALIDADE        (String)
+ *   - DATA_CONSULTA        (String — formato "yyyy-MM-dd")
+ *   - HORA_CONSULTA        (String — formato "HH:mm")
  *   - ID_CONSULTA_OFERTADA (Long)
  */
 class ConfirmacaoConsultaActivity : BaseActivity() {
 
     private val viewModel: ConfirmacaoConsultaViewModel by viewModels()
 
-    private var idPaciente: Long = -1L
-    private var idMedico: Long = -1L
+    override val menuType = BottomMenuType.PACIENTE
+
     private var idConsultaOfertada: Long = -1L
     private var dataConsulta: String = ""
     private var horaConsulta: String = ""
@@ -41,14 +40,12 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirmacao_consulta)
 
-        idPaciente         = intent.getLongExtra("ID_PACIENTE", -1L)
-        idMedico           = intent.getLongExtra("ID_MEDICO", -1L)
         idConsultaOfertada = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)
         dataConsulta       = intent.getStringExtra("DATA_CONSULTA") ?: ""
         horaConsulta       = intent.getStringExtra("HORA_CONSULTA") ?: ""
 
-        val nomeMedico    = intent.getStringExtra("NOME_MEDICO")    ?: "Médico"
-        val especialidade = intent.getStringExtra("ESPECIALIDADE")  ?: ""
+        val nomeMedico    = intent.getStringExtra("NOME_MEDICO")   ?: "Médico"
+        val especialidade = intent.getStringExtra("ESPECIALIDADE") ?: ""
 
         preencherResumo(nomeMedico, especialidade)
         configurarBotoes()
@@ -57,7 +54,6 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
     }
 
     private fun preencherResumo(nomeMedico: String, especialidade: String) {
-        // DateFormatter used instead of inline split logic
         findViewById<TextView>(R.id.tvConfNomeMedico).text    = nomeMedico
         findViewById<TextView>(R.id.tvConfEspecialidade).text = especialidade
         findViewById<TextView>(R.id.tvConfData).text          = DateFormatter.apiToUiDate(dataConsulta)
@@ -69,7 +65,7 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
 
         findViewById<Button>(R.id.btnConfirmarAgendamento).setOnClickListener {
             when (val result = ConsultaValidator.validarConfirmacao(
-                idPaciente, idConsultaOfertada, dataConsulta, horaConsulta
+                idConsultaOfertada, dataConsulta, horaConsulta
             )) {
                 is ValidationResult.Success ->
                     viewModel.confirmarConsulta(idConsultaOfertada, dataConsulta, horaConsulta)
@@ -95,11 +91,7 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
                         setLoading(false)
                         showToast("Consulta agendada com sucesso!")
                         startActivity(
-                            Intent(
-                                this@ConfirmacaoConsultaActivity,
-                                MinhasConsultasActivity::class.java
-                            ).apply {
-                                putExtra("ID_PACIENTE", idPaciente)
+                            Intent(this@ConfirmacaoConsultaActivity, MinhasConsultasActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                             }
                         )
@@ -115,5 +107,4 @@ class ConfirmacaoConsultaActivity : BaseActivity() {
         btn.isEnabled = !carregando
         btn.text = if (carregando) "Agendando..." else "Confirmar Agendamento"
     }
-
 }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.UI.activities.paciente.consultas.DetalheConsultaActivity
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.paciente.consulta.MinhasConsultasViewModel
@@ -28,7 +27,6 @@ class MinhasConsultasActivity : BaseActivity() {
     private val formatoMesAno    = SimpleDateFormat("MMMM, yyyy", Locale("pt", "BR"))
     private val formatoDataLabel = SimpleDateFormat("EEEE, dd 'de' MMMM", Locale("pt", "BR"))
 
-    private var idPaciente: Long = -1L
     private lateinit var adapter: ConsultasPacienteAdapter
 
     override val menuType = BottomMenuType.PACIENTE
@@ -37,8 +35,6 @@ class MinhasConsultasActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_minhas_consultas)
 
-        idPaciente = intent.getLongExtra("ID_PACIENTE", -1L)
-
         val tvMesAno         = findViewById<TextView>(R.id.tvMesAno)
         val tvDataSelecionada = findViewById<TextView>(R.id.tvDataSelecionada)
         val btnMesAnterior   = findViewById<ImageButton>(R.id.btnMesAnterior)
@@ -46,13 +42,11 @@ class MinhasConsultasActivity : BaseActivity() {
         val gridCalendario   = findViewById<GridView>(R.id.gridViewCalendario)
         val rvConsultas      = findViewById<RecyclerView>(R.id.rvConsultasDoDia)
 
-        // Adapter com clique → abre DetalheConsultaActivity
         adapter = ConsultasPacienteAdapter(
             consultas = emptyList(),
             onItemClick = { consulta ->
                 startActivity(
                     Intent(this, DetalheConsultaActivity::class.java).apply {
-                        putExtra("ID_PACIENTE", idPaciente)
                         putExtra("ID_EVENTO", consulta.id)
                     }
                 )
@@ -73,7 +67,7 @@ class MinhasConsultasActivity : BaseActivity() {
         }
 
         observeViewModel()
-        if (idPaciente != -1L) viewModel.carregarConsultas()
+        viewModel.carregarConsultas()
 
         setupBottomNavigation(R.id.nav_consultas_paciente)
     }
@@ -82,15 +76,23 @@ class MinhasConsultasActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
-                    is MinhasConsultasViewModel.UiState.Idle    -> Unit
-                    is MinhasConsultasViewModel.UiState.Loading -> Unit
-                    is MinhasConsultasViewModel.UiState.Success -> adapter.atualizarLista(state.consultas)
+                    is MinhasConsultasViewModel.UiState.Idle    -> setLoading(false)
+                    is MinhasConsultasViewModel.UiState.Loading -> setLoading(true)
+                    is MinhasConsultasViewModel.UiState.Success -> {
+                        setLoading(false)
+                        adapter.atualizarLista(state.consultas)
+                    }
                     is MinhasConsultasViewModel.UiState.Error   -> {
+                        setLoading(false)
                         handleError(state.error)
                     }
                 }
             }
         }
+    }
+
+    private fun setLoading(carregando: Boolean) {
+        findViewById<RecyclerView>(R.id.rvConsultasDoDia).alpha = if (carregando) 0.4f else 1f
     }
 
     private fun atualizarCalendario(

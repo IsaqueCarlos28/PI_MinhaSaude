@@ -2,17 +2,18 @@ package com.example.medicoapplication.viewmodel.medico.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medicoapplication.data.local.SessionManager
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
 import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
+import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.ConsultaOfertadaRepository
 import com.example.medicoapplication.data.repository.ConvenioRepository
 import com.example.medicoapplication.data.repository.EspecialidadeRepository
 import com.example.medicoapplication.data.repository.LocalRepository
+import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +30,7 @@ class ConsultaOfertadaViewModel(
         object Idle : UiState()
         object Loading : UiState()
         object Success : UiState()
-        data class Error(val message: String) : UiState()
+        data class Error(val error: NetworkError) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -52,7 +53,7 @@ class ConsultaOfertadaViewModel(
             _uiState.value = UiState.Loading
             repository.getMinhaConsultasOfertadas()
                 .onSuccess { _consultas.value = it; _uiState.value = UiState.Idle }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao carregar consultas") }
+                .onFailure { _uiState.value = UiState.Error(it.toNetworkError()) }
         }
     }
 
@@ -95,7 +96,7 @@ class ConsultaOfertadaViewModel(
             )
             repository.createConsultaOfertada(dto)
                 .onSuccess { _uiState.value = UiState.Success }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao criar consulta") }
+                .onFailure { _uiState.value = UiState.Error(it.toNetworkError()) }
         }
     }
 
@@ -104,7 +105,7 @@ class ConsultaOfertadaViewModel(
             _uiState.value = UiState.Loading
             repository.deleteConsultaOfertada(idConsulta)
                 .onSuccess { carregarConsultasOfertadas() }
-                .onFailure { _uiState.value = UiState.Error(it.message ?: "Erro ao deletar") }
+                .onFailure { _uiState.value = UiState.Error(it.toNetworkError()) }
         }
     }
 

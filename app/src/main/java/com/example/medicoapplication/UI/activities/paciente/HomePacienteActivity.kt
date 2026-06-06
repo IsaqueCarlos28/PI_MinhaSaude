@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.DetalheConsultaActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
 import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
-import com.example.medicoapplication.activities.paciente.viewmodel.HomePacienteViewModel
+import com.example.medicoapplication.viewmodel.paciente.HomePacienteViewModel
 import com.example.medicoapplication.UI.adapters.ConsultasPacienteAdapter
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import kotlinx.coroutines.launch
@@ -33,8 +32,6 @@ class HomePacienteActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_paciente)
-
-
 
         tvSaudacao          = findViewById(R.id.tvSaudacao)
         rvProximasConsultas = findViewById(R.id.rvProximasConsultas)
@@ -78,9 +75,9 @@ class HomePacienteActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.nomeState.collect { state ->
                 when (state) {
-                    is HomePacienteViewModel.NomeState.Idle -> tvSaudacao.text = "Olá,..."
+                    is HomePacienteViewModel.NomeState.Idle    -> tvSaudacao.text = "Olá,..."
                     is HomePacienteViewModel.NomeState.Success -> tvSaudacao.text = "Olá, ${state.primeiroNome}"
-                    is HomePacienteViewModel.NomeState.Error -> tvSaudacao.text = "Olá, Usuario Não encontrado"
+                    is HomePacienteViewModel.NomeState.Error   -> tvSaudacao.text = "Olá, Usuario Não encontrado"
                 }
             }
         }
@@ -91,10 +88,9 @@ class HomePacienteActivity : BaseActivity() {
                     is HomePacienteViewModel.ConsultasState.Idle    -> Unit
                     is HomePacienteViewModel.ConsultasState.Loading -> Unit
                     is HomePacienteViewModel.ConsultasState.Success -> adaptadorConsultas.atualizarLista(state.consultas)
-                    is HomePacienteViewModel.ConsultasState.Error   -> showToast(state.message)
+                    is HomePacienteViewModel.ConsultasState.Error   -> handleError(state.error)
                 }
             }
         }
     }
-
 }

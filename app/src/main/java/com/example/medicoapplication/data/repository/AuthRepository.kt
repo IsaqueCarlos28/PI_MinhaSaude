@@ -58,4 +58,8 @@ class AuthRepository: BaseRepository() {
             val response = api.alterarSenha(AlterarSenhaRequestDto(token, novaSenha))
             if (!response.isSuccessful) error("Erro ao alterar senha (${response.code()})")
         }
+
+    suspend fun logout() {
+        sessionManager.limparSessao()
+    }
 }

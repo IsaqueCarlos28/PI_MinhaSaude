@@ -12,7 +12,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-import com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta.ConfirmacaoConsultaActivity
+import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.mappers.MedicoMapper
 import com.example.medicoapplication.UI.common.validations.ConsultaValidator
 import com.example.medicoapplication.UI.common.validations.ValidationResult
@@ -33,8 +33,9 @@ class AgendarConsultaActivity : BaseActivity() {
 
     private var horarioSelecionado: String? = null
     private var medicoId: Long = -1L
-    private var idPaciente: Long = -1L
     private var idConsultaOfertada: Long = -1L
+
+    override val menuType = BottomMenuType.PACIENTE
 
     private val idsBlocoDia = listOf(
         R.id.diaBloco0, R.id.diaBloco1, R.id.diaBloco2,
@@ -46,7 +47,6 @@ class AgendarConsultaActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agendar_consulta)
 
-        idPaciente         = intent.getLongExtra("ID_PACIENTE", -1L)
         medicoId           = intent.getLongExtra("ID_MEDICO", intent.getLongExtra("MEDICO_ID", -1L))
         idConsultaOfertada = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)
 
@@ -64,7 +64,6 @@ class AgendarConsultaActivity : BaseActivity() {
             diaOffset++; calendar.add(Calendar.DAY_OF_MONTH, 1); renderizarDias()
         }
 
-        //Mudar para os horarios da API
         val botoesHorario = listOf(
             Pair(R.id.btnHorario0900, "09:00"), Pair(R.id.btnHorario0930, "09:30"),
             Pair(R.id.btnHorario1000, "10:00"), Pair(R.id.btnHorario1030, "10:30"),
@@ -86,7 +85,6 @@ class AgendarConsultaActivity : BaseActivity() {
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
-    //Verificar
     private fun renderizarDias() {
         val base = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, diaOffset - 3) }
         idsBlocoDia.forEachIndexed { index, idBloco ->
@@ -118,7 +116,6 @@ class AgendarConsultaActivity : BaseActivity() {
                     is AgendarConsultaViewModel.UiState.Loading -> Unit
                     is AgendarConsultaViewModel.UiState.Error   -> Unit
                     is AgendarConsultaViewModel.UiState.MedicoCarregado -> {
-                        // Mapping responsibility moved to MedicoMapper
                         val info = MedicoMapper.toAgendamentoInfo(state.medico)
                         findViewById<TextView>(R.id.tvNomeMedicoAgendar).text      = info.nome
                         findViewById<TextView>(R.id.tvEspecialidadeAgendar).text   = info.especialidade
@@ -146,8 +143,6 @@ class AgendarConsultaActivity : BaseActivity() {
             is ValidationResult.Success -> {
                 startActivity(
                     Intent(this, ConfirmacaoConsultaActivity::class.java).apply {
-                        putExtra("ID_PACIENTE",          idPaciente)
-                        putExtra("ID_MEDICO",            medicoId)
                         putExtra("NOME_MEDICO",          findViewById<TextView>(R.id.tvNomeMedicoAgendar).text.toString())
                         putExtra("ESPECIALIDADE",        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text.toString())
                         putExtra("DATA_CONSULTA",        dataApi)
