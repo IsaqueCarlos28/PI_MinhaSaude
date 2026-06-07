@@ -31,7 +31,9 @@ class ConsultasMedicoActivity : BaseActivity() {
         val rv = findViewById<RecyclerView>(R.id.rvConsultasMedico)
         rv.layoutManager = LinearLayoutManager(this)
 
-        adapter = ConsultasMedicoAdapter(emptyList()) { irParaTelaConsulta() }
+        adapter = ConsultasMedicoAdapter(emptyList()) { consulta ->
+            irParaTelaConsulta(consulta.id)
+        }
         rv.adapter = adapter
 
         val btnTodas      = findViewById<Button>(R.id.btnFiltroTodas)
@@ -83,7 +85,11 @@ class ConsultasMedicoActivity : BaseActivity() {
             if (isLoading) 0.4f else 1f
     }
 
-    private fun irParaTelaConsulta() {
-        startActivity(Intent(this, VisualisarConsultaMedico::class.java))
+    private fun irParaTelaConsulta(idEvento: Long) {
+        startActivity(
+            Intent(this, VisualisarConsultaMedico::class.java).apply {
+                putExtra("ID_EVENTO", idEvento)
+            }
+        )
     }
 }

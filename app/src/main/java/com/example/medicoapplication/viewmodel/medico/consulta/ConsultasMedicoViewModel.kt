@@ -30,12 +30,12 @@ class ConsultasMedicoViewModel(
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             repository.getConsultas()
-            .onSuccess {
-                _uiState.value = UiState.Success(it)
-            }
-            .onFailure { throwable ->
-                _uiState.value = UiState.Error(throwable.toNetworkError())
-            }
+                .onSuccess {
+                    _uiState.value = UiState.Success(it)
+                }
+                .onFailure { throwable ->
+                    _uiState.value = UiState.Error(throwable.toNetworkError())
+                }
         }
     }
 }

@@ -16,6 +16,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.medico.agenda.AgendaMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.consultas.ConsultasMedicoActivity
+import com.example.medicoapplication.UI.activities.medico.consultas.VisualisarConsultaMedico
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.launch
@@ -43,7 +44,11 @@ class HomeMedicoActivity : BaseActivity() {
         adapter = ConsultasMedicoAdapter(
             consultas   = emptyList(),
             onItemClick = { consulta ->
-                // TODO: abrir detalhe da consulta
+                startActivity(
+                    Intent(this, VisualisarConsultaMedico::class.java).apply {
+                        putExtra("ID_EVENTO", consulta.id)
+                    }
+                )
             }
         )
         findViewById<RecyclerView>(R.id.rvProximasConsultasMedico).apply {
