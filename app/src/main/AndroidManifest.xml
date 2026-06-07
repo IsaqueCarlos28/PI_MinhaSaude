@@ -15,6 +15,14 @@
         android:name=".data.local.UsuarioApplication"
         android:theme="@style/Theme.MedicoApplication"
         tools:targetApi="31">
+        <service
+            android:name=".data.remote.message.MinhaSaudeFirebaseMessagingService"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".UI.activities.medico.consultas.VisualisarConsultaMedico"
             android:exported="false" />

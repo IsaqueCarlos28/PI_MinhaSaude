@@ -2,6 +2,7 @@ package com.example.medicoapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
 import com.example.medicoapplication.data.local.AppDependencies
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -40,6 +42,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish() // Fecha a tela de entrada para não voltar nela ao clicar em 'back'
         }
+
+        FirebaseMessaging.getInstance()
+            .token
+            .addOnSuccessListener {
+                Log.d("FCM", "TOKEN: $it")
+            }
     }
 
     fun verificarSessao() {

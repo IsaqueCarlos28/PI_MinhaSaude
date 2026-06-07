@@ -1,5 +1,6 @@
 package com.example.medicoapplication.data.remote
 
+import com.example.medicoapplication.data.remote.DTO.notification.RegistrarFcmTokenRequest
 import com.example.medicoapplication.data.remote.DTO.agenda.AgendaRequestDTO
 import com.example.medicoapplication.data.remote.DTO.agenda.AgendaResponseDto
 import com.example.medicoapplication.data.remote.DTO.agenda.DisponibilidadeSemanaDTO
@@ -37,6 +38,7 @@ import com.example.medicoapplication.data.remote.DTO.medico.MedicoPageResponseDt
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
+import com.example.medicoapplication.data.remote.DTO.notification.DesativarFcmTokenRequest
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteEditRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacientePageResponseDto
@@ -397,4 +399,17 @@ interface ApiService {
         @Path("idEvento") idEvento: Long,
         @Body status: ConsultaStatusRequestDto
     ): Response<ConsultaResponseDto>
+
+    // ─── NOTIFICAÇÕES ────────────────────────────────────
+
+    @POST("notificacoes/fcm-token")
+    suspend fun registrarFcmToken(
+        @Body request: RegistrarFcmTokenRequest
+    ):Response<Unit>
+
+    @POST("notificacoes/fcm-token/desativar")
+    suspend fun desativarFcmToken(
+        @Body request: DesativarFcmTokenRequest
+    ):Response<Unit>
+
 }

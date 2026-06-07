@@ -1,5 +1,6 @@
 package com.example.medicoapplication.data.repository
 
+import android.util.Log
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.remote.DTO.auth.AlterarSenhaRequestDto
 import com.example.medicoapplication.data.remote.DTO.auth.EsqueceuSenhaRequestDto
@@ -9,13 +10,19 @@ import com.example.medicoapplication.data.remote.DTO.auth.ValidarTokenRequestDto
 import com.example.medicoapplication.data.remote.DTO.auth.TokenDeRecuperacaoDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
+import com.example.medicoapplication.data.remote.DTO.notification.DesativarFcmTokenRequest
+import com.example.medicoapplication.data.remote.DTO.notification.RegistrarFcmTokenRequest
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteCreateRequestDto
 import com.example.medicoapplication.data.remote.DTO.paciente.PacienteResponseDto
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 
 
-class AuthRepository: BaseRepository() {
+class AuthRepository(
 
+): BaseRepository() {
 
+    private val notificationRepository =  NotificationRepository()
     suspend fun login(
         email: String,
         senha: String
@@ -23,11 +30,14 @@ class AuthRepository: BaseRepository() {
         safeApiCall {
             api.login(LoginRequestDto(email, senha))
         }.onSuccess { usuario ->
+
             sessionManager.salvarSessao(
                 usuario.id,
                 usuario.email,
                 usuario.role.toString()
             )
+
+            registrarFcmToken(usuario.id)
         }
 
     suspend fun cadastrarPaciente(dto: PacienteCreateRequestDto): Result<PacienteResponseDto> =
@@ -60,6 +70,53 @@ class AuthRepository: BaseRepository() {
         }
 
     suspend fun logout() {
+        desativarFcmToken()
         sessionManager.limparSessao()
+    }
+
+    private suspend fun registrarFcmToken(
+        usuarioId: Long
+    ) {
+        try {
+
+            val token =
+                FirebaseMessaging
+                    .getInstance()
+                    .token
+                    .await()
+
+            notificationRepository
+                .registrarFcmToken(RegistrarFcmTokenRequest(usuarioId,token))
+
+
+        } catch (e: Exception) {
+            Log.e(
+                "FCM",
+                "Erro ao registrar token",
+                e
+            )
+        }
+    }
+
+    suspend fun desativarFcmToken() {
+
+        try {
+
+            val token =
+                FirebaseMessaging
+                    .getInstance()
+                    .token
+                    .await()
+
+            notificationRepository
+                .desativarFcmToken(DesativarFcmTokenRequest(token))
+        } catch (e: Exception) {
+
+            Log.e(
+                "FCM",
+                "Erro ao remover token",
+                e
+            )
+        }
     }
 }
