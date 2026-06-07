@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "132531635235",
+    "project_id": "minhasaude-161ad",
+    "storage_bucket": "minhasaude-161ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132531635235:android:2de9d6eacd3b1af7b15d96",
+        "android_client_info": {
+          "package_name": "com.example.medicoapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqEDjdYFX-PEC7Ar_PxGYePRl1JVXrVIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
