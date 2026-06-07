@@ -79,6 +79,19 @@
         <activity
             android:name=".UI.activities.medico.perfil.PerfilMedicoActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".UI.activities.medico.configuracao.ConfigNotificacoesMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.configuracao.ConfigFaqMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.configuracao.ConfigTermosMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.configuracao.ConfigSobreMedicoActivity"
+            android:exported="false" />
         <activity
             android:name=".UI.activities.medico.ConfiguracoesMedicoActivity"
             android:exported="false" />
