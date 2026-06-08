@@ -51,7 +51,7 @@ class BuscaMedicosViewModel : ViewModel() {
                     // Busca consultas ofertadas de cada médico em paralelo
                     val medicosComTipo = medicos.map { medico ->
                         async {
-                            val tipos = repository.getConsultasOfertadasDoMedico(medico.id)
+                            val tipos = repository.getConsultasOfertadasDoMedico(medico.usuario!!.id)
                                 .getOrNull()
                                 ?.map { it.tipoConsulta }
                                 ?.toSet()
