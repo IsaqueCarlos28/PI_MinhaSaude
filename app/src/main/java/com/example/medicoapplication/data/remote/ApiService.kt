@@ -72,7 +72,7 @@ interface ApiService {
         @Body request: ValidarTokenRequestDto
     ): Response<TokenDeRecuperacaoDto>
 
-    @PUT("auth/alterar_senha")
+    @PUT("auth/alterar-senha")
     suspend fun alterarSenha(
         @Body request: AlterarSenhaRequestDto
     ): Response<Unit>
@@ -120,10 +120,6 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<MedicoResponseDto>
 
-    @GET("medicos/usuario/{id}")
-    suspend fun getMedicoByUsuarioId(
-        @Path("id") id: Long
-    ): Response<MedicoResponseDto>
 
     @POST("medicos")
     suspend fun createMedico(

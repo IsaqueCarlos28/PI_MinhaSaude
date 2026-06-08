@@ -47,8 +47,8 @@ class PesquisaMedicosActivity : BaseActivity() {
         // Navigate to doctor's public profile on click
         adapter = MedicoAdapter(emptyList()) { medico ->
             val intent = Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
-                putExtra("MEDICO_ID", medico.id)
-                putExtra("NOME_MEDICO", medico.usuario?.nome ?: "Médico")
+                putExtra("MEDICO_ID", medico.usuario!!.id)
+                putExtra("NOME_MEDICO", medico.usuario.nome ?: "Nome não encontrado")
             }
             startActivity(intent)
         }

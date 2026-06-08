@@ -13,7 +13,7 @@ class MedicoRepository : BaseRepository() {
     // Médico autenticado — GET medicos/{id}
     suspend fun getMedico(): Result<MedicoResponseDto> {
         val idMedico = requireUserId()
-        return safeApiCall { api.getMedicoByUsuarioId(idMedico) }
+        return safeApiCall { api.getMedicoById(idMedico) }
     }
 
     // Médico por ID (visão pública do paciente) — GET medicos/{id}
