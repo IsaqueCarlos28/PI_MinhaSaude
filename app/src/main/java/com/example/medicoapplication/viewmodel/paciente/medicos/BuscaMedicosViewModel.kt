@@ -2,10 +2,13 @@ package com.example.medicoapplication.viewmodel.paciente.medicos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.MedicoRepository
 import com.example.medicoapplication.data.repository.toNetworkError
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +18,17 @@ class BuscaMedicosViewModel : ViewModel() {
 
     private val repository = MedicoRepository()
 
-    private var listaCompleta: List<MedicoResponseDto> = emptyList()
+    /**
+     * Modelo interno que une MedicoResponseDto com os tipos de consulta
+     * que ele oferece, sem alterar os DTOs da API.
+     */
+    data class MedicoComTipo(
+        val medico: MedicoResponseDto,
+        val tipos: Set<TipoConsulta>
+    )
+
+    private var listaCompleta: List<MedicoComTipo> = emptyList()
+    private var filtroTipoAtivo: TipoConsulta = TipoConsulta.PRESENCIAL
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -27,19 +40,28 @@ class BuscaMedicosViewModel : ViewModel() {
         data class Error(val error: NetworkError) : UiState()
     }
 
-    fun carregarMedicos(
-        page: Int,
-        size: Int) {
+    fun carregarMedicos(page: Int, size: Int) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
 
             repository.getMedicos(page, size)
-                .onSuccess {
+                .onSuccess { pagina ->
+                    val medicos = pagina._embedded?.medicos ?: emptyList()
 
-                    val medicos = it._embedded?.medicos ?: emptyList()
+                    // Busca consultas ofertadas de cada médico em paralelo
+                    val medicosComTipo = medicos.map { medico ->
+                        async {
+                            val tipos = repository.getConsultasOfertadasDoMedico(medico.id)
+                                .getOrNull()
+                                ?.map { it.tipoConsulta }
+                                ?.toSet()
+                                ?: emptySet()
+                            MedicoComTipo(medico, tipos)
+                        }
+                    }.awaitAll()
 
-                    listaCompleta = medicos
-                    _uiState.value = UiState.Success(medicos)
+                    listaCompleta = medicosComTipo
+                    aplicarFiltros(texto = "", tipo = filtroTipoAtivo)
                 }
                 .onFailure { throwable ->
                     _uiState.value = UiState.Error(throwable.toNetworkError())
@@ -47,33 +69,34 @@ class BuscaMedicosViewModel : ViewModel() {
         }
     }
 
-    //Verificar o que faz
+    fun setFiltroTipo(tipo: TipoConsulta) {
+        filtroTipoAtivo = tipo
+        aplicarFiltros(texto = textoAtual, tipo = tipo)
+    }
+
     fun filtrar(texto: String) {
+        textoAtual = texto
+        aplicarFiltros(texto = texto, tipo = filtroTipoAtivo)
+    }
 
-        if (texto.isBlank()) {
-            _uiState.value = UiState.Success(listaCompleta)
-            return
-        }
+    private var textoAtual: String = ""
 
+    private fun aplicarFiltros(texto: String, tipo: TipoConsulta) {
         val textoBusca = texto.trim().lowercase()
 
-        val listaFiltrada = listaCompleta.filter { medico ->
+        val filtrados = listaCompleta
+            // 1. Filtro por tipo de consulta
+            .filter { it.tipos.isEmpty() || it.tipos.contains(tipo) }
+            // 2. Filtro por nome ou especialidade
+            .filter { entry ->
+                if (textoBusca.isBlank()) return@filter true
+                val nome = entry.medico.usuario?.nome?.lowercase() ?: ""
+                val especialidade = entry.medico.especialidades
+                    .firstOrNull()?.especialidade?.nome?.lowercase() ?: ""
+                nome.contains(textoBusca) || especialidade.contains(textoBusca)
+            }
+            .map { it.medico }
 
-            val nome = medico.usuario?.nome
-                ?.lowercase()
-                ?: ""
-
-            val especialidade = medico.especialidades
-                .firstOrNull()
-                ?.especialidade
-                ?.nome
-                ?.lowercase()
-                ?: ""
-
-            nome.contains(textoBusca) ||
-                    especialidade.contains(textoBusca)
-        }
-
-        _uiState.value = UiState.Success(listaFiltrada)
+        _uiState.value = UiState.Success(filtrados)
     }
 }
