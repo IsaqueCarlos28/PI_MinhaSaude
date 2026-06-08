@@ -34,13 +34,13 @@ class ResetPasswordActivity : BaseActivity() {
         etConfirmPass = findViewById(R.id.etConfirmNewPassword)
         btnReset      = findViewById(R.id.btnResetPassword)
 
-        val token = intent.getStringExtra("Token")
+        val token = intent.getStringExtra("Token")?:""
 
         btnReset.setOnClickListener { tentarRedefinir(token) }
         observeViewModel()
     }
 
-    private fun tentarRedefinir(token: String?) {
+    private fun tentarRedefinir(token: String) {
         val nova      = etNewPass.text.toString()
         val confirmacao = etConfirmPass.text.toString()
 

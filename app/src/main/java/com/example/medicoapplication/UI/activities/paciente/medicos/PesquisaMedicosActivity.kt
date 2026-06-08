@@ -52,12 +52,11 @@ class PesquisaMedicosActivity : BaseActivity() {
             ?: TextView(this).also { it.visibility = View.GONE }
 
         adapter = MedicoAdapter(emptyList()) { medico ->
-            startActivity(
-                Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
-                    putExtra("MEDICO_ID", medico.id)
-                    putExtra("NOME_MEDICO", medico.usuario?.nome ?: "Medico")
-                }
-            )
+            val intent = Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
+                putExtra("MEDICO_ID", medico.usuario!!.id)
+                putExtra("NOME_MEDICO", medico.usuario.nome ?: "Nome não encontrado")
+            }
+            startActivity(intent)
         }
         rvResultados.layoutManager = LinearLayoutManager(this)
         rvResultados.adapter = adapter

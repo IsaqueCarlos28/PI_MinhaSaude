@@ -63,7 +63,7 @@ class AuthRepository(
             }
         }
 
-    suspend fun alterarSenha(token: String?, novaSenha: String): Result<Unit> =
+    suspend fun alterarSenha(token: String, novaSenha: String): Result<Unit> =
         runCatching {
             val response = api.alterarSenha(AlterarSenhaRequestDto(token, novaSenha))
             if (!response.isSuccessful) error("Erro ao alterar senha (${response.code()})")

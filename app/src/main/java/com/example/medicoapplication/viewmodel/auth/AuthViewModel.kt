@@ -24,12 +24,12 @@ class AuthViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    var tokenRecuperacao: String? = null
+    var tokenRecuperacao: String? = " "
         private set
 
-    private var token: String? = null
+    private lateinit var token: String
 
-    fun setToken(token: String?) {
+    fun setToken(token: String) {
         this.token = token
     }
 

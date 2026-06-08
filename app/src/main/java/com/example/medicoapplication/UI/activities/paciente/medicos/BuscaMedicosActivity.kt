@@ -34,8 +34,8 @@ class BuscaMedicosActivity : BaseActivity() {
         adapter = MedicoAdapter(emptyList()) { medico ->
             startActivity(
                 Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
-                    putExtra("MEDICO_ID", medico.id)
-                    putExtra("NOME_MEDICO", medico.usuario?.nome ?: "Médico")
+                    putExtra("MEDICO_ID", medico.usuario!!.id)
+                    putExtra("NOME_MEDICO", medico.usuario.nome ?: "Nome não encontrado")
                 }
             )
         }
