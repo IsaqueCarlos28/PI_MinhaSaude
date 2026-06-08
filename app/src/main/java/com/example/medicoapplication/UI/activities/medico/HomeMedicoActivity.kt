@@ -1,6 +1,6 @@
 package com.example.medicoapplication.UI.activities.medico
 
-import ConsultasMedicoAdapter
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -17,6 +17,7 @@ import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.medico.agenda.AgendaMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.consultas.ConsultasMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.consultas.VisualisarConsultaMedico
+import com.example.medicoapplication.UI.adapters.ConsultasMedicoAdapter
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.launch

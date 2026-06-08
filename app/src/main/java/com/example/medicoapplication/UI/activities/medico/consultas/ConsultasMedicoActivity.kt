@@ -1,6 +1,6 @@
 package com.example.medicoapplication.UI.activities.medico.consultas
 
-import ConsultasMedicoAdapter
+
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.adapters.ConsultasMedicoAdapter
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
