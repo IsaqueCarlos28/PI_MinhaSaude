@@ -178,7 +178,7 @@
 
     <!-- BOTTOM NAVIGATION -->
     <include
-        layout="@layout/view_bottom_nav_paciente"
+        layout="@layout/view_bottom_nav_medico"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

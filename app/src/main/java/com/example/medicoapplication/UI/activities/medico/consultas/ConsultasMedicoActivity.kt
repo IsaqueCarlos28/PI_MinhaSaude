@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
-
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
+import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.launch
 
@@ -32,7 +32,7 @@ class ConsultasMedicoActivity : BaseActivity() {
         rv.layoutManager = LinearLayoutManager(this)
 
         adapter = ConsultasMedicoAdapter(emptyList()) { consulta ->
-            irParaTelaConsulta(consulta.id)
+            abrirDetalheConsulta(consulta)
         }
         rv.adapter = adapter
 
@@ -85,10 +85,11 @@ class ConsultasMedicoActivity : BaseActivity() {
             if (isLoading) 0.4f else 1f
     }
 
-    private fun irParaTelaConsulta(idEvento: Long) {
+    private fun abrirDetalheConsulta(consulta: ConsultaResponseDto) {
         startActivity(
             Intent(this, VisualisarConsultaMedico::class.java).apply {
-                putExtra("ID_EVENTO", idEvento)
+                putExtra("ID_EVENTO",     consulta.id)
+                putExtra("NOME_PACIENTE", consulta.nomePaciente ?: "Paciente")
             }
         )
     }

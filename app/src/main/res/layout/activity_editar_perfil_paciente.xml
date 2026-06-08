@@ -2,6 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText,Typos,MissingAutofillHints"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -24,7 +26,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_back"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:contentDescription="Voltar" />
 
         <TextView
@@ -197,5 +199,10 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        layout="@layout/view_bottom_nav_paciente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

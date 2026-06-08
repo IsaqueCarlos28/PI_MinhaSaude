@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Medico Application</string>
+    <string name="placeholder_avatar">?</string>
     <string-array name="ufs">
         <item>AC</item>
         <item>AL</item>

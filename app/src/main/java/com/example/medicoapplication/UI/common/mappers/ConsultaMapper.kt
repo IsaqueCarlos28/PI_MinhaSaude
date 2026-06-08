@@ -17,8 +17,10 @@ object ConsultaMapper {
 
     data class DisplayConsulta(
         val nomeMedico: String,
+        val nomePaciente: String,
         val data: String,
         val horaInicio: String,
+        val horaFim: String,
         val convenio: String,
         val status: String,
         val statusEnum: StatusConsulta
@@ -26,12 +28,14 @@ object ConsultaMapper {
 
     fun toDisplay(dto: ConsultaResponseDto): DisplayConsulta {
         return DisplayConsulta(
-            nomeMedico = dto.nomeMedico ?: "—",
-            data       = DateFormatter.apiToUiDate(dto.data),
-            horaInicio = TimeFormatter.apiToUiTime(dto.horaInicio),
-            convenio   = dto.nomeConvenio ?: "Particular",
-            status     = traduzirStatus(dto.status),
-            statusEnum = dto.status
+            nomeMedico  = dto.nomeMedico  ?: "—",
+            nomePaciente = dto.nomePaciente ?: "—",
+            data        = DateFormatter.apiToUiDate(dto.data),
+            horaInicio  = TimeFormatter.apiToUiTime(dto.horaInicio),
+            horaFim     = dto.horaFim?.let { TimeFormatter.apiToUiTime(it) } ?: "—",
+            convenio    = dto.nomeConvenio ?: "Particular",
+            status      = traduzirStatus(dto.status),
+            statusEnum  = dto.status
         )
     }
 
