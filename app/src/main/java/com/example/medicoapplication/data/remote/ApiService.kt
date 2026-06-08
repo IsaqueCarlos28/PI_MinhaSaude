@@ -120,6 +120,11 @@ interface ApiService {
         @Path("id") id: Long
     ): Response<MedicoResponseDto>
 
+    @GET("medicos/usuario/{id}")
+    suspend fun getMedicoByUsuarioId(
+        @Path("id") id: Long
+    ): Response<MedicoResponseDto>
+
     @POST("medicos")
     suspend fun createMedico(
         @Body medico: MedicoCreateRequestDto
