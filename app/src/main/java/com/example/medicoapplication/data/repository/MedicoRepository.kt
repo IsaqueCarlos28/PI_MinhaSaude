@@ -41,4 +41,9 @@ class MedicoRepository : BaseRepository() {
         val idMedico = requireUserId()
         return safeApiCall { api.getConsultasOfertadas(idMedico) }
     }
+
+    // Consultas ofertadas de qualquer médico pelo ID (visão pública)
+    suspend fun getConsultasOfertadasDoMedico(idMedico: Long): Result<List<ConsultaOfertadaResponseDto>> {
+        return safeApiCall { api.getConsultasOfertadas(idMedico) }
+    }
 }

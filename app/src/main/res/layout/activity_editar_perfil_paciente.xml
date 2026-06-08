@@ -201,8 +201,10 @@
     </androidx.core.widget.NestedScrollView>
 
     <include
+        android:id="@+id/bottomNavPaciente"
         layout="@layout/view_bottom_nav_paciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 </LinearLayout>
+

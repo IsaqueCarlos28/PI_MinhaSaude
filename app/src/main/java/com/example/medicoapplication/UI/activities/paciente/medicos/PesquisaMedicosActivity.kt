@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.MedicoAdapter
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
 import com.example.medicoapplication.viewmodel.paciente.medicos.BuscaMedicosViewModel
 import kotlinx.coroutines.launch
 
@@ -26,10 +28,13 @@ class PesquisaMedicosActivity : BaseActivity() {
 
     private val viewModel: BuscaMedicosViewModel by viewModels()
 
-    private var filtroAtivo = "PRESENCIAL"
     private lateinit var rvResultados: RecyclerView
     private lateinit var adapter: MedicoAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var tvVazio: TextView
+    private lateinit var etPesquisa: EditText
+    private lateinit var btnPresencial: Button
+    private lateinit var btnTele: Button
 
     override val menuType = BottomMenuType.PACIENTE
 
@@ -37,14 +42,15 @@ class PesquisaMedicosActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pesquisa_medicos)
 
-        val btnVoltar   = findViewById<ImageButton>(R.id.btnVoltarPesquisa)
-        val etPesquisa  = findViewById<EditText>(R.id.etPesquisarMedicoOuEspecialidade)
-        val btnPresencial = findViewById<Button>(R.id.btnFiltroParticular)
-        val btnTele     = findViewById<Button>(R.id.btnFiltroConvenio)
-        rvResultados    = findViewById(R.id.rvResultadosPesquisa)
-        progressBar     = ProgressBar(this).also { it.visibility = View.GONE }
+        val btnVoltar = findViewById<ImageButton>(R.id.btnVoltarPesquisa)
+        etPesquisa    = findViewById(R.id.etPesquisarMedicoOuEspecialidade)
+        btnPresencial = findViewById(R.id.btnFiltroParticular)
+        btnTele       = findViewById(R.id.btnFiltroConvenio)
+        rvResultados  = findViewById(R.id.rvResultadosPesquisa)
+        progressBar   = findViewById(R.id.progressPesquisa)
+        tvVazio       = findViewById<TextView?>(R.id.tvVazioPesquisa)
+            ?: TextView(this).also { it.visibility = View.GONE }
 
-        // Navigate to doctor's public profile on click
         adapter = MedicoAdapter(emptyList()) { medico ->
             val intent = Intent(this, PerfilMedicoPublicoActivity::class.java).apply {
                 putExtra("MEDICO_ID", medico.usuario!!.id)
@@ -52,34 +58,34 @@ class PesquisaMedicosActivity : BaseActivity() {
             }
             startActivity(intent)
         }
-
         rvResultados.layoutManager = LinearLayoutManager(this)
         rvResultados.adapter = adapter
+
+        // Estilo inicial — Presencial ativo
+        atualizarEstiloBotoesFiltro(btnPresencial, btnTele)
 
         btnVoltar.setOnClickListener { finish() }
 
         btnPresencial.setOnClickListener {
-            filtroAtivo = "PRESENCIAL"
             atualizarEstiloBotoesFiltro(btnPresencial, btnTele)
-            viewModel.filtrar(etPesquisa.text.toString())
+            viewModel.setFiltroTipo(TipoConsulta.PRESENCIAL)
         }
 
         btnTele.setOnClickListener {
-            filtroAtivo = "TELEMEDICINA"
             atualizarEstiloBotoesFiltro(btnTele, btnPresencial)
-            viewModel.filtrar(etPesquisa.text.toString())
+            viewModel.setFiltroTipo(TipoConsulta.TELECONSULTA)
         }
 
         etPesquisa.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.filtrar(s.toString())
+                viewModel.filtrar(s?.toString() ?: "")
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
         observeViewModel()
-        viewModel.carregarMedicos(1,20)
+        viewModel.carregarMedicos(0, 50)
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
 
@@ -88,13 +94,14 @@ class PesquisaMedicosActivity : BaseActivity() {
             viewModel.uiState.collect { state ->
                 when (state) {
                     is BuscaMedicosViewModel.UiState.Idle    -> Unit
-                    is BuscaMedicosViewModel.UiState.Loading -> progressBar.visibility = View.VISIBLE
+                    is BuscaMedicosViewModel.UiState.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                        tvVazio.visibility = View.GONE
+                    }
                     is BuscaMedicosViewModel.UiState.Success -> {
                         progressBar.visibility = View.GONE
                         adapter.atualizarLista(state.medicos)
-                        if (state.medicos.isEmpty()) {
-                            showToast("Nenhum médico encontrado")
-                        }
+                        tvVazio.visibility = if (state.medicos.isEmpty()) View.VISIBLE else View.GONE
                     }
                     is BuscaMedicosViewModel.UiState.Error -> {
                         progressBar.visibility = View.GONE
@@ -111,5 +118,4 @@ class PesquisaMedicosActivity : BaseActivity() {
         btnInativo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E2E8F0"))
         btnInativo.setTextColor(Color.parseColor("#64748B"))
     }
-
 }
