@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.adapters.ConsultasMedicoAdapter
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
+import com.example.medicoapplication.data.remote.DTO.StatusConsulta
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.viewmodel.medico.consulta.ConsultasMedicoViewModel
 import kotlinx.coroutines.launch
@@ -48,11 +48,10 @@ class ConsultasMedicoActivity : BaseActivity() {
             ativo.backgroundTintList = ColorStateList.valueOf(0xFF3B82F6.toInt())
         }
 
-        // TODO: implementar filtros por status quando a feature estiver pronta
-        //btnTodas.setOnClickListener      { destacar(btnTodas);      viewModel.carregarConsultas(null) }
-        //btnAgendadas.setOnClickListener  { destacar(btnAgendadas);  viewModel.carregarConsultas("AGENDADA") }
-        //btnRealizadas.setOnClickListener { destacar(btnRealizadas); viewModel.carregarConsultas("REALIZADA") }
-        //btnCanceladas.setOnClickListener { destacar(btnCanceladas); viewModel.carregarConsultas("CANCELADA") }
+        btnTodas.setOnClickListener      { destacar(btnTodas);      viewModel.aplicarFiltro(null) }
+        btnAgendadas.setOnClickListener  { destacar(btnAgendadas);  viewModel.aplicarFiltro(StatusConsulta.AGENDADA) }
+        btnRealizadas.setOnClickListener { destacar(btnRealizadas); viewModel.aplicarFiltro(StatusConsulta.REALIZADA) }
+        btnCanceladas.setOnClickListener { destacar(btnCanceladas); viewModel.aplicarFiltro(StatusConsulta.CANCELADA) }
 
         observeViewModel()
 

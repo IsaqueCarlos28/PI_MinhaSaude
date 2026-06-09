@@ -38,4 +38,6 @@ class ConsultasMedicoViewModel(
                 }
         }
     }
+
+    fun aplicarFiltro(nothing: Nothing?) {}
 }

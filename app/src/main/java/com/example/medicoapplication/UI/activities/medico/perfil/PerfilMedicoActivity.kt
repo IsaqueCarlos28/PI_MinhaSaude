@@ -1,5 +1,6 @@
 package com.example.medicoapplication.UI.activities.medico.perfil
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -27,7 +28,7 @@ class PerfilMedicoActivity : BaseActivity() {
         findViewById<TextView>(R.id.tvNomeCompletoMedico).text = nomeFallback.uppercase()
 
         findViewById<Button>(R.id.btnEditarPerfilMedico).setOnClickListener {
-            showToast("Edição de perfil em breve!")
+            startActivity(Intent(this, EditarPerfilMedicoActivity::class.java))
         }
 
         observeViewModel()
