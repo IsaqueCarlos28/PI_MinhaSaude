@@ -23,7 +23,7 @@ class ConsultasMedicoActivity : BaseActivity() {
     private val viewModel: ConsultasMedicoViewModel by viewModels()
     private lateinit var adapter: ConsultasMedicoAdapter
 
-    override val menuType = BottomMenuType.MEDICO
+    override val menuType = BottomMenuType.DISABLED
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +58,6 @@ class ConsultasMedicoActivity : BaseActivity() {
 
         destacar(btnTodas)
         viewModel.carregarConsultas()
-
-        setupBottomNavigation(R.id.nav_consultas_medico)
     }
 
     private fun observeViewModel() {

@@ -35,9 +35,6 @@ class ConfiguracoesMedicoActivity : BaseActivity() {
         findViewById<LinearLayout>(R.id.itemPerfilMedicoUsuario).setOnClickListener {
             startActivity(Intent(this, PerfilMedicoActivity::class.java))
         }
-        findViewById<LinearLayout>(R.id.itemConsultasOfertadas).setOnClickListener {
-            startActivity(Intent(this, ConsultasOfertadasActivity::class.java))
-        }
         findViewById<LinearLayout>(R.id.itemSegurancaMedico).setOnClickListener {
             startActivity(Intent(this, ResetPasswordActivity::class.java))
         }

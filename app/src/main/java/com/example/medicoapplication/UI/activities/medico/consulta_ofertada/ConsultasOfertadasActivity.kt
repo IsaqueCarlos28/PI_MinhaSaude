@@ -66,7 +66,7 @@ class ConsultasOfertadasActivity : BaseActivity() {
             startActivity(Intent(this, CriarConsultaOfertadaActivity::class.java))
         }
 
-        setupBottomNavigation(R.id.nav_consultas_medico)
+        setupBottomNavigation(R.id.nav_consultas_ofertadas_medico)
         viewModel.carregarConsultasOfertadas()
     }
 
