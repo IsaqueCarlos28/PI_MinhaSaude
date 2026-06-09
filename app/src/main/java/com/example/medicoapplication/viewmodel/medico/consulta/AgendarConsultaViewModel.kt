@@ -1,4 +1,4 @@
-package com.example.medicoapplication.viewmodel.paciente.medicos.marcar_consulta
+package com.example.medicoapplication.viewmodel.paciente.medicos.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -81,7 +81,7 @@ class AgendarConsultaViewModel(
         viewModelScope.launch {
             _disponibilidadeState.value = DisponibilidadeState.Loading
 
-            // consultaOfertadaRepository.getDisponibilidade usa requireUserId() para o médico logado,
+            // AgendaRepository.getDisponibilidade usa requireUserId() para o médico logado,
             // mas aqui somos um paciente consultando o médico de outro usuário — precisamos
             // chamar a API diretamente passando idMedico explicitamente.
             consultaOfertadaRepository.getDisponibilidadePublica(idMedico, idConsultaOfertada, semanas)

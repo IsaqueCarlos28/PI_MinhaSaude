@@ -1,4 +1,4 @@
-package com.example.medicoapplication.viewmodel.paciente.medicos.marcar_consulta
+package com.example.medicoapplication.viewmodel.paciente.medicos.consulta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

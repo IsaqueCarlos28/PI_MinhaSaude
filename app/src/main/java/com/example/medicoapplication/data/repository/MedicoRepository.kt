@@ -4,6 +4,7 @@ import com.example.medicoapplication.data.local.AppDependencies
 import com.example.medicoapplication.data.remote.RetrofitClient
 import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
+import com.example.medicoapplication.data.remote.DTO.medico.MedicoEditRequestDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoPageResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import java.util.Objects
@@ -45,5 +46,12 @@ class MedicoRepository : BaseRepository() {
     // Consultas ofertadas de qualquer médico pelo ID (visão pública)
     suspend fun getConsultasOfertadasDoMedico(idMedico: Long): Result<List<ConsultaOfertadaResponseDto>> {
         return safeApiCall { api.getConsultasOfertadas(idMedico) }
+    }
+
+
+    // Atualiza os dados do médico autenticado — PUT medicos/{id}
+    suspend fun updateMedico(dto: MedicoEditRequestDto): Result<MedicoResponseDto> {
+        val idMedico = requireUserId()
+        return safeApiCall { api.updateMedico(idMedico, dto) }
     }
 }

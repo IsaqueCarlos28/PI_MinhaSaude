@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente.medicos.marcar_consulta
+package com.example.medicoapplication.UI.activities.paciente.medicos
 
 import android.content.Intent
 import android.os.Bundle

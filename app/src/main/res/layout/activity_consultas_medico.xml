@@ -112,14 +112,38 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- LISTA DE CONSULTAS -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvConsultasMedico"
+    <!-- LISTA DE CONSULTAS (com estado vazio) -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="8dp"
-        android:clipToPadding="false" />
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvConsultasMedico"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false" />
+
+        <TextView
+            android:id="@+id/tvConsultasMedicoVazio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Nenhuma consulta encontrada"
+            android:textColor="#94A3B8"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <!-- BOTTOM NAVIGATION -->
+    <include
+        android:id="@+id/bottomNavMedico"
+        layout="@layout/view_bottom_nav_medico"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

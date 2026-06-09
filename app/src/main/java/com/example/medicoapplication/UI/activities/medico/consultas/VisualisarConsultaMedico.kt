@@ -72,7 +72,7 @@ class VisualisarConsultaMedico : BaseActivity() {
             finish()
         }
 
-
+        setupBottomNavigation(R.id.nav_agenda_medico)
     }
 
     // -----------------------------------------------------------------------

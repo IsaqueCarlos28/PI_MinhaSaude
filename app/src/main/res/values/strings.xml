@@ -1,50 +1,20 @@
 <resources>
     <string name="app_name">Medico Application</string>
     <string name="placeholder_avatar">?</string>
-    <string-array name="ufs">
-        <item>AC</item>
-        <item>AL</item>
-        <item>AP</item>
-        <item>AM</item>
-        <item>BA</item>
-        <item>CE</item>
-        <item>DF</item>
-        <item>ES</item>
-        <item>GO</item>
-        <item>MA</item>
-        <item>MT</item>
-        <item>MS</item>
-        <item>MG</item>
-        <item>PA</item>
-        <item>PB</item>
-        <item>PR</item>
-        <item>PE</item>
-        <item>PI</item>
-        <item>RJ</item>
-        <item>RN</item>
-        <item>RS</item>
-        <item>RO</item>
-        <item>RR</item>
-        <item>SC</item>
-        <item>SP</item>
-        <item>SE</item>
-        <item>TO</item>
-    </string-array>
-    <string name="title_activity_settings">SettingsActivity</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <!-- Preference headers -->
+    <string name="messages_header">Mensagens</string>
+    <string name="sync_header">Sincronização</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <!-- EditTextPreference -->
+    <string name="signature_title">Assinatura</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- ListPreference -->
+    <string name="reply_title">Responder</string>
 
+    <!-- SwitchPreferences -->
+    <string name="sync_title">Sincronizar</string>
+    <string name="attachment_title">Anexos</string>
+    <string name="attachment_summary_on">Anexos habilitados</string>
+    <string name="attachment_summary_off">Anexos desabilitados</string>
 </resources>

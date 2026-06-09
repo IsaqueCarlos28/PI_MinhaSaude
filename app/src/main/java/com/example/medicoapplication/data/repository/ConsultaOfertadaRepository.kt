@@ -1,4 +1,5 @@
 package com.example.medicoapplication.data.repository
+import com.example.medicoapplication.data.remote.DTO.agenda.DisponibilidadeSemanaDTO
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.*
 import com.example.medicoapplication.data.remote.RetrofitClient
 
@@ -51,6 +52,13 @@ class ConsultaOfertadaRepository : BaseRepository() {
         val idMedico = requireUserId()
         return safeApiCall { api.deleteConsultaOfertada(idMedico, id) }
     }
+
+    suspend fun getDisponibilidadePublica(
+        idMedico: Long,
+        idConsulta: Long,
+        semanas: Int = 4
+    ): Result<List<DisponibilidadeSemanaDTO>> =
+        safeApiCall { api.getDisponibilidade(idMedico, idConsulta, semanas) }
 
 }
 
