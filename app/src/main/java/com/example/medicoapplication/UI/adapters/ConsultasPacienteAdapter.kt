@@ -1,9 +1,11 @@
 package com.example.medicoapplication.UI.adapters
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
@@ -12,13 +14,15 @@ import com.example.medicoapplication.data.remote.DTO.consulta.ConsultaResponseDt
 
 class ConsultasPacienteAdapter(
     private var consultas: List<ConsultaResponseDto>,
-    private val onItemClick: (ConsultaResponseDto) -> Unit = {},
+    private val onItemClick: (ConsultaResponseDto) -> Unit = {}
 ) : RecyclerView.Adapter<ConsultasPacienteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvNomeMedico: TextView = itemView.findViewById(R.id.tvNomeMedicoItem)
-        val tvData:       TextView = itemView.findViewById(R.id.tvDataConsultaItem)
-        val btnVerConsulta: Button   = itemView.findViewById(R.id.btnReagendar)
+        val tvNomeMedico:   TextView  = itemView.findViewById(R.id.tvNomeMedicoItem)
+        val tvEspecialidade: TextView = itemView.findViewById(R.id.tvEspecialidadeItem)
+        val tvData:         TextView  = itemView.findViewById(R.id.tvDataConsultaItem)
+        val tvStatus:       TextView  = itemView.findViewById(R.id.tvStatusItem)
+        val imgAvatar:      ImageView = itemView.findViewById(R.id.imgMedicoAvatar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,14 +36,16 @@ class ConsultasPacienteAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val consulta = consultas[position]
 
-        val labelMedico = buildString {
-            append(consulta.nomeMedico ?: "Médico não informado")
-            if (!consulta.nomeConvenio.isNullOrBlank()) append(" - ${consulta.nomeConvenio}")
-        }
-        holder.tvNomeMedico.text = labelMedico
+        holder.tvNomeMedico.text    = consulta.nomeMedico ?: "Médico não informado"
+        holder.tvEspecialidade.text = consulta.nomeConvenio
+            ?.takeIf { it.isNotBlank() }
+            ?.let { "Convênio: $it" }
+            ?: "Particular"
         holder.tvData.text = formatarDataHora(consulta.data, consulta.horaInicio)
 
-        // Clique no item abre o detalhe
+        bindStatus(holder.tvStatus, consulta.status)
+
+        // The whole card opens DetalheConsultaActivity — where cancel/reagendar live
         holder.itemView.setOnClickListener { onItemClick(consulta) }
     }
 
@@ -48,12 +54,34 @@ class ConsultasPacienteAdapter(
         notifyDataSetChanged()
     }
 
+    // ─── Status badge ────────────────────────────────────────────────────────
+
+    private fun bindStatus(tv: TextView, status: StatusConsulta) {
+        when (status) {
+            StatusConsulta.AGENDADA -> {
+                tv.text = "Agendada"
+                tv.setTextColor(Color.parseColor("#16A34A"))
+                tv.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#DCFCE7"))
+            }
+            StatusConsulta.CANCELADA -> {
+                tv.text = "Cancelada"
+                tv.setTextColor(Color.parseColor("#DC2626"))
+                tv.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FEE2E2"))
+            }
+            StatusConsulta.REALIZADA -> {
+                tv.text = "Realizada"
+                tv.setTextColor(Color.parseColor("#2563EB"))
+                tv.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#DBEAFE"))
+            }
+        }
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
     private fun formatarDataHora(data: String, hora: String): String {
         return try {
-            val partes = data.split("-")
-            val dataFormatada = "${partes[2]}/${partes[1]}/${partes[0]}"
-            val horaFormatada = hora.substring(0, 5)
-            "$dataFormatada às $horaFormatada"
+            val (ano, mes, dia) = data.split("-")
+            "$dia/$mes/$ano às ${hora.substring(0, 5)}"
         } catch (e: Exception) {
             "$data às $hora"
         }

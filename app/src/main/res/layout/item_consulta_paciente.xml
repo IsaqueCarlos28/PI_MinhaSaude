@@ -21,12 +21,12 @@
             android:id="@+id/imgMedicoAvatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_user"
+            android:src="@drawable/ic_doctor"
             android:background="@drawable/bg_button_primary"
-            android:backgroundTint="#3B82F6"
+            android:backgroundTint="#E8F0FF"
             android:padding="10dp" />
 
-        <!-- Info + Botões em coluna -->
+        <!-- Info (nome + data/hora) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -38,36 +38,75 @@
                 android:id="@+id/tvNomeMedicoItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nome do medico | Especialidade"
+                android:text="Dr. Nome do Médico"
                 android:textColor="#1E293B"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
-                android:id="@+id/tvDataConsultaItem"
+                android:id="@+id/tvEspecialidadeItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="XX:Xx"
+                android:text="Especialidade"
                 android:textColor="#64748B"
-                android:textSize="12sp"
-                android:layout_marginBottom="2dp"/>
-
-            <!-- Botões abaixo do texto -->
-            <Button
-                android:id="@+id/btnReagendar"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_button_primary"
-                android:backgroundTint="#3B82F6"
-                android:text="Reagendar"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
                 android:textSize="11sp"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="2dp"/>
+                android:layout_marginBottom="4dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_calendar"
+                    android:tint="#94A3B8" />
+
+                <TextView
+                    android:id="@+id/tvDataConsultaItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="01/01/2025 às 09:00"
+                    android:textColor="#64748B"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Status badge + chevron -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/tvStatusItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agendada"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:background="@drawable/bg_button_primary"
+                android:backgroundTint="#DCFCE7"
+                android:textColor="#16A34A"
+                android:layout_marginBottom="6dp"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_arrow_forward"
+                android:tint="#CBD5E1"
+                android:contentDescription="Ver detalhes" />
 
         </LinearLayout>
 

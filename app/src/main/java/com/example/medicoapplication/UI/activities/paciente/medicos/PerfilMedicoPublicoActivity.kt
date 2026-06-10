@@ -71,7 +71,7 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
                             }
                             startActivity(
                                 Intent(this@PerfilMedicoPublicoActivity, AgendarConsultaActivity::class.java).apply {
-                                    putExtra("ID_MEDICO",            medicoId)
+                                    putExtra("MEDICO_ID",            medicoId)
                                     putExtra("NOME_MEDICO",          info.nome)
                                     putExtra("ESPECIALIDADE",        info.especialidade)
                                     putExtra("ID_CONSULTA_OFERTADA", consultasOfertadas.first().id)
