@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.medico.consulta_ofertada
+package com.example.medicoapplication.UI.activities.medico.servicos
 
 import android.content.Intent
 import android.os.Bundle
@@ -66,7 +66,7 @@ class ConsultasOfertadasActivity : BaseActivity() {
             startActivity(Intent(this, CriarConsultaOfertadaActivity::class.java))
         }
 
-        setupBottomNavigation(R.id.nav_consultas_ofertadas_medico)
+        setupBottomNavigation(R.id.nav_servicos_medico)
         viewModel.carregarConsultasOfertadas()
     }
 

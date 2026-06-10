@@ -3,27 +3,24 @@ package com.example.medicoapplication.UI.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
 
-class EspecialidadeAdapter(
+class EspecialidadePreviewAdapter(
     private var especialidades: List<MedicoEspecialidadeResponseDto>,
-    private val onExcluir: (MedicoEspecialidadeResponseDto) -> Unit
-) : RecyclerView.Adapter<EspecialidadeAdapter.ViewHolder>() {
+    private val onClick: (MedicoEspecialidadeResponseDto) -> Unit
+) : RecyclerView.Adapter<EspecialidadePreviewAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
 
         val tvNome: TextView =
             itemView.findViewById(R.id.tvNomeEspecialidade)
 
         val tvRqe: TextView =
             itemView.findViewById(R.id.tvRqe)
-
-        val btnExcluir: ImageButton =
-            itemView.findViewById(R.id.btnExcluirEspecialidade)
     }
 
     override fun onCreateViewHolder(
@@ -33,7 +30,7 @@ class EspecialidadeAdapter(
 
         val view = LayoutInflater.from(parent.context)
             .inflate(
-                R.layout.item_especialidade,
+                R.layout.item_especialidade_preview,
                 parent,
                 false
             )
@@ -57,8 +54,8 @@ class EspecialidadeAdapter(
         holder.tvRqe.text =
             "RQE: ${item.rqe ?: "-"}"
 
-        holder.btnExcluir.setOnClickListener {
-            onExcluir(item)
+        holder.itemView.setOnClickListener {
+            onClick(item)
         }
     }
 
