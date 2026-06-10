@@ -1,23 +1,36 @@
 package com.example.medicoapplication.UI.activities.medico.configuracao
 
-import com.example.medicoapplication.UI.activities.configuracao.BaseConfigTextoActivity
+import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.Switch
+import android.widget.TextView
+import com.example.medicoapplication.R
+import com.example.medicoapplication.UI.activities.BaseActivity
 
-class ConfigNotificacoesMedicoActivity : BaseConfigTextoActivity() {
-    override val titulo = "Notificações"
-    override val subtitulo = "Avisos para médicos"
-    override val conteudo = """
-        Nesta área o médico poderá acompanhar e configurar avisos relacionados à sua agenda e aos atendimentos.
+class ConfigNotificacoesMedicoActivity : BaseActivity() {
 
-        Sugestões de notificações para o médico:
-        • Nova consulta agendada por um paciente;
-        • Consulta cancelada ou reagendada;
-        • Lembrete de próximo atendimento;
-        • Alerta de alteração na agenda;
-        • Avisos sobre horários disponíveis cadastrados.
+    private val prefs by lazy { getSharedPreferences("config_notificacoes_medico", MODE_PRIVATE) }
 
-        Exemplo:
-        Você pode receber uma notificação quando um paciente agendar uma consulta em um horário ofertado por você.
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_config_notificacoes)
 
-        No momento, esta tela está preparada como modelo visual. A ativação real das notificações pode ser integrada futuramente com permissões do Android, Firebase Cloud Messaging ou notificações locais.
-    """
+        findViewById<ImageButton>(R.id.btnVoltarNotificacoes).setOnClickListener { finish() }
+        findViewById<TextView>(R.id.tvDescricaoNotificacoes).text =
+            "Escolha quais avisos deseja receber sobre agenda e atendimentos."
+        findViewById<Switch>(R.id.swLembretesConsulta).text = "Lembretes de próximos atendimentos"
+        findViewById<Switch>(R.id.swAlteracoesAgenda).text = "Novas consultas, reagendamentos e cancelamentos"
+
+        configurarSwitch(R.id.swNotificacoesGerais, "gerais", true)
+        configurarSwitch(R.id.swLembretesConsulta, "lembretes_atendimento", true)
+        configurarSwitch(R.id.swAlteracoesAgenda, "alteracoes_agenda", true)
+    }
+
+    private fun configurarSwitch(id: Int, chave: String, valorPadrao: Boolean) {
+        val switch = findViewById<Switch>(id)
+        switch.isChecked = prefs.getBoolean(chave, valorPadrao)
+        switch.setOnCheckedChangeListener { _, checked ->
+            prefs.edit().putBoolean(chave, checked).apply()
+        }
+    }
 }

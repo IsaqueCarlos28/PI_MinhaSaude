@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.paciente.configuracao
+package com.example.medicoapplication.UI.activities.medico.configuracao
 
 import android.os.Bundle
 import android.widget.ImageButton
@@ -6,9 +6,9 @@ import android.widget.RadioGroup
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 
-class ConfigIdiomaActivity : BaseActivity() {
+class ConfigIdiomaMedicoActivity : BaseActivity() {
 
-    private val prefs by lazy { getSharedPreferences("config_idioma", MODE_PRIVATE) }
+    private val prefs by lazy { getSharedPreferences("config_idioma_medico", MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

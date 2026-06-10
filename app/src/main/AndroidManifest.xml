@@ -67,7 +67,7 @@
             android:name=".UI.activities.paciente.medicos.PesquisaMedicosActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.medicos.marcar_consulta.AgendarConsultaActivity"
+            android:name=".UI.activities.paciente.medicos.AgendarConsultaActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.paciente.perfil.PerfilPacienteActivity"
@@ -88,10 +88,16 @@
             android:name=".UI.activities.medico.perfil.PerfilMedicoActivity"
             android:exported="false" />
         <activity
+            android:name=".UI.activities.medico.perfil.EditarPerfilMedicoActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.activities.medico.configuracao.ConfigNotificacoesMedicoActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.medico.configuracao.ConfigFaqMedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.activities.medico.configuracao.ConfigIdiomaMedicoActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.medico.configuracao.ConfigTermosMedicoActivity"
@@ -109,7 +115,7 @@
             android:name=".UI.activities.medico.consulta_ofertada.CriarConsultaOfertadaActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.activities.paciente.medicos.marcar_consulta.ConfirmacaoConsultaActivity"
+            android:name=".UI.activities.paciente.medicos.ConfirmacaoConsultaActivity"
             android:exported="false" />
         <activity
             android:name=".UI.activities.paciente.consultas.DetalheConsultaActivity"

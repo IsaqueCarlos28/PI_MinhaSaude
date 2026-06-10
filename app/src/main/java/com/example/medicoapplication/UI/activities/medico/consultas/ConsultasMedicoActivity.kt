@@ -71,23 +71,23 @@ class ConsultasMedicoActivity : BaseActivity() {
             }
             ativo.backgroundTintList = ColorStateList.valueOf(0xFF3B82F6.toInt())
         }
-//
-//        btnTodas.setOnClickListener {
-//            destacar(btnTodas)
-//            viewModel.filtrar(null)
-//        }
-//        btnAgendadas.setOnClickListener {
-//            destacar(btnAgendadas)
-//            viewModel.filtrar(StatusConsulta.AGENDADA)
-//        }
-//        btnRealizadas.setOnClickListener {
-//            destacar(btnRealizadas)
-//            viewModel.filtrar(StatusConsulta.REALIZADA)
-//        }
-//        btnCanceladas.setOnClickListener {
-//            destacar(btnCanceladas)
-//            viewModel.filtrar(StatusConsulta.CANCELADA)
-//        }
+
+        btnTodas.setOnClickListener {
+            destacar(btnTodas)
+            viewModel.filtrar(null)
+        }
+        btnAgendadas.setOnClickListener {
+            destacar(btnAgendadas)
+            viewModel.filtrar(StatusConsulta.AGENDADA)
+        }
+        btnRealizadas.setOnClickListener {
+            destacar(btnRealizadas)
+            viewModel.filtrar(StatusConsulta.REALIZADA)
+        }
+        btnCanceladas.setOnClickListener {
+            destacar(btnCanceladas)
+            viewModel.filtrar(StatusConsulta.CANCELADA)
+        }
 
         // Inicia com "Todas" selecionado
         destacar(btnTodas)

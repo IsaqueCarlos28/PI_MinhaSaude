@@ -1,58 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#2C2C2E">
+    android:background="#F0F4F8">
 
-    <!-- CARD BRANCO COM CANTOS ARREDONDADOS NO TOPO -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_gradient"
+        android:paddingTop="36dp"
+        android:paddingBottom="22dp"
+        android:paddingHorizontal="16dp">
+
+        <ImageButton
+            android:id="@+id/btnVoltarIdioma"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_voltar_button"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="#2563EB" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Idioma"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/bg_config_card"
-        android:layout_marginTop="60dp">
+        android:padding="16dp">
 
-
-
-        <!-- ITEM DE LISTA -->
-        <LinearLayout
-            android:id="@+id/itemIdiomaDetalhe"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:text="Selecione o idioma de preferência."
+            android:textColor="#475569"
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp" />
+
+        <RadioGroup
+            android:id="@+id/rgIdiomas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_list_item"
-            android:paddingHorizontal="14dp"
-            android:layout_marginHorizontal="16dp"
-            android:clickable="true"
-            android:focusable="true">
+            android:orientation="vertical"
+            android:padding="8dp">
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_email"
-                android:tint="#64748B" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="12dp"
-                android:text="Idioma"
+            <RadioButton
+                android:id="@+id/rbPortugues"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Português"
                 android:textColor="#1E293B"
                 android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="›"
-                android:textColor="#94A3B8"
-                android:textSize="20sp" />
+            <RadioButton
+                android:id="@+id/rbIngles"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Inglês"
+                android:textColor="#1E293B"
+                android:textSize="14sp" />
 
-        </LinearLayout>
+            <RadioButton
+                android:id="@+id/rbEspanhol"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Espanhol"
+                android:textColor="#1E293B"
+                android:textSize="14sp" />
+        </RadioGroup>
 
+        <TextView
+            android:id="@+id/tvAvisoIdioma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_list_item"
+            android:padding="14dp"
+            android:text="A preferência fica salva localmente. Para tradução completa do app, é necessário criar arquivos strings.xml por idioma."
+            android:textColor="#64748B"
+            android:textSize="13sp" />
     </LinearLayout>
-
 </LinearLayout>
