@@ -41,4 +41,13 @@ object DateFormatter {
             null
         }
     }
+
+    /** Parses an ISO date string (yyyy-MM-dd) to a [LocalDate], or null if invalid. */
+    fun apiToLocalDate(apiDate: String): LocalDate? {
+        return try {
+            LocalDate.parse(apiDate, API_FORMAT)
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

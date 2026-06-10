@@ -144,12 +144,12 @@
                         android:textSize="14sp"
                         android:inputType="phone"
                         android:layout_marginBottom="14dp" />
-
                     <!-- Data de Nascimento -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Data de Nascimento (yyyy-MM-dd)"
+                        android:text="Data de Nascimento (DD/MM/AAAA)"
+                        android:hint="31/01/2000"
                         android:textColor="#64748B"
                         android:textSize="12sp"
                         android:layout_marginBottom="4dp" />
