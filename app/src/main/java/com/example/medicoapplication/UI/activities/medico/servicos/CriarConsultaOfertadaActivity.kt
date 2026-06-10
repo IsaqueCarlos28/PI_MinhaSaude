@@ -1,4 +1,4 @@
-package com.example.medicoapplication.UI.activities.medico.consulta_ofertada
+package com.example.medicoapplication.UI.activities.medico.servicos
 
 import android.os.Bundle
 import android.view.View

@@ -8,8 +8,9 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.medico.agenda.AgendaMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.ConfiguracoesMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
-import com.example.medicoapplication.UI.activities.medico.consulta_ofertada.ConsultasOfertadasActivity
+import com.example.medicoapplication.UI.activities.medico.servicos.ConsultasOfertadasActivity
 import com.example.medicoapplication.UI.activities.medico.perfil.PerfilMedicoActivity
+import com.example.medicoapplication.UI.activities.medico.servicos.MedicoServicosActivity
 import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
@@ -133,10 +134,10 @@ abstract class BaseActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_consultas_ofertadas_medico -> {
-                    if (this !is ConsultasOfertadasActivity) {
+                R.id.nav_servicos_medico -> {
+                    if (this !is MedicoServicosActivity) {
                         startActivity(
-                            Intent(this, ConsultasOfertadasActivity::class.java)
+                            Intent(this, MedicoServicosActivity::class.java)
                         )
                     }
                     true

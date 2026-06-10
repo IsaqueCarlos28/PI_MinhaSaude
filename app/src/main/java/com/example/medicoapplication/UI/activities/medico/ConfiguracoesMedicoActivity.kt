@@ -11,7 +11,6 @@ import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.LoginActivity
 import com.example.medicoapplication.UI.activities.auth_e_cadastro.ResetPasswordActivity
-import com.example.medicoapplication.UI.activities.medico.consulta_ofertada.ConsultasOfertadasActivity
 import com.example.medicoapplication.UI.activities.medico.perfil.PerfilMedicoActivity
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.viewmodel.auth.LogoutViewModel
