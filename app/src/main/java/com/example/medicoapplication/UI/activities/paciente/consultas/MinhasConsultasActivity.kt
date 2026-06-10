@@ -46,7 +46,7 @@ class MinhasConsultasActivity : BaseActivity() {
     private lateinit var calendarioAdapter: CalendarioAdapter
 
     // Track the currently selected date so a second tap clears the filter
-    private var dataSelecionada: String? = null
+    private var dataSelecionada: String? = formatoDataApi.format(calendar.time)
 
     override val menuType = BottomMenuType.PACIENTE
 
@@ -84,8 +84,8 @@ class MinhasConsultasActivity : BaseActivity() {
         )
         rvCalendario.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 7)
         rvCalendario.adapter = calendarioAdapter
-
         atualizarCalendario(tvMesAno, tvDataSelecionada)
+        viewModel.filtrarPorData(dataSelecionada)
 
         btnMesAnterior.setOnClickListener {
             calendar.add(Calendar.MONTH, -1)
