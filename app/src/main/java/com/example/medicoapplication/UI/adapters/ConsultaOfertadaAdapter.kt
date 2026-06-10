@@ -74,10 +74,4 @@ class ConsultaOfertadaAdapter(
             hours * 60 + minutes
         } catch (e: Exception) { 0 }
     }
-
-    fun atualizarLista(
-        novaLista: List<ConsultaOfertadaResponseDto>
-    ) {
-        submitList(novaLista)
-    }
 }

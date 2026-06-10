@@ -30,7 +30,7 @@ class LoginActivity : BaseActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
 
-    private var tipoUsuario = "Paciente"
+    private var tipoUsuario: String? = null
     private lateinit var tabLayout: TabLayout
     private lateinit var inputEmail: EditText
     private lateinit var inputSenha: EditText
@@ -55,6 +55,13 @@ class LoginActivity : BaseActivity() {
         botaoLogin     = findViewById(R.id.btnLogin)
         tvIrCadastro   = findViewById(R.id.tvIrParaCadastro)
         tvEsqueciSenha = findViewById(R.id.tvEsqueciSenha)
+
+        // Remove a seleção automática que o TabLayout faz na primeira aba
+        tabLayout.post {
+            for (i in 0 until tabLayout.tabCount) {
+                tabLayout.getTabAt(i)?.view?.isSelected = false
+            }
+        }
     }
 
     private fun setupTabListener() {
@@ -86,6 +93,11 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun tentarLogin() {
+        if (tipoUsuario == null) {
+            showToast("Selecione o tipo de usuário: Paciente ou Médico.")
+            return
+        }
+
         val email = inputEmail.text.toString().trim()
         val senha = inputSenha.text.toString().trim()
 

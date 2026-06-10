@@ -51,7 +51,9 @@ class HomePacienteActivity : BaseActivity() {
             consultas   = emptyList(),
             onItemClick = { consulta ->
                 startActivity(
-                    Intent(this, DetalheConsultaActivity::class.java)
+                    Intent(this, DetalheConsultaActivity::class.java).apply {
+                        putExtra("ID_EVENTO", consulta.id)
+                    }
                 )
             }
         )

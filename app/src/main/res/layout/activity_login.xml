@@ -44,12 +44,14 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@drawable/bg_tab_selector"
+            android:padding="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tabBackground="@drawable/bg_tab_item_selector"
             app:tabIndicatorHeight="0dp"
-            app:tabSelectedTextColor="#000000"
+            app:tabSelectedTextColor="#5B21B6"
             app:tabTextColor="#757575">
 
             <com.google.android.material.tabs.TabItem android:text="Paciente" />

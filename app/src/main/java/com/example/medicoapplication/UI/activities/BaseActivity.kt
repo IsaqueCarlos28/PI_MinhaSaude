@@ -1,16 +1,15 @@
 package com.example.medicoapplication.UI.activities
 
+import ConfiguracoesMedicoActivity
 import android.content.Intent
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.medico.agenda.AgendaMedicoActivity
-import com.example.medicoapplication.UI.activities.medico.ConfiguracoesMedicoActivity
 import com.example.medicoapplication.UI.activities.medico.HomeMedicoActivity
-import com.example.medicoapplication.UI.activities.medico.servicos.ConsultasOfertadasActivity
+import com.example.medicoapplication.UI.activities.medico.consulta_ofertada.ConsultasOfertadasActivity
 import com.example.medicoapplication.UI.activities.medico.perfil.PerfilMedicoActivity
-import com.example.medicoapplication.UI.activities.medico.servicos.MedicoServicosActivity
 import com.example.medicoapplication.UI.activities.paciente.medicos.BuscaMedicosActivity
 import com.example.medicoapplication.UI.activities.paciente.HomePacienteActivity
 import com.example.medicoapplication.UI.activities.paciente.consultas.MinhasConsultasActivity
@@ -134,10 +133,10 @@ abstract class BaseActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.nav_servicos_medico -> {
-                    if (this !is MedicoServicosActivity) {
+                R.id.nav_consultas_ofertadas_medico -> {
+                    if (this !is ConsultasOfertadasActivity) {
                         startActivity(
-                            Intent(this, MedicoServicosActivity::class.java)
+                            Intent(this, ConsultasOfertadasActivity::class.java)
                         )
                     }
                     true

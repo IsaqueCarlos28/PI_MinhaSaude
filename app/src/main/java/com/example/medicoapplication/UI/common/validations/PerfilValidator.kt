@@ -44,7 +44,11 @@ object PerfilValidator {
         }
 
         if (dto.dataNascimento.isNotBlank()) {
-            DateFormatter.uiToLocalDate(dto.dataNascimento)
+            // dto.dataNascimento is already in API/ISO format (yyyy-MM-dd) because
+            // PerfilMapper.uiToApi() converts it before validation is called.
+            // We accept both ISO (yyyy-MM-dd) and UI (dd/MM/yyyy) formats here.
+            val parsedDate = DateFormatter.uiToLocalDate(dto.dataNascimento)
+                ?: DateFormatter.apiToLocalDate(dto.dataNascimento)
                 ?: return ValidationResult.Error(
                     ValidationField.DATA_NASCIMENTO,
                     "Data inválida. Use o formato DD/MM/AAAA."
