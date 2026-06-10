@@ -3,6 +3,7 @@ package com.example.medicoapplication.viewmodel.paciente.medicos.marcar_consulta
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicoapplication.data.remote.DTO.agenda.DisponibilidadeDiaDTO
+import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
 import com.example.medicoapplication.data.remote.DTO.medico.MedicoResponseDto
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.AgendaRepository
@@ -22,10 +23,16 @@ class AgendarConsultaViewModel(
     // ─── Estados ─────────────────────────────────────────────────────────────
 
     sealed class UiState {
-        object Idle    : UiState()
+        object Idle : UiState()
         object Loading : UiState()
-        data class MedicoCarregado(val medico: MedicoResponseDto) : UiState()
-        data class Error(val error: NetworkError) : UiState()
+
+        data class ConsultaOfertadaCarregada(
+            val consultaOfertada: ConsultaOfertadaResponseDto
+        ) : UiState()
+
+        data class Error(
+            val error: NetworkError
+        ) : UiState()
     }
 
     sealed class DisponibilidadeState {
@@ -55,12 +62,29 @@ class AgendarConsultaViewModel(
     // ─── Ações ───────────────────────────────────────────────────────────────
 
     /** Carrega as informações do médico para exibição no header. */
-    fun carregarMedico(idMedico: Long) {
+    fun carregarConsultaOfertada(
+        idMedico: Long,
+        idConsultaOfertada: Long
+    ) {
         viewModelScope.launch {
+
             _uiState.value = UiState.Loading
-            pacienteRepository.getMedico(idMedico)
-                .onSuccess { _uiState.value = UiState.MedicoCarregado(it) }
-                .onFailure { _uiState.value = UiState.Error(it.toNetworkError()) }
+
+            consultaOfertadaRepository
+                .getConsultaOfertada(
+                    idMedico,
+                    idConsultaOfertada
+                )
+                .onSuccess {
+
+                    _uiState.value =
+                        UiState.ConsultaOfertadaCarregada(it)
+                }
+                .onFailure {
+
+                    _uiState.value =
+                        UiState.Error(it.toNetworkError())
+                }
         }
     }
 

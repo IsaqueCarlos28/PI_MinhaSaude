@@ -253,17 +253,18 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Schedule button -->
-            <Button
-                android:id="@+id/btnAgendarComEsteMedico"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:text="Agendar Consulta"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Consultas Disponíveis"
                 android:textStyle="bold"
-                android:background="@drawable/bg_button_primary"
-                android:backgroundTint="#3B82F6"
-                android:layout_marginBottom="8dp" />
+                android:textSize="18sp"
+                android:layout_marginBottom="12dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvConsultasOfertadas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 

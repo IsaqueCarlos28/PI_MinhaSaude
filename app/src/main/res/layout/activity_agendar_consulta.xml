@@ -75,6 +75,24 @@
                         android:gravity="center" />
 
                     <TextView
+                        android:id="@+id/tvTipoConsultaAgendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo" />
+
+                    <TextView
+                        android:id="@+id/tvLocalConsultaAgendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Local" />
+
+                    <TextView
+                        android:id="@+id/tvValorConsultaAgendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Valor" />
+
+                    <TextView
                         android:id="@+id/tvEspecialidadeAgendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

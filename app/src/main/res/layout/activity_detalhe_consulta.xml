@@ -135,6 +135,29 @@
                         android:textSize="15sp"
                         android:layout_marginBottom="16dp" />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E5E7EB"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Local"
+                        android:textColor="#64748B"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="2dp" />
+
+                    <TextView
+                        android:id="@+id/tvDetalheEndereco"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textColor="#1E293B"
+                        android:textSize="15sp"
+                        android:layout_marginBottom="16dp" />
+
                     <!-- Status -->
                     <TextView
                         android:layout_width="wrap_content"

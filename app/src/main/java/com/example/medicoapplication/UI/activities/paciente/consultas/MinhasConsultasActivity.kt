@@ -178,6 +178,11 @@ class MinhasConsultasActivity : BaseActivity() {
         repeat(primeiroDiaSemana) { dias.add("") }
         for (d in 1..totalDias) dias.add(d.toString())
 
-        calendarioAdapter.atualizarMes(dias, dataSelecionada)
+        calendarioAdapter.atualizarMes(
+            dias = dias,
+            ano = calendar.get(Calendar.YEAR),
+            mes = calendar.get(Calendar.MONTH),
+            selecao = dataSelecionada
+        )
     }
 }

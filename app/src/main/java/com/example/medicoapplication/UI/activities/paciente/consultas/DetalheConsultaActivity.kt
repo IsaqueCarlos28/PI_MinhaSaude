@@ -60,13 +60,14 @@ class DetalheConsultaActivity : BaseActivity() {
                     is DetalheConsultaViewModel.UiState.Loading -> Unit
                     is DetalheConsultaViewModel.UiState.Error   -> handleError(state.error)
                     is DetalheConsultaViewModel.UiState.Success -> {
-                        val display = ConsultaMapper.toDisplay(state.consulta)
+                        val display = ConsultaMapper.toDisplay(state.detalhe.consulta)
 
                         findViewById<TextView>(R.id.tvDetalheMedico).text   = display.nomeMedico
                         findViewById<TextView>(R.id.tvDetalheData).text     = display.data
                         findViewById<TextView>(R.id.tvDetalheHora).text     = display.horaInicio
                         findViewById<TextView>(R.id.tvDetalheConvenio).text = display.convenio
                         findViewById<TextView>(R.id.tvDetalheStatus).text   = display.status
+                        findViewById<TextView>(R.id.tvDetalheEndereco).text = state.detalhe.enderecoCompleto
 
                         val podeAcionar  = display.statusEnum == StatusConsulta.AGENDADA
                         val btnReagendar = findViewById<Button>(R.id.btnReagendarDetalhe)
@@ -82,7 +83,7 @@ class DetalheConsultaActivity : BaseActivity() {
                                     ReagendarConsultaActivity::class.java
                                 ).apply {
                                     putExtra("ID_EVENTO",   idEvento)
-                                    putExtra("NOME_MEDICO", state.consulta.nomeMedico ?: "")
+                                    putExtra("NOME_MEDICO", state.detalhe.consulta.nomeMedico ?: "")
                                 }
                             )
                         }

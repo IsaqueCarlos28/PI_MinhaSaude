@@ -79,14 +79,16 @@ class CalendarioAdapter(
 
     // ─── Public update methods ────────────────────────────────────────────────
 
-    fun atualizarMes(dias: List<String>, selecao: String?) {
-        diasNoMes       = dias
+    fun atualizarMes(
+        dias: List<String>,
+        ano: Int,
+        mes: Int,
+        selecao: String?
+    ) {
+        diasNoMes = dias
+        this.ano = ano
+        this.mes = mes
         dataSelecionada = selecao
-
-        // Infer ano + mes from current calendar state (caller guarantees consistency)
-        val cal = java.util.Calendar.getInstance()
-        ano = cal.get(java.util.Calendar.YEAR)
-        mes = cal.get(java.util.Calendar.MONTH)
 
         notifyDataSetChanged()
     }

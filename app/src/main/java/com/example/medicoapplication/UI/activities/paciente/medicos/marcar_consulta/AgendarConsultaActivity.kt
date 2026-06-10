@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
 class AgendarConsultaActivity : BaseActivity() {
 
     private val viewModel: AgendarConsultaViewModel by viewModels()
@@ -78,7 +79,15 @@ class AgendarConsultaActivity : BaseActivity() {
 
         observeViewModel()
 
-        if (medicoId != -1L)           viewModel.carregarMedico(medicoId)
+        if (
+            medicoId != -1L &&
+            idConsultaOfertada != -1L
+        ) {
+            viewModel.carregarConsultaOfertada(
+                medicoId,
+                idConsultaOfertada
+            )
+        }
         if (idConsultaOfertada != -1L) viewModel.carregarDisponibilidade(medicoId, idConsultaOfertada)
 
         setupBottomNavigation(R.id.nav_medicos_paciente)
@@ -133,11 +142,24 @@ class AgendarConsultaActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
-                    is AgendarConsultaViewModel.UiState.MedicoCarregado -> {
-                        val info = MedicoMapper.toAgendamentoInfo(state.medico)
-                        findViewById<TextView>(R.id.tvNomeMedicoAgendar).text    = info.nome
-                        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text = info.especialidade
-                        findViewById<TextView>(R.id.tvCrmAgendar).text           = info.crm
+                    is AgendarConsultaViewModel.UiState.ConsultaOfertadaCarregada -> {
+
+                        val consulta = state.consultaOfertada
+
+                        findViewById<TextView>(R.id.tvEspecialidadeAgendar).text =
+                            consulta.especialidade?.nome ?: "-"
+
+                        findViewById<TextView>(R.id.tvTipoConsultaAgendar).text =
+                            consulta.tipoConsulta.name
+
+                        findViewById<TextView>(R.id.tvValorConsultaAgendar).text =
+                            "R$ ${consulta.valorConsulta}"
+
+                        findViewById<TextView>(R.id.tvLocalConsultaAgendar).text =
+                            consulta.local?.nome ?: "Local não informado"
+
+                        findViewById<TextView>(R.id.tvNomeMedicoAgendar).text =
+                            intent.getStringExtra("NOME_MEDICO") ?: "Médico"
                     }
                     else -> Unit
                 }

@@ -7,18 +7,24 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
+import com.example.medicoapplication.UI.adapters.ConsultaOfertadaAdapter
+import com.example.medicoapplication.UI.adapters.ConsultaOfertadaPacientAdapter
 
 import com.example.medicoapplication.UI.common.components.bottom_nav.BottomMenuType
 import com.example.medicoapplication.UI.common.mappers.MedicoMapper
 import com.example.medicoapplication.viewmodel.paciente.medicos.PerfilMedicoPublicoViewModel
 import kotlinx.coroutines.launch
 
+
 class PerfilMedicoPublicoActivity : BaseActivity() {
 
     private val viewModel: PerfilMedicoPublicoViewModel by viewModels()
 
+    private lateinit var adapter: ConsultaOfertadaPacientAdapter
     private var medicoId: Long = -1L
 
     override val menuType = BottomMenuType.PACIENTE
@@ -26,6 +32,40 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_medico_publico)
+
+
+        adapter = ConsultaOfertadaPacientAdapter { consulta ->
+
+            startActivity(
+                Intent(
+                    this,
+                    AgendarConsultaActivity::class.java
+                ).apply {
+
+                    putExtra("MEDICO_ID", medicoId)
+
+                    putExtra(
+                        "ID_CONSULTA_OFERTADA",
+                        consulta.id
+                    )
+
+                    putExtra(
+                        "NOME_MEDICO",
+                        findViewById<TextView>(R.id.tvNomeMedicoPublico).text.toString()
+                    )
+
+                    putExtra(
+                        "ESPECIALIDADE",
+                        consulta.especialidade?.nome ?: ""
+                    )
+                }
+            )
+        }
+
+        findViewById<RecyclerView>(R.id.rvConsultasOfertadas).apply {
+            layoutManager = LinearLayoutManager(this@PerfilMedicoPublicoActivity)
+            adapter = this@PerfilMedicoPublicoActivity.adapter
+        }
 
         medicoId = intent.getLongExtra("MEDICO_ID", -1L)
         val nomeFallback = intent.getStringExtra("NOME_MEDICO") ?: "Médico"
@@ -63,21 +103,9 @@ class PerfilMedicoPublicoActivity : BaseActivity() {
                         findViewById<TextView>(R.id.tvEmailPublico).text         = medico.usuario?.email ?: "—"
                         findViewById<TextView>(R.id.tvTelefonePublico).text      = medico.usuario?.telefone ?: "—"
 
-                        val consultasOfertadas = state.consultasOfertadas
-                        findViewById<Button>(R.id.btnAgendarComEsteMedico).setOnClickListener {
-                            if (consultasOfertadas.isEmpty()) {
-                                showToast("Este médico não possui consultas disponíveis no momento.")
-                                return@setOnClickListener
-                            }
-                            startActivity(
-                                Intent(this@PerfilMedicoPublicoActivity, AgendarConsultaActivity::class.java).apply {
-                                    putExtra("MEDICO_ID",            medicoId)
-                                    putExtra("NOME_MEDICO",          info.nome)
-                                    putExtra("ESPECIALIDADE",        info.especialidade)
-                                    putExtra("ID_CONSULTA_OFERTADA", consultasOfertadas.first().id)
-                                }
-                            )
-                        }
+
+                        adapter.submitList(state.consultasOfertadas)
+
                     }
                 }
             }
