@@ -124,6 +124,9 @@
             android:name=".UI.activities.medico.servicos.CriarConsultaOfertadaActivity"
             android:exported="false" />
         <activity
+            android:name=".UI.activities.medico.servicos.SetarAgendaConsultaOfertadaActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.activities.paciente.medicos.ConfirmacaoConsultaActivity"
             android:exported="false" />
         <activity

@@ -28,39 +28,36 @@ class AgendarConsultaActivity : BaseActivity() {
 
     private val viewModel: AgendarConsultaViewModel by viewModels()
 
-    // ─── Calendário e formatadores ────────────────────────────────────────────
-    private val calendar        = Calendar.getInstance()
+    private val calendar         = Calendar.getInstance()
     private val formatoApi       = SimpleDateFormat("yyyy-MM-dd", Locale("pt", "BR"))
     private val formatoExibicao  = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
     private val formatoDiaSemana = SimpleDateFormat("EEE", Locale("pt", "BR"))
 
-    // ─── Estado de seleção ────────────────────────────────────────────────────
     private var horarioSelecionado: String? = null
     private var medicoId: Long = -1L
     private var idConsultaOfertada: Long = -1L
 
     override val menuType = BottomMenuType.PACIENTE
 
-    // ─── IDs dos blocos de dia na barra de seleção ────────────────────────────
     private val idsBlocoDia = listOf(
         R.id.diaBloco0, R.id.diaBloco1, R.id.diaBloco2,
         R.id.diaBloco3, R.id.diaBloco4, R.id.diaBloco5, R.id.diaBloco6
     )
     private var diaOffset = 0
 
-    // ─── Views de horários (criadas dinamicamente) ────────────────────────────
     private lateinit var containerHorarios: LinearLayout
     private lateinit var progressHorarios: ProgressBar
     private lateinit var tvHorariosVazio: TextView
     private lateinit var tvHorariosErro: TextView
 
-    // ─── onCreate ─────────────────────────────────────────────────────────────
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agendar_consulta)
 
-        medicoId           = intent.getLongExtra("ID_MEDICO", intent.getLongExtra("MEDICO_ID", -1L))
+        // FIX: standardised to MEDICO_ID — removed the dual-key fallback.
+        // All callers must pass MEDICO_ID. If you are migrating old code that
+        // passes ID_MEDICO, update those call sites to use MEDICO_ID instead.
+        medicoId           = intent.getLongExtra("MEDICO_ID", -1L)
         idConsultaOfertada = intent.getLongExtra("ID_CONSULTA_OFERTADA", -1L)
 
         val nomeExtra = intent.getStringExtra("NOME_MEDICO")
@@ -68,7 +65,6 @@ class AgendarConsultaActivity : BaseActivity() {
             findViewById<TextView>(R.id.tvNomeMedicoAgendar).text = nomeExtra
         }
 
-        // Vincula as views de estado dos horários
         containerHorarios = findViewById(R.id.containerHorariosAgendar)
         progressHorarios  = findViewById(R.id.progressHorariosAgendar)
         tvHorariosVazio   = findViewById(R.id.tvHorariosVazioAgendar)
@@ -78,8 +74,6 @@ class AgendarConsultaActivity : BaseActivity() {
         vincularNavegacaoDias()
 
         findViewById<Button>(R.id.btnConfirmarConsulta).setOnClickListener { confirmarConsulta() }
-
-        // "Voltar a agendar" vira simples finish() para voltar ao perfil do médico
         findViewById<TextView>(R.id.tvVerMaisHorarios).setOnClickListener { finish() }
 
         observeViewModel()
@@ -89,8 +83,6 @@ class AgendarConsultaActivity : BaseActivity() {
 
         setupBottomNavigation(R.id.nav_medicos_paciente)
     }
-
-    // ─── Navegação entre dias ─────────────────────────────────────────────────
 
     private fun vincularNavegacaoDias() {
         findViewById<ImageButton>(R.id.btnDataAnterior).setOnClickListener {
@@ -110,11 +102,9 @@ class AgendarConsultaActivity : BaseActivity() {
     }
 
     private fun notificarDiaSelecionado() {
-        horarioSelecionado = null                          // limpa a seleção anterior
+        horarioSelecionado = null
         viewModel.selecionarDia(formatoApi.format(calendar.time))
     }
-
-    // ─── Renderização dos blocos de dia ───────────────────────────────────────
 
     private fun renderizarDias() {
         val base = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, diaOffset - 3) }
@@ -139,10 +129,7 @@ class AgendarConsultaActivity : BaseActivity() {
         }
     }
 
-    // ─── Observers ───────────────────────────────────────────────────────────
-
     private fun observeViewModel() {
-        // Dados do médico (header)
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
@@ -157,7 +144,6 @@ class AgendarConsultaActivity : BaseActivity() {
             }
         }
 
-        // Estado geral da disponibilidade (loading / erro / vazio)
         lifecycleScope.launch {
             viewModel.disponibilidadeState.collect { state ->
                 when (state) {
@@ -173,7 +159,6 @@ class AgendarConsultaActivity : BaseActivity() {
                         tvHorariosVazio.visibility   = View.GONE
                         tvHorariosErro.visibility    = View.GONE
                         containerHorarios.visibility = View.VISIBLE
-                        // Dispara a filtragem para o dia já selecionado
                         viewModel.selecionarDia(formatoApi.format(calendar.time))
                     }
                     is AgendarConsultaViewModel.DisponibilidadeState.Vazio  -> {
@@ -193,7 +178,6 @@ class AgendarConsultaActivity : BaseActivity() {
             }
         }
 
-        // Horários do dia selecionado → renderiza botões dinamicamente
         lifecycleScope.launch {
             viewModel.horariosDoDia.collect { horarios ->
                 renderizarBotoesHorario(horarios)
@@ -201,12 +185,6 @@ class AgendarConsultaActivity : BaseActivity() {
         }
     }
 
-    // ─── Renderização dinâmica dos botões de horário ─────────────────────────
-
-    /**
-     * Limpa o container e gera um botão por horário disponível retornado pela API.
-     * Os botões são agrupados em linhas de 4 para manter o mesmo visual do layout original.
-     */
     private fun renderizarBotoesHorario(horarios: List<String>) {
         containerHorarios.removeAllViews()
         horarioSelecionado = null
@@ -221,7 +199,6 @@ class AgendarConsultaActivity : BaseActivity() {
         tvHorariosVazio.visibility   = View.GONE
         containerHorarios.visibility = View.VISIBLE
 
-        // Agrupa em linhas de 4 colunas
         val linhaSize = 4
         horarios.chunked(linhaSize).forEach { grupo ->
             val linha = LinearLayout(this).apply {
@@ -239,37 +216,28 @@ class AgendarConsultaActivity : BaseActivity() {
                     isAllCaps      = false
                     setTextColor(Color.parseColor("#1E293B"))
                     backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E2E8F0"))
-                    layoutParams = LinearLayout.LayoutParams(
-                        0,
-                        dpToPx(38),
-                        1f
-                    ).also { it.marginEnd = dpToPx(6) }
-
+                    layoutParams = LinearLayout.LayoutParams(0, dpToPx(38), 1f)
+                        .also { it.marginEnd = dpToPx(6) }
                     setOnClickListener { selecionarHorario(this, horario) }
                 }
                 linha.addView(botao)
             }
 
-            // Preenche espaços vazios na última linha para manter alinhamento
             val faltando = linhaSize - grupo.size
             repeat(faltando) {
-                val espacador = View(this).apply {
+                linha.addView(View(this).apply {
                     layoutParams = LinearLayout.LayoutParams(0, dpToPx(38), 1f)
                         .also { it.marginEnd = dpToPx(6) }
-                }
-                linha.addView(espacador)
+                })
             }
 
             containerHorarios.addView(linha)
         }
     }
 
-    // ─── Seleção de horário ───────────────────────────────────────────────────
-
     private fun selecionarHorario(botaoSelecionado: Button, horario: String) {
         horarioSelecionado = horario
 
-        // Reseta todos os botões no container
         for (i in 0 until containerHorarios.childCount) {
             val linha = containerHorarios.getChildAt(i) as? LinearLayout ?: continue
             for (j in 0 until linha.childCount) {
@@ -280,12 +248,9 @@ class AgendarConsultaActivity : BaseActivity() {
             }
         }
 
-        // Destaca o botão selecionado
         botaoSelecionado.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#3B82F6"))
         botaoSelecionado.setTextColor(Color.WHITE)
     }
-
-    // ─── Confirmação ─────────────────────────────────────────────────────────
 
     private fun confirmarConsulta() {
         val dataApi = formatoApi.format(calendar.time)
@@ -299,14 +264,14 @@ class AgendarConsultaActivity : BaseActivity() {
                         putExtra("DATA_CONSULTA",        dataApi)
                         putExtra("HORA_CONSULTA",        horarioSelecionado!!)
                         putExtra("ID_CONSULTA_OFERTADA", idConsultaOfertada)
+                        // FIX: pass medicoId so ConfirmacaoConsultaActivity can load convenios
+                        putExtra("ID_MEDICO",            medicoId)
                     }
                 )
             }
             is ValidationResult.Error -> showToast(result.message)
         }
     }
-
-    // ─── Utilitário ──────────────────────────────────────────────────────────
 
     private fun dpToPx(dp: Int): Int =
         (dp * resources.displayMetrics.density + 0.5f).toInt()

@@ -5,7 +5,7 @@ data class ConsultaResponseDto(
     val idPaciente: Long,
     val nomePaciente: String?,
     val idConsultaOfertada: Long,
-    val idMedico: Long,
+    val idUsuarioMedico: Long,
     val nomeMedico: String?,
     val idConvenio: Long?,
     val nomeConvenio: String?,

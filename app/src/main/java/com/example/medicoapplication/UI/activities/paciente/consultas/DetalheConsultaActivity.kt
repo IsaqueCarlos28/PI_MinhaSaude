@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.medicoapplication.R
 import com.example.medicoapplication.UI.activities.BaseActivity
@@ -17,9 +18,11 @@ import com.example.medicoapplication.viewmodel.paciente.consulta.DetalheConsulta
 import kotlinx.coroutines.launch
 
 /**
- * Exibe os detalhes completos de uma consulta do paciente.
- * Recebe via Intent:
+ * Shows full details of a paciente's consulta.
+ * Receives via Intent:
  *   - ID_EVENTO (Long)
+ *
+ * FIX: cancel button now shows an AlertDialog before firing the API call.
  */
 class DetalheConsultaActivity : BaseActivity() {
 
@@ -65,7 +68,7 @@ class DetalheConsultaActivity : BaseActivity() {
                         findViewById<TextView>(R.id.tvDetalheConvenio).text = display.convenio
                         findViewById<TextView>(R.id.tvDetalheStatus).text   = display.status
 
-                        val podeAcionar = display.statusEnum == StatusConsulta.AGENDADA
+                        val podeAcionar  = display.statusEnum == StatusConsulta.AGENDADA
                         val btnReagendar = findViewById<Button>(R.id.btnReagendarDetalhe)
                         val btnCancelar  = findViewById<Button>(R.id.btnCancelarDetalhe)
 
@@ -85,14 +88,29 @@ class DetalheConsultaActivity : BaseActivity() {
                         }
 
                         btnCancelar.setOnClickListener {
-                            viewModel.cancelarConsulta(idEvento) {
-                                showToast("Consulta cancelada.")
-                                finish()
-                            }
+                            confirmarCancelamento()
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * FIX: shows an AlertDialog asking the user to confirm before calling the API.
+     * Cancellation is irreversible, so a two-step confirmation is required.
+     */
+    private fun confirmarCancelamento() {
+        AlertDialog.Builder(this)
+            .setTitle("Cancelar consulta")
+            .setMessage("Tem certeza que deseja cancelar esta consulta? Esta ação não pode ser desfeita.")
+            .setPositiveButton("Sim, cancelar") { _, _ ->
+                viewModel.cancelarConsulta(idEvento) {
+                    showToast("Consulta cancelada.")
+                    finish()
+                }
+            }
+            .setNegativeButton("Voltar", null)
+            .show()
     }
 }

@@ -88,7 +88,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- SELETOR DE DATA -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,18 +114,7 @@
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_arrow_back"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:tint="#3B82F6"
-                            android:contentDescription="Data anterior" />
-
-                        <TextView
-                            android:id="@+id/tvDataSelecionadaReagendar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="01/01/2025"
-                            android:textColor="#1E293B"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:tint="#3B82F6"/>
 
                         <ImageButton
                             android:id="@+id/btnProximaDataReagendar"
@@ -136,10 +124,137 @@
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_arrow_forward"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:tint="#3B82F6"
-                            android:contentDescription="Próxima data" />
+                            android:tint="#3B82F6"/>
 
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp">
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco0Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco1Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco2Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco3Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco4Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco5Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/diaBloco6Reagendar"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -160,84 +275,36 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <LinearLayout
+                    <ProgressBar
+                        android:id="@+id/progressHorariosReagendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tvHorariosErroReagendar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:text="Erro ao carregar horários."
+                        android:textAlignment="center"
+                        android:textColor="#EF4444"
+                        android:visibility="gone"/>
 
-                        <Button android:id="@+id/btnReagHorario0900"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="09:00" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                        <Button android:id="@+id/btnReagHorario0930"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="09:30" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                        <Button android:id="@+id/btnReagHorario1000"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="10:00" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                        <Button android:id="@+id/btnReagHorario1030"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="10:30" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvHorariosVazioReagendar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:text="Nenhum horário disponível."
+                        android:textAlignment="center"
+                        android:textColor="#64748B"
+                        android:visibility="gone"/>
 
-                        <Button android:id="@+id/btnReagHorario1100"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="11:00" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                        <Button android:id="@+id/btnReagHorario1130"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="11:30" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                        <Button android:id="@+id/btnReagHorario1200"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="12:00" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                        <Button android:id="@+id/btnReagHorario1230"
-                            android:layout_width="0dp" android:layout_height="38dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_button_primary"
-                            android:backgroundTint="#E2E8F0"
-                            android:text="12:30" android:textColor="#1E293B"
-                            android:textSize="12sp" android:textAllCaps="false" />
-
-                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/containerHorariosReagendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
 
                 </LinearLayout>
 

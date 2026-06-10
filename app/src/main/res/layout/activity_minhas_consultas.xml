@@ -113,15 +113,11 @@
             </LinearLayout>
 
             <!-- Grid de dias -->
-            <GridView
-                android:id="@+id/gridViewCalendario"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCalendario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:numColumns="7"
-                android:verticalSpacing="4dp"
-                android:horizontalSpacing="0dp"
-                android:stretchMode="columnWidth"
-                android:layout_marginTop="4dp" />
+                android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
 

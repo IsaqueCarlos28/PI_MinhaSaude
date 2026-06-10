@@ -6,13 +6,13 @@ import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOf
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.ConsultaOfertadaResponseDto
 import com.example.medicoapplication.data.remote.DTO.consultaofertada.TipoConsulta
 import com.example.medicoapplication.data.remote.DTO.convenio.ConvenioResponseDto
-import com.example.medicoapplication.data.remote.DTO.especialidades.EspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.DTO.local.LocalResponseDto
+import com.example.medicoapplication.data.remote.DTO.medicoespecialidade.MedicoEspecialidadeResponseDto
 import com.example.medicoapplication.data.remote.NetworkError
 import com.example.medicoapplication.data.repository.ConsultaOfertadaRepository
 import com.example.medicoapplication.data.repository.ConvenioRepository
-import com.example.medicoapplication.data.repository.EspecialidadeRepository
 import com.example.medicoapplication.data.repository.LocalRepository
+import com.example.medicoapplication.data.repository.MedicoEspecialidadeRepository
 import com.example.medicoapplication.data.repository.toNetworkError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class ConsultaOfertadaViewModel(
     private val repository: ConsultaOfertadaRepository = ConsultaOfertadaRepository(),
-    private val especialidadeRepo: EspecialidadeRepository = EspecialidadeRepository(),
+    private val medicoEspecialidadeRepo: MedicoEspecialidadeRepository = MedicoEspecialidadeRepository(),
     private val localRepo: LocalRepository = LocalRepository(),
     private val convenioRepo: ConvenioRepository = ConvenioRepository()
 ) : ViewModel() {
@@ -30,6 +30,8 @@ class ConsultaOfertadaViewModel(
         object Idle : UiState()
         object Loading : UiState()
         object Success : UiState()
+        // Após criar consulta ofertada, carrega o id para navegar para SetarAgenda
+        data class SuccessComId(val idConsultaOfertada: Long) : UiState()
         data class Error(val error: NetworkError) : UiState()
     }
 
@@ -39,8 +41,9 @@ class ConsultaOfertadaViewModel(
     private val _consultas = MutableStateFlow<List<ConsultaOfertadaResponseDto>>(emptyList())
     val consultas: StateFlow<List<ConsultaOfertadaResponseDto>> = _consultas.asStateFlow()
 
-    private val _especialidades = MutableStateFlow<List<EspecialidadeResponseDto>>(emptyList())
-    val especialidades: StateFlow<List<EspecialidadeResponseDto>> = _especialidades.asStateFlow()
+    // Especialidades do médico logado (MedicoEspecialidade, não todas as especialidades do sistema)
+    private val _minhasEspecialidades = MutableStateFlow<List<MedicoEspecialidadeResponseDto>>(emptyList())
+    val minhasEspecialidades: StateFlow<List<MedicoEspecialidadeResponseDto>> = _minhasEspecialidades.asStateFlow()
 
     private val _locais = MutableStateFlow<List<LocalResponseDto>>(emptyList())
     val locais: StateFlow<List<LocalResponseDto>> = _locais.asStateFlow()
@@ -59,10 +62,11 @@ class ConsultaOfertadaViewModel(
 
     fun carregarDadosFormulario() {
         viewModelScope.launch {
-            especialidadeRepo.getEspecialidades()
-                .onSuccess { page ->
-                    _especialidades.value = page._embedded.especialidadeResponseDTOList
-                }
+            // Carrega apenas as especialidades que o médico possui vínculo
+            medicoEspecialidadeRepo.getMinhasEspecialidades()
+                .onSuccess { _minhasEspecialidades.value = it }
+                .onFailure { /* silencia — o spinner ficará vazio */ }
+
             localRepo.getLocais()
                 .onSuccess { page ->
                     _locais.value = page._embedded.localResponseDTOList
@@ -95,7 +99,9 @@ class ConsultaOfertadaViewModel(
                 conveniosAceitosIds = conveniosIds
             )
             repository.createConsultaOfertada(dto)
-                .onSuccess { _uiState.value = UiState.Success }
+                .onSuccess { criada ->
+                    _uiState.value = UiState.SuccessComId(criada.id)
+                }
                 .onFailure { _uiState.value = UiState.Error(it.toNetworkError()) }
         }
     }

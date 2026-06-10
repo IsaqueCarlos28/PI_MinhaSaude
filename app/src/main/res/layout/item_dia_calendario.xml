@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="36dp"
-    android:gravity="center">
 
-    <TextView
-        android:id="@+id/tvDiaCalendario"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:layout_weight="1">
+
+    <LinearLayout
+        android:id="@+id/containerDiaCalendario"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="13sp"
-        android:textColor="#1E293B" />
+        android:orientation="vertical">
 
-    <!-- Indicador de consulta (ponto azul abaixo do número) -->
-    <View
-        android:id="@+id/viewIndicadorConsulta"
-        android:layout_width="6dp"
-        android:layout_height="6dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:background="#3B82F6"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/tvDiaCalendario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#1E293B" />
+
+        <View
+            android:id="@+id/dotConsultaCalendario"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/bg_dot_consulta"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </FrameLayout>
